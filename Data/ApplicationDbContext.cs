@@ -14,4 +14,21 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     }
     
     public DbSet<Address> Addresses { get; set; } = null!;
+    public DbSet<Person> People { get; set; } = null!;
+    
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+    
+        builder.Entity<Person>(userEntity =>
+        {
+            userEntity.HasOne(u => u.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Person>(u => u.ApplicationUserId);
+    
+            userEntity.HasOne(u => u.Address)
+                .WithMany()
+                .HasForeignKey(u => u.AddressId);
+        });
+    }
 }
