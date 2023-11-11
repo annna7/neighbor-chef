@@ -4,7 +4,6 @@ namespace neighbor_chef.Models;
 
 public class Address : BaseEntity
 {
-    public Guid Id { get; set; }
     public string Street { get; set; } = null!;
     public string City { get; set; } = null!;
     public string County { get; set; } = null!;
