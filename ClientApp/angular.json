@@ -132,5 +132,8 @@
       }
     }
   },
-  "defaultProject": "neighbor_chef"
+  "defaultProject": "neighbor_chef",
+  "cli": {
+    "analytics": false
+  }
 }
