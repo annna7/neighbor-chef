@@ -15,6 +15,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<Person> People { get; set; } = null!;
+    public DbSet<Category> Categories { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
