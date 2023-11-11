@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-using neighbor_chef.Data;
-using neighbor_chef.Models;
+using Neighbor_Chef.Data;
+using Neighbor_Chef.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
-using neighbor_chef.Models;
+using Neighbor_Chef.Models;
 
-namespace neighbor_chef.Data;
+namespace Neighbor_Chef.Data;
 
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
 {

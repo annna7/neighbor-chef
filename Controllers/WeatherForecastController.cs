@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace neighbor_chef.Controllers;
+namespace Neighbor_Chef.Controllers;
 
 [Authorize]
 [ApiController]

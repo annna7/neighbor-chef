@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Mvc;
 
-namespace neighbor_chef.Controllers;
+namespace Neighbor_Chef.Controllers;
 
 public class OidcConfigurationController : Controller
 {
