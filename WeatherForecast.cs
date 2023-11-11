@@ -1,4 +1,4 @@
-namespace Neighbor_Chef;
+namespace neighbor_chef;
 
 public class WeatherForecast
 {

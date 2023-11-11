@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Neighbor_Chef.Models.Base;
+using neighbor_chef.Models.Base;
 
-namespace Neighbor_Chef.Models.Base
+namespace neighbor_chef.Models.Base
 {
     public class BaseEntity: IBaseEntity
     {

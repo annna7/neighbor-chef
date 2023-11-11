@@ -1,4 +1,4 @@
-namespace Neighbor_Chef.Models.Base
+namespace neighbor_chef.Models.Base
 {
     public interface IBaseEntity
     {

@@ -1,6 +1,6 @@
-using Neighbor_Chef.Models.Base;
+using neighbor_chef.Models.Base;
 
-namespace Neighbor_Chef.Models;
+namespace neighbor_chef.Models;
 
 public class Address : BaseEntity
 {

@@ -1,7 +1,7 @@
-using Neighbor_Chef.Models.Base;
-using Neighbor_Chef.Repositories.GenericRepository;
+using neighbor_chef.Models.Base;
+using neighbor_chef.Repositories.GenericRepository;
 
-namespace Neighbor_Chef.UnitOfWork
+namespace neighbor_chef.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {

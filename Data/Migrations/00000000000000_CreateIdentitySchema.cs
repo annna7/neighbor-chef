@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Neighbor_Chef.Data.Migrations
+namespace neighbor_chef.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

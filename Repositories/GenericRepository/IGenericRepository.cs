@@ -1,6 +1,6 @@
-using Neighbor_Chef.Models.Base;
+using neighbor_chef.Models.Base;
 
-namespace Neighbor_Chef.Repositories.GenericRepository
+namespace neighbor_chef.Repositories.GenericRepository
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
