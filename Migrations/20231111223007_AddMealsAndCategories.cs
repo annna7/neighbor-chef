@@ -6,13 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace neighbor_chef.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMeals : Migration
+    public partial class AddMealsAndCategories : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Meal",
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -27,9 +41,9 @@ namespace neighbor_chef.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Meal", x => x.Id);
+                    table.PrimaryKey("PK_Meals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Meal_Categories_CategoryId",
+                        name: "FK_Meals_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -37,8 +51,8 @@ namespace neighbor_chef.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meal_CategoryId",
-                table: "Meal",
+                name: "IX_Meals_CategoryId",
+                table: "Meals",
                 column: "CategoryId");
         }
 
@@ -46,7 +60,10 @@ namespace neighbor_chef.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Meal");
+                name: "Meals");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

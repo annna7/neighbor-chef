@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using neighbor_chef.Data;
 
@@ -11,9 +12,11 @@ using neighbor_chef.Data;
 namespace neighbor_chef.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231112113027_AddChefsAndCustomers")]
+    partial class AddChefsAndCustomers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -524,39 +527,6 @@ namespace neighbor_chef.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("neighbor_chef.Models.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChefId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChefId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("Reviews");
-                });
-
             modelBuilder.Entity("neighbor_chef.Models.Chef", b =>
                 {
                     b.HasBaseType("neighbor_chef.Models.Person");
@@ -673,25 +643,6 @@ namespace neighbor_chef.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
-            modelBuilder.Entity("neighbor_chef.Models.Review", b =>
-                {
-                    b.HasOne("neighbor_chef.Models.Chef", "Chef")
-                        .WithMany("ReviewsReceived")
-                        .HasForeignKey("ChefId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("neighbor_chef.Models.Customer", "Customer")
-                        .WithMany("ReviewsLeft")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Chef");
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("neighbor_chef.Models.Category", b =>
                 {
                     b.Navigation("Meals");
@@ -700,13 +651,6 @@ namespace neighbor_chef.Migrations
             modelBuilder.Entity("neighbor_chef.Models.Chef", b =>
                 {
                     b.Navigation("Meals");
-
-                    b.Navigation("ReviewsReceived");
-                });
-
-            modelBuilder.Entity("neighbor_chef.Models.Customer", b =>
-                {
-                    b.Navigation("ReviewsLeft");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,4 +21,9 @@ public class Meal : BaseEntity
     
     public Guid CategoryId { get; set; }
     public virtual Category Category { get; set; } = null!;
+    
+    public Guid ChefId { get; set; }
+    public virtual Chef Chef { get; set; } = null!;
+    
+    public ICollection<OrderMeal> OrderMeals { get; set; } = new List<OrderMeal>();
 }

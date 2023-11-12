@@ -12,8 +12,8 @@ using neighbor_chef.Data;
 namespace neighbor_chef.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231111203300_addCategories")]
-    partial class addCategories
+    [Migration("20231111223007_AddMealsAndCategories")]
+    partial class AddMealsAndCategories
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -436,6 +436,44 @@ namespace neighbor_chef.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("neighbor_chef.Models.Meal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IngredientsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Meals");
+                });
+
             modelBuilder.Entity("neighbor_chef.Models.Person", b =>
                 {
                     b.Property<Guid>("Id")
@@ -527,6 +565,17 @@ namespace neighbor_chef.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("neighbor_chef.Models.Meal", b =>
+                {
+                    b.HasOne("neighbor_chef.Models.Category", "Category")
+                        .WithMany("Meals")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("neighbor_chef.Models.Person", b =>
                 {
                     b.HasOne("neighbor_chef.Models.Address", "Address")
@@ -544,6 +593,11 @@ namespace neighbor_chef.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Category", b =>
+                {
+                    b.Navigation("Meals");
                 });
 #pragma warning restore 612, 618
         }

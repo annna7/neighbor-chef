@@ -12,8 +12,8 @@ using neighbor_chef.Data;
 namespace neighbor_chef.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231111213729_AddMeals")]
-    partial class AddMeals
+    [Migration("20231112114626_AddReviews")]
+    partial class AddReviews
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -445,6 +445,9 @@ namespace neighbor_chef.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ChefId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -471,7 +474,9 @@ namespace neighbor_chef.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Meal");
+                    b.HasIndex("ChefId");
+
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Person", b =>
@@ -493,6 +498,10 @@ namespace neighbor_chef.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -512,6 +521,70 @@ namespace neighbor_chef.Migrations
                         .IsUnique();
 
                     b.ToTable("People");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChefId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChefId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Chef", b =>
+                {
+                    b.HasBaseType("neighbor_chef.Models.Person");
+
+                    b.Property<int>("AdvanceNoticeDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AvailableDatesJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxOrdersPerDay")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Chef");
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Customer", b =>
+                {
+                    b.HasBaseType("neighbor_chef.Models.Person");
+
+                    b.HasDiscriminator().HasValue("Customer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -573,7 +646,15 @@ namespace neighbor_chef.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("neighbor_chef.Models.Chef", "Chef")
+                        .WithMany("Meals")
+                        .HasForeignKey("ChefId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Chef");
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Person", b =>
@@ -595,9 +676,40 @@ namespace neighbor_chef.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("neighbor_chef.Models.Review", b =>
+                {
+                    b.HasOne("neighbor_chef.Models.Chef", "Chef")
+                        .WithMany("ReviewsReceived")
+                        .HasForeignKey("ChefId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("neighbor_chef.Models.Customer", "Customer")
+                        .WithMany("ReviewsLeft")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Chef");
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("neighbor_chef.Models.Category", b =>
                 {
                     b.Navigation("Meals");
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Chef", b =>
+                {
+                    b.Navigation("Meals");
+
+                    b.Navigation("ReviewsReceived");
+                });
+
+            modelBuilder.Entity("neighbor_chef.Models.Customer", b =>
+                {
+                    b.Navigation("ReviewsLeft");
                 });
 #pragma warning restore 612, 618
         }
