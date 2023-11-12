@@ -22,8 +22,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Customer> Customers { get; set; } = null!;
     public DbSet<Chef> Chefs { get; set; } = null!;
     public DbSet<Review> Reviews { get; set; } = null!;
-    // public DbSet<Order> Orders { get; set; } = null!;
-    // public DbSet<OrderMeal> OrderMeals { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderMeal> OrderMeals { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -59,28 +59,30 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .HasForeignKey(r => r.CustomerId)
             .OnDelete(DeleteBehavior.NoAction);
         });
-    //     
-    // builder.Entity<OrderMeal>()
-    //     .HasKey(om => new { om.OrderId, om.MealId }); 
-    //
-    // builder.Entity<OrderMeal>()
-    //     .HasOne(om => om.Order)
-    //     .WithMany(o => o.OrderMeals)
-    //     .HasForeignKey(om => om.OrderId);
-    //
-    // builder.Entity<OrderMeal>()
-    //     .HasOne(om => om.Meal)
-    //     .WithMany(m => m.OrderMeals)
-    //     .HasForeignKey(om => om.MealId);
-    //
-    // builder.Entity<Order>()
-    //     .HasOne(o => o.Chef)
-    //     .WithMany(c => c.OrdersReceived)
-    //     .HasForeignKey(o => o.ChefId);
-    //
-    // builder.Entity<Order>()
-    //     .HasOne(o => o.Customer)
-    //     .WithMany(c => c.OrdersPlaced)
-    //     .HasForeignKey(o => o.CustomerId);
+        
+    builder.Entity<OrderMeal>()
+        .HasKey(om => new { om.OrderId, om.MealId }); 
+    
+    builder.Entity<OrderMeal>()
+        .HasOne(om => om.Order)
+        .WithMany(o => o.OrderMeals)
+        .HasForeignKey(om => om.OrderId);
+    
+    builder.Entity<OrderMeal>()
+        .HasOne(om => om.Meal)
+        .WithMany(m => m.OrderMeals)
+        .HasForeignKey(om => om.MealId);
+    
+    builder.Entity<Order>()
+        .HasOne(o => o.Chef)
+        .WithMany(c => c.OrdersReceived)
+        .HasForeignKey(o => o.ChefId)
+        .OnDelete(DeleteBehavior.NoAction);
+    
+    builder.Entity<Order>()
+        .HasOne(o => o.Customer)
+        .WithMany(c => c.OrdersPlaced)
+        .HasForeignKey(o => o.CustomerId)
+        .OnDelete(DeleteBehavior.NoAction);
     }
 }
