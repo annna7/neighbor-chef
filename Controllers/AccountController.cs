@@ -1,7 +1,9 @@
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
+using neighbor_chef.Services;
 using neighbor_chef.UnitOfWork;
 using neighbor_chef.TokenService;
 
@@ -15,19 +17,59 @@ public class AccountController : ControllerBase
     private readonly IUnitOfWork _unitOfWork;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ITokenService _tokenService;
+    private readonly IChefService _chefService;
+    private readonly ICustomerService _customerService;
 
-    public AccountController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService)
+    public AccountController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService, IChefService chefService, ICustomerService customerService)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
+        _chefService = chefService;
+        _customerService = customerService;
     }
-
+    
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(PersonRegisterDto personRegisterDto)
+    {
+        switch (personRegisterDto.Type)
+        {
+            case "Chef":
+            {
+                Console.WriteLine("Chef pipeline");
+                var chef = await _chefService.CreatePersonAsync(personRegisterDto);
+                return Ok(chef);
+            }
+            case "Customer":
+            {
+                var customer = await _customerService.CreatePersonAsync(personRegisterDto);
+                return Ok(customer);
+            }
+            default:
+                return BadRequest("Invalid person type.");
+        }
+        // switch (personRegisterDto)
+        // {
+        //     case ChefRegisterDto chefDto:
+        //     {
+        //         var chef = await _chefService.CreatePersonAsync(chefDto);
+        //         return Ok(chef);
+        //     }
+        //     case CustomerRegisterDto customerDto:
+        //     {
+        //         var customer = await _customerService.CreatePersonAsync(customerDto);
+        //         return Ok(customer);
+        //     }
+        //     default:
+        //         return BadRequest("Invalid person type.");
+        // }
+    }
+    
     [HttpPost("register-chef")]
     public async Task<IActionResult> RegisterChef(ChefRegisterDto model)
     {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+        var user = new ApplicationUser { UserName = model.Email, Email = model.Email, EmailConfirmed = true };
         var result = await _userManager.CreateAsync(user, model.Password);
 
         if (!result.Succeeded)
@@ -49,7 +91,7 @@ public class AccountController : ControllerBase
         await _userManager.AddToRoleAsync(user, "Chef");
         
         var chefRepository = _unitOfWork.GetRepository<Chef>();
-        await chefRepository.CreateAsync(chef);
+        await chefRepository.AddAsync(chef);
         await _unitOfWork.CompleteAsync();
         
         return Ok(new { Username = user.UserName, Email = user.Email });

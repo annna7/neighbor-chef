@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using neighbor_chef.Data;
 using neighbor_chef.Models.Base;
@@ -31,7 +32,24 @@ namespace neighbor_chef.Repositories.GenericRepository
             return await _table.AsNoTracking().ToListAsync();
         }
 
-        public async Task CreateAsync(TEntity entity)
+        public Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, List<Expression<Func<TEntity, object>>>? includes = null)
+        {
+            IQueryable<TEntity> query = _table;
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (includes != null)
+            {
+                query = includes.Aggregate(query, (current, include) => current.Include(include));
+            }
+
+            return orderBy != null ? orderBy(query).FirstOrDefaultAsync() : query.FirstOrDefaultAsync();
+        }
+
+        public async Task AddAsync(TEntity entity)
         {
             await _table.AddAsync(entity);
         }

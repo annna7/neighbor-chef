@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using neighbor_chef.Models.Base;
 
 namespace neighbor_chef.Repositories.GenericRepository
@@ -9,9 +10,12 @@ namespace neighbor_chef.Repositories.GenericRepository
         
         // Get all
         Task<List<TEntity>> GetAllAsync();
+        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            List<Expression<Func<TEntity, object>>>? includes = null);
         
         // Add
-        Task CreateAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
         Task CreateRangeAsync(IEnumerable<TEntity> entities);
 
         // Update
@@ -21,7 +25,7 @@ namespace neighbor_chef.Repositories.GenericRepository
 
         // Delete 
         Task DeleteAsync(TEntity entity);
-        Task DeleteRangeAsync(IEnumerable<TEntity> entities);
+        Task DeleteRangeAsync(IEnumerable<TEntity> entityIds);
 
         // Save
         Task<bool> SaveAsync();
