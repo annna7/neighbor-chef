@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
 using Humanizer;
 using neighbor_chef.Models;
+using neighbor_chef.Models.Base;
 
 namespace neighbor_chef.Data;
 
@@ -24,8 +25,6 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Review> Reviews { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderMeal> OrderMeals { get; set; } = null!;
-    
-    
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -62,29 +61,50 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .OnDelete(DeleteBehavior.NoAction);
         });
         
-    builder.Entity<OrderMeal>()
-        .HasKey(om => new { om.OrderId, om.MealId }); 
+        builder.Entity<OrderMeal>()
+            .HasKey(om => new { om.OrderId, om.MealId }); 
+        
+        builder.Entity<OrderMeal>()
+            .HasOne(om => om.Order)
+            .WithMany(o => o.OrderMeals)
+            .HasForeignKey(om => om.OrderId);
+        
+        builder.Entity<OrderMeal>()
+            .HasOne(om => om.Meal)
+            .WithMany(m => m.OrderMeals)
+            .HasForeignKey(om => om.MealId);
+        
+        builder.Entity<Order>()
+            .HasOne(o => o.Chef)
+            .WithMany(c => c.OrdersReceived)
+            .HasForeignKey(o => o.ChefId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.Entity<Order>()
+            .HasOne(o => o.Customer)
+            .WithMany(c => c.OrdersPlaced)
+            .HasForeignKey(o => o.CustomerId)
+            .OnDelete(DeleteBehavior.NoAction);
+    }
     
-    builder.Entity<OrderMeal>()
-        .HasOne(om => om.Order)
-        .WithMany(o => o.OrderMeals)
-        .HasForeignKey(om => om.OrderId);
-    
-    builder.Entity<OrderMeal>()
-        .HasOne(om => om.Meal)
-        .WithMany(m => m.OrderMeals)
-        .HasForeignKey(om => om.MealId);
-    
-    builder.Entity<Order>()
-        .HasOne(o => o.Chef)
-        .WithMany(c => c.OrdersReceived)
-        .HasForeignKey(o => o.ChefId)
-        .OnDelete(DeleteBehavior.NoAction);
-    
-    builder.Entity<Order>()
-        .HasOne(o => o.Customer)
-        .WithMany(c => c.OrdersPlaced)
-        .HasForeignKey(o => o.CustomerId)
-        .OnDelete(DeleteBehavior.NoAction);
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        var entries = ChangeTracker
+            .Entries()
+            .Where(e => e.Entity is BaseEntity && (
+                    e.State == EntityState.Added
+                    || e.State == EntityState.Modified));
+        
+        foreach (var entityEntry in entries)
+        {
+            var baseEntity = ((BaseEntity) entityEntry.Entity);
+            baseEntity.DateModified = DateTime.UtcNow;
+            if (entityEntry.State == EntityState.Added || baseEntity.DateCreated == null)
+            {
+                baseEntity.DateCreated = DateTime.UtcNow;
+            }
+        }
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
