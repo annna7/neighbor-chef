@@ -52,6 +52,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IChefService, ChefService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

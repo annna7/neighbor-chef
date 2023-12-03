@@ -28,8 +28,8 @@ public class ChefService : PersonService, IChefService
         
         var chef  = await base.CreatePersonAsync(chefDto);
         
-        var jsonString = JsonConvert.SerializeObject(chef.ApplicationUser, Formatting.Indented);
-        Console.WriteLine(jsonString);
+        // var jsonString = JsonConvert.SerializeObject(chef.ApplicationUser, Formatting.Indented);
+        // Console.WriteLine(jsonString);
         
         await _accountService.RegisterUserAsync(chef.ApplicationUser);
         await _accountService.AssignRoleAsync(chef.ApplicationUser, "Chef");
