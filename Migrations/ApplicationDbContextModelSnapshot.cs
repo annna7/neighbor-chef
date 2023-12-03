@@ -344,7 +344,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.ApplicationUser", b =>
@@ -430,7 +430,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Meal", b =>
@@ -473,7 +473,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasIndex("ChefId");
 
-                    b.ToTable("Meals");
+                    b.ToTable("Meals", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Order", b =>
@@ -513,7 +513,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.OrderMeal", b =>
@@ -538,7 +538,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("OrderMeals");
+                    b.ToTable("OrderMeals", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Person", b =>
@@ -582,7 +582,7 @@ namespace neighbor_chef.Migrations
                     b.HasIndex("ApplicationUserId")
                         .IsUnique();
 
-                    b.ToTable("People");
+                    b.ToTable("People", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
 
@@ -619,7 +619,7 @@ namespace neighbor_chef.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("neighbor_chef.Models.Chef", b =>

@@ -10,7 +10,7 @@ public class Person : BaseEntity
     public virtual ApplicationUser ApplicationUser { get; set; } = null!;
     
     public Guid AddressId { get; set; }
-    public virtual Address Address { get; set; } = null!;
+    public virtual Address? Address { get; set; }
     
     public string? ProfilePictureUrl { get; set; }
 }

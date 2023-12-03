@@ -7,8 +7,8 @@ namespace neighbor_chef.Services;
 
 public class PersonService : IPersonService
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly AccountService _accountService;
+    protected readonly IUnitOfWork _unitOfWork;
+    protected readonly AccountService _accountService;
 
     protected PersonService(IUnitOfWork unitOfWork, AccountService accountService)
     {
@@ -23,37 +23,34 @@ public class PersonService : IPersonService
             Email = personDto.Email,
             UserName = personDto.Email,
             PasswordHash = personDto.Password,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            PhoneNumber = personDto.PhoneNumber,
         };
         
-        await _accountService.RegisterUserAsync(user);
-
-        if (personDto.Address != null)
+        var address = new Address
         {
-            var address = new Address
-            {
-                StreetNumber = personDto.Address?.StreetNumber,
-                County = personDto.Address.County,
-                Street = personDto.Address.Street,
-                City = personDto.Address.City,
-                Country = personDto.Address.Country,
-                ZipCode = personDto.Address.ZipCode,
-                Apartment = personDto.Address?.ApartmentNumber
-            };
+            StreetNumber = personDto.Address.StreetNumber ?? "NaN",
+            County = personDto.Address.County,
+            Street = personDto.Address.Street,
+            City = personDto.Address.City,
+            Country = personDto.Address.Country,
+            ZipCode = personDto.Address.ZipCode,
+            Apartment = personDto.Address?.ApartmentNumber
+        };
+    
+        await _unitOfWork.GetRepository<Address>().AddAsync(address);
+        await _unitOfWork.CompleteAsync();
         
-            await _unitOfWork.GetRepository<Address>().AddAsync(address);
-            await _unitOfWork.CompleteAsync();
-        }
-        
+        Console.WriteLine(address.Id);
         var person = new Person
         {
             FirstName = personDto.FirstName,
             LastName = personDto.LastName,
-            ApplicationUser = user
+            AddressId = address.Id,
+            Address = address,
+            ApplicationUser = user,
+            ApplicationUserId = user.Id,
         };
-        
-        await _unitOfWork.GetRepository<Person>().AddAsync(person);
-        await _unitOfWork.CompleteAsync();
         
         return person;
     }
@@ -67,7 +64,9 @@ public class PersonService : IPersonService
     public Task<Person> GetPersonAsync(Guid id)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
-        return personRepository.GetByIdAsync(id);
+        var person = personRepository.GetByIdAsync(id);
+        Console.WriteLine(person.Result.ApplicationUser.PhoneNumber);
+        return person;
     }
 
     public Task<Person> UpdatePersonAsync(Person person)

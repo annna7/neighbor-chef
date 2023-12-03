@@ -73,7 +73,7 @@ public class DbInitializer
         public static async Task DbInitialize(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         await context.Database.EnsureCreatedAsync();
-        await SeedUsers(context, userManager, roleManager);
         await SeedRoles(context, roleManager);
+        await SeedUsers(context, userManager, roleManager);
     }
 }

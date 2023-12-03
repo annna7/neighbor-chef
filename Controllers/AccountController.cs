@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models;
@@ -31,39 +32,24 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register(PersonRegisterDto personRegisterDto)
+    public async Task<IActionResult> Register([FromBody] JsonElement person)
     {
-        switch (personRegisterDto.Type)
+        var typeDiscriminator = person.GetProperty("Type").GetString();
+        PersonRegisterDto personDto;
+
+        switch (typeDiscriminator)
         {
             case "Chef":
-            {
-                Console.WriteLine("Chef pipeline");
-                var chef = await _chefService.CreatePersonAsync(personRegisterDto);
+                var chefDto = JsonSerializer.Deserialize<ChefRegisterDto>(person.GetRawText());
+                var chef = await _chefService.CreatePersonAsync(chefDto);
                 return Ok(chef);
-            }
             case "Customer":
-            {
-                var customer = await _customerService.CreatePersonAsync(personRegisterDto);
+                var customerDto = JsonSerializer.Deserialize<CustomerRegisterDto>(person.GetRawText());
+                var customer = await _customerService.CreatePersonAsync(customerDto);
                 return Ok(customer);
-            }
             default:
                 return BadRequest("Invalid person type.");
         }
-        // switch (personRegisterDto)
-        // {
-        //     case ChefRegisterDto chefDto:
-        //     {
-        //         var chef = await _chefService.CreatePersonAsync(chefDto);
-        //         return Ok(chef);
-        //     }
-        //     case CustomerRegisterDto customerDto:
-        //     {
-        //         var customer = await _customerService.CreatePersonAsync(customerDto);
-        //         return Ok(customer);
-        //     }
-        //     default:
-        //         return BadRequest("Invalid person type.");
-        // }
     }
     
     [HttpPost("register-chef")]
