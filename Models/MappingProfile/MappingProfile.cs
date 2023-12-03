@@ -1,5 +1,5 @@
 using AutoMapper;
-using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 
 namespace neighbor_chef.Models.MappingProfile;
 

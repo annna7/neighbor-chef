@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Models;
-using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 
 namespace neighbor_chef.Controllers;
 

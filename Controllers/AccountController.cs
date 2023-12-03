@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 using neighbor_chef.Services;
 using neighbor_chef.TokenService;
 

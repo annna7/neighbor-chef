@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models;
+using neighbor_chef.Models.DTOs;
 using neighbor_chef.Services;
 
 namespace neighbor_chef.Controllers;
@@ -35,6 +36,22 @@ public class PersonController : ControllerBase
     public async Task<IActionResult> UpdatePerson(Person person)
     {
         var updatedPerson = await _personService.UpdatePersonAsync(person);
+        return Ok(updatedPerson);
+    }
+    
+    [HttpPut("update/{id:guid}")]
+    public async Task<IActionResult> UpdatePerson(Guid id, [FromBody] UpdatePersonDto updateDto)
+    {
+        var updatedPerson = await _personService.UpdatePersonAsync(id, updateDto);
+        return Ok(updatedPerson);
+    }
+    
+    [HttpPut("updateByEmail/{email}")]
+    public async Task<IActionResult> UpdatePerson(string email, [FromBody] UpdatePersonDto updateDto)
+    {
+        var person = await _personService.GetPersonAsync(email);
+        if (person == null) return NotFound("Person with email " + email + " not found.");
+        var updatedPerson = await _personService.UpdatePersonAsync(person.Id, updateDto);
         return Ok(updatedPerson);
     }
 

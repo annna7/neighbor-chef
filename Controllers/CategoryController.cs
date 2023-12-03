@@ -6,7 +6,7 @@ namespace neighbor_chef.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CategoryController : ControllerBase, ICategoryController
+public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _categoryService;
 
@@ -22,7 +22,7 @@ public class CategoryController : ControllerBase, ICategoryController
         return Ok(category);
     }
 
-    [HttpGet("getById/{id:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCategoryById(Guid id)
     {
         var category = await _categoryService.GetCategoryAsync(id);

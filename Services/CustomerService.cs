@@ -1,6 +1,6 @@
 using AutoMapper;
 using neighbor_chef.Models;
-using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 using neighbor_chef.UnitOfWork;
 using Newtonsoft.Json;
 
@@ -26,8 +26,8 @@ public class CustomerService : PersonService, ICustomerService
         
         var customer  = await base.CreatePersonAsync(customerDto);
         
-        // var jsonString = JsonConvert.SerializeObject(customer.ApplicationUser, Formatting.Indented);
-        // Console.WriteLine(jsonString);
+        var jsonString = JsonConvert.SerializeObject(customer.ApplicationUser, Formatting.Indented);
+        Console.WriteLine(jsonString);
         
         await _accountService.RegisterUserAsync(customer.ApplicationUser);
         await _accountService.AssignRoleAsync(customer.ApplicationUser, "Customer");

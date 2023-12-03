@@ -1,10 +1,10 @@
-using System.Text.Json;
+// using System.Text.Json;
 using AutoMapper;
 using neighbor_chef.Models;
-using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 using neighbor_chef.UnitOfWork;
-using Newtonsoft.Json;
-using JsonSerializer = Newtonsoft.Json.JsonSerializer;
+// using Newtonsoft.Json;
+// using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace neighbor_chef.Services;
 

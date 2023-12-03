@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Authentication;
 using neighbor_chef.UnitOfWork;
 
 namespace neighbor_chef.Services;
@@ -58,7 +59,11 @@ public class PersonService : IPersonService
     public Task<Person?> GetPersonAsync(string email)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
-        return personRepository.GetFirstOrDefaultAsync(predicate: p => p.ApplicationUser.Email == email);
+        return personRepository.GetFirstOrDefaultAsync(
+            predicate: p => p.ApplicationUser.Email == email,
+            includes: query => query
+                .Include(p => p.Address)
+                .Include(p => p.ApplicationUser));
     }
 
     public async Task<Person?> GetPersonAsync(Guid id)
@@ -76,6 +81,46 @@ public class PersonService : IPersonService
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
         await personRepository.UpdateAsync(person);
+        await _unitOfWork.CompleteAsync();
+        return person;
+    }
+    
+    public async Task<Person> UpdatePersonAsync(Guid id, UpdatePersonDto updateDto)
+    {
+        var personRepository = _unitOfWork.GetRepository<Person>();
+        var person = await personRepository.GetFirstOrDefaultAsync(
+            p => p.Id == id,
+            includes: query => query
+                .Include(p => p.Address)
+                .Include(p => p.ApplicationUser));
+
+        if (person == null) throw new KeyNotFoundException("Person not found.");
+
+        if (!string.IsNullOrEmpty(updateDto.FirstName))
+            person.FirstName = updateDto.FirstName;
+        if (!string.IsNullOrEmpty(updateDto.LastName))
+            person.LastName = updateDto.LastName;
+        if (!string.IsNullOrEmpty(updateDto.PhoneNumber))
+            person.ApplicationUser.PhoneNumber = updateDto.PhoneNumber;
+        if (!string.IsNullOrEmpty(updateDto.ProfilePictureUrl))
+            person.ProfilePictureUrl = updateDto.ProfilePictureUrl;
+
+        if (updateDto.Address != null)
+        {
+            var address = person.Address;
+            address.Street = updateDto.Address.Street ?? address.Street;
+            address.City = updateDto.Address.City ?? address.City;
+            address.County = updateDto.Address.County ?? address.County;
+            address.Country = updateDto.Address.Country ?? address.Country;
+            address.ZipCode = updateDto.Address.ZipCode ?? address.ZipCode;
+            address.StreetNumber = updateDto.Address.StreetNumber ?? address.StreetNumber;
+            address.Apartment = updateDto.Address.ApartmentNumber ?? address.Apartment;
+            
+            await _unitOfWork.GetRepository<Address>().UpdateAsync(address);
+        }
+        
+        await personRepository.UpdateAsync(person);
+
         await _unitOfWork.CompleteAsync();
         return person;
     }

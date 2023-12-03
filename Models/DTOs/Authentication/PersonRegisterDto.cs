@@ -1,4 +1,4 @@
-namespace neighbor_chef.Models.DTOs;
+namespace neighbor_chef.Models.DTOs.Authentication;
 
 public class PersonRegisterDto
 {
@@ -9,5 +9,5 @@ public class PersonRegisterDto
     public string Password { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
     public string? PictureUrl { get; set; }
-    public AddressDto? Address { get; set; } = null!;
+    public CreateAddressDto Address { get; set; } = null!;
 }
