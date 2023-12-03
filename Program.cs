@@ -49,6 +49,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(context =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IChefService, ChefService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 var app = builder.Build();

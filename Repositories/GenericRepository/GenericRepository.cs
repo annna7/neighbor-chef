@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using neighbor_chef.Data;
 using neighbor_chef.Models.Base;
 
@@ -16,7 +17,7 @@ namespace neighbor_chef.Repositories.GenericRepository
             _table = _context.Set<TEntity>();
         }
 
-        public async Task<TEntity> GetByIdAsync(Guid id)
+        public async Task<TEntity?> GetByIdAsync(Guid id)
         {
             var entity = await _table.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
             if (entity == null)
@@ -32,22 +33,33 @@ namespace neighbor_chef.Repositories.GenericRepository
             return await _table.AsNoTracking().ToListAsync();
         }
 
-        public Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, List<Expression<Func<TEntity, object>>>? includes = null)
+        public async Task<TEntity?> GetFirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null)
         {
-            IQueryable<TEntity> query = _table;
+            IQueryable<TEntity> query = _table.AsNoTracking();
+
+            if (includes != null)
+            {
+                query = includes(query);
+            }
 
             if (predicate != null)
             {
                 query = query.Where(predicate);
             }
 
-            if (includes != null)
+            if (orderBy != null)
             {
-                query = includes.Aggregate(query, (current, include) => current.Include(include));
+                return await orderBy(query).FirstOrDefaultAsync();
             }
-
-            return orderBy != null ? orderBy(query).FirstOrDefaultAsync() : query.FirstOrDefaultAsync();
+            else
+            {
+                return await query.FirstOrDefaultAsync();
+            }
         }
+
 
         public async Task AddAsync(TEntity entity)
         {

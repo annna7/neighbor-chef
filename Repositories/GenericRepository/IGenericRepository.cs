@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 using neighbor_chef.Models.Base;
 
 namespace neighbor_chef.Repositories.GenericRepository
@@ -6,13 +7,15 @@ namespace neighbor_chef.Repositories.GenericRepository
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {
         // Get by id
-        Task<TEntity> GetByIdAsync(Guid id);
+        Task<TEntity?> GetByIdAsync(Guid id);
         
         // Get all
         Task<List<TEntity>> GetAllAsync();
-        Task<TEntity> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate = null,
+
+        Task<TEntity?> GetFirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            List<Expression<Func<TEntity, object>>>? includes = null);
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null);
         
         // Add
         Task AddAsync(TEntity entity);
