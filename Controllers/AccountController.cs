@@ -29,10 +29,14 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] JsonElement person)
+    public async Task<IActionResult> Register()
     {
-        var typeDiscriminator = person.GetProperty("Type").GetString();
-        PersonRegisterDto personDto;
+        var person = await JsonSerializer.DeserializeAsync<JsonElement>(Request.Body);
+        if (!person.TryGetProperty("Type", out var typeDiscriminatorElement))
+        {
+            return BadRequest("Invalid Request!");
+        }
+        var typeDiscriminator = typeDiscriminatorElement.GetString();
 
         switch (typeDiscriminator)
         {
@@ -44,6 +48,7 @@ public class AccountController : ControllerBase
             case "Customer":
                 var customerDto = JsonSerializer.Deserialize<CustomerRegisterDto>(person.GetRawText());
                 if (customerDto == null) return BadRequest("Invalid customer DTO.");
+                await Console.Error.WriteLineAsync(customerDto.ToString());
                 var customer = await _customerService.CreatePersonAsync(customerDto);
                 return Ok(customer);
             default:
