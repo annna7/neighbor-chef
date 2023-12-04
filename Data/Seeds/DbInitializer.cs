@@ -21,6 +21,35 @@ public class DbInitializer
         }
         return Task.CompletedTask;
     }
+    
+    // seed meal categories
+    private static Task SeedCategories(ApplicationDbContext context)
+    {
+        if (context.Categories.Any()) return Task.CompletedTask;
+        var categories = new List<string>
+        {
+            "Breakfast",
+            "Vegan",
+            "Meat",
+            "Fish",
+            "Dessert",
+            "Traditional",
+            "Snack",
+            "Soup",
+            "Salad",
+            "Appetizer",
+            "Side Dish",
+            "Drink",
+            "Pizza",
+            "Pasta",
+            "Burger",
+        };
+        foreach (var category in categories)
+        {
+            context.Categories.Add(new Category() { Name = category });
+        }
+        return context.SaveChangesAsync();
+    }
 
     private static async Task SeedUsers(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager)
@@ -74,6 +103,7 @@ public class DbInitializer
     {
         await context.Database.EnsureCreatedAsync();
         await SeedRoles(context, roleManager);
-        await SeedUsers(context, userManager, roleManager);
+        await SeedCategories(context);
+        // await SeedUsers(context, userManager, roleManager);
     }
 }
