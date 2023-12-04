@@ -36,7 +36,6 @@ public class CategoryController : ControllerBase
     [HttpGet("getByName/{name}")]
     public async Task<IActionResult> GetCategoryByName(string name)
     {
-        Console.WriteLine("am i here?");
         var category = await _categoryService.GetCategoryAsync(name);
         if (category == null)
         {

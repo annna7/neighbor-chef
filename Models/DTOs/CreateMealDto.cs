@@ -7,5 +7,5 @@ public class CreateMealDto
     public string CategoryName { get; set; } = null!;
     public string? PictureUrl { get; set; }
     public decimal Price { get; set; }
-    // TODO: Ingredients blob
+    public List<string>? Ingredients { get; set; }
 }

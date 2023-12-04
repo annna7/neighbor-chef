@@ -7,5 +7,8 @@ public interface IMealService
 {
     Task<Meal> CreateMealAsync(CreateMealDto createMealDto, Guid chefId);
     Task<Meal?> GetMealAsync(Guid id);
-    Task UpdateMealAsync(Guid id, CreateMealDto updateMealDto);
+    Task<Meal> UpdateMealAsync(Guid id, UpdateMealDto updateMealDto);
+    Task<Meal> AddIngredientAsync(Guid id, AddIngredientDto addIngredientDto);
+    Task<Meal> RemoveIngredientAsync(Guid id, RemoveIngredientDto removeIngredientDto);
+    Task<Meal> DeleteMealAsync(Guid id);
 }

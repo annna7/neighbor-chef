@@ -46,7 +46,11 @@ builder.Services.AddAuthentication()
         };
     });
 
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(context =>
     new UnitOfWork(context.GetRequiredService<ApplicationDbContext>()));
