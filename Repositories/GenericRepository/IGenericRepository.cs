@@ -19,6 +19,7 @@ namespace neighbor_chef.Repositories.GenericRepository
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null);
 
         Task<IEnumerable<TEntity>> FindWithSpecificationPatternAsync(ISpecification<TEntity> specification = null);
+        Task<TEntity?> FindFirstOrDefaultWithSpecificationPatternAsync(ISpecification<TEntity> specification = null);
         
         // Add
         Task AddAsync(TEntity entity);

@@ -44,8 +44,7 @@ public class MealService : IMealService
     public async Task<Meal?> GetMealAsync(Guid id)
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        return await mealRepository.GetFirstOrDefaultAsync(
-            predicate: m => m.Id == id);
+        return await mealRepository.GetByIdAsync(id);
     }
 
     public async Task<Meal> UpdateMealAsync(Guid id, UpdateMealDto updateMealDto)

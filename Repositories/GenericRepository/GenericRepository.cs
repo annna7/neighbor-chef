@@ -66,8 +66,13 @@ namespace neighbor_chef.Repositories.GenericRepository
         {
             return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification);
         }
-
-
+        
+        public async Task<TEntity?> FindFirstOrDefaultWithSpecificationPatternAsync(
+            ISpecification<TEntity> specification = null)
+        {
+            return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification).FirstOrDefault();
+        }
+        
         public async Task AddAsync(TEntity entity)
         {
             await _table.AddAsync(entity);

@@ -1,5 +1,6 @@
 using neighbor_chef.Models;
 using neighbor_chef.Services;
+using neighbor_chef.Specifications.Categories;
 using neighbor_chef.UnitOfWork;
 
 public class CategoryService : ICategoryService
@@ -26,7 +27,8 @@ public class CategoryService : ICategoryService
     
     public async Task<Category?> GetCategoryAsync(string name)
     {
-        return await _unitOfWork.GetRepository<Category>().GetFirstOrDefaultAsync(x => x.Name == name);
+        var categorySpecification = new CategoryNameSpecification(name);
+        return await _unitOfWork.GetRepository<Category>().FindFirstOrDefaultWithSpecificationPatternAsync(categorySpecification);
     }
 
     public async Task<IEnumerable<Category>> GetAllCategoriesAsync()

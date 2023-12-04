@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
 using neighbor_chef.Models.DTOs.Authentication;
+using neighbor_chef.Specifications.People;
 using neighbor_chef.UnitOfWork;
 
 namespace neighbor_chef.Services;
@@ -59,22 +60,15 @@ public class PersonService : IPersonService
     public Task<Person?> GetPersonAsync(string email)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
-        return personRepository.GetFirstOrDefaultAsync(
-            predicate: p => p.ApplicationUser.Email == email,
-            includes: query => query
-                .Include(p => p.Address)
-                .Include(p => p.ApplicationUser));
+        var fullPersonByEmailSpecification = new FullPersonWithEmailSpecification(email);
+        return personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByEmailSpecification);
     }
 
     public async Task<Person?> GetPersonAsync(Guid id)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
-        var person = await personRepository.GetFirstOrDefaultAsync(
-            p => p.Id == id,
-            includes: query => query
-                .Include(p => p.Address)
-                .Include(p => p.ApplicationUser));
-        return person;
+        var fullPersonByIdSpecification = new FullPersonWithIdSpecification(id);
+        return await personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByIdSpecification);
     }
 
     public async Task<Person> UpdatePersonAsync(Person person)
@@ -88,11 +82,8 @@ public class PersonService : IPersonService
     public async Task<Person> UpdatePersonAsync(Guid id, UpdatePersonDto updateDto)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
-        var person = await personRepository.GetFirstOrDefaultAsync(
-            p => p.Id == id,
-            includes: query => query
-                .Include(p => p.Address)
-                .Include(p => p.ApplicationUser));
+        var fullPersonByIdSpecification = new FullPersonWithIdSpecification(id);
+        var person = await personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByIdSpecification);
 
         if (person == null) throw new KeyNotFoundException("Person not found.");
 
