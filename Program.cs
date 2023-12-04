@@ -13,6 +13,7 @@ using neighbor_chef.UnitOfWork;
 using AutoMapper;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
+using neighbor_chef.Services.Reviews;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,6 +63,7 @@ builder.Services.AddScoped<IChefService, ChefService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<IReviewsService, ReviewsService>();
 
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 var app = builder.Build();

@@ -118,12 +118,4 @@ public class MealController : ControllerBase
 
         return NoContent();
     }
-    
-    [HttpGet("chefs")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
-    public async Task<IActionResult> GetChefs()
-    {
-        var chefs = await _chefService.GetChefsSortedAsync();
-        return Ok(chefs);
-    }
 }

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Authentication;
 
-namespace neighbor_chef.Controllers;
+namespace neighbor_chef.Services;
 
 public interface IAccountService
 {
