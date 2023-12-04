@@ -31,6 +31,10 @@ builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -38,7 +42,7 @@ builder.Services.AddAuthentication()
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretsecretsecret"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
         };
     });
 
@@ -53,6 +57,9 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IChefService, ChefService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IMealService, MealService>();
+
+var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -73,6 +80,17 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseIdentityServer();
 app.UseAuthorization();
+
+app.Use(async (context, next) =>
+{
+    context.Request.EnableBuffering();
+    var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+    context.Request.Body.Position = 0;
+    
+    logger.LogInformation("Request: {method} {url} {body}", context.Request.Method, context.Request.Path, body);
+
+    await next.Invoke();
+});
 
 app.MapControllerRoute(
     name: "default",

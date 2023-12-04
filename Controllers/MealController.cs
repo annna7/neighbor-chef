@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,7 @@ public class MealController : ControllerBase
     }
     
     [HttpGet]
-    [Authorize(Roles = "Chef")] // Only chefs can create meals
-
+    [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")] // Only chefs can create meals
     public Task<IActionResult> Hello()
     {
         return Task.FromResult<IActionResult>(Ok("hello"));
