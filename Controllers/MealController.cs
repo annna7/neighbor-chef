@@ -15,12 +15,14 @@ public class MealController : ControllerBase
     private readonly IMealService _mealService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IPersonService _peopleService;
+    private readonly IChefService _chefService;
 
-    public MealController(IMealService mealService, UserManager<ApplicationUser> userManager, IPersonService peopleService)
+    public MealController(IChefService chefService, IMealService mealService, UserManager<ApplicationUser> userManager, IPersonService peopleService)
     {
         _mealService = mealService;
         _userManager = userManager;
         _peopleService = peopleService;
+        _chefService = chefService;
     }
     
 
@@ -115,5 +117,13 @@ public class MealController : ControllerBase
         await _mealService.DeleteMealAsync(id);
 
         return NoContent();
+    }
+    
+    [HttpGet("chefs")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public async Task<IActionResult> GetChefs()
+    {
+        var chefs = await _chefService.GetChefsSortedAsync();
+        return Ok(chefs);
     }
 }

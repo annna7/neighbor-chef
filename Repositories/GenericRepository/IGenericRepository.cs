@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using neighbor_chef.Models.Base;
+using neighbor_chef.Specifications;
 
 namespace neighbor_chef.Repositories.GenericRepository
 {
@@ -16,6 +17,8 @@ namespace neighbor_chef.Repositories.GenericRepository
             Expression<Func<TEntity, bool>> predicate = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? includes = null);
+
+        Task<IEnumerable<TEntity>> FindWithSpecificationPatternAsync(ISpecification<TEntity> specification = null);
         
         // Add
         Task AddAsync(TEntity entity);

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using neighbor_chef.Data;
 using neighbor_chef.Models.Base;
+using neighbor_chef.Specifications;
 
 namespace neighbor_chef.Repositories.GenericRepository
 {
@@ -58,6 +59,12 @@ namespace neighbor_chef.Repositories.GenericRepository
             {
                 return await query.FirstOrDefaultAsync();
             }
+        }
+
+        public async Task<IEnumerable<TEntity>> FindWithSpecificationPatternAsync(
+            ISpecification<TEntity> specification = null)
+        {
+            return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification);
         }
 
 

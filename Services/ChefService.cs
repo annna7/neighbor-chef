@@ -2,6 +2,7 @@
 using AutoMapper;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Authentication;
+using neighbor_chef.Specifications;
 using neighbor_chef.UnitOfWork;
 // using Newtonsoft.Json;
 // using JsonSerializer = Newtonsoft.Json.JsonSerializer;
@@ -55,5 +56,13 @@ public class ChefService : PersonService, IChefService
         await _unitOfWork.CompleteAsync();
         
         return chefObject;
+    }
+
+    public async Task<List<Chef>> GetChefsSortedAsync()
+    {
+        var chefRepository = _unitOfWork.GetRepository<Chef>();
+        var chefSpecification = new ChefNameAscending('D');
+        var chefs = await chefRepository.FindWithSpecificationPatternAsync(chefSpecification);
+        return chefs.ToList();
     }
 }
