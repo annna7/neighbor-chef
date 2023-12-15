@@ -57,11 +57,11 @@ public class PersonService : IPersonService
         return person;
     }
 
-    public Task<Person?> GetPersonAsync(string email)
+    public Task<Person?> GetPersonAsync(string email, bool asNoTracking = false)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
         var fullPersonByEmailSpecification = new FullPersonWithEmailSpecification(email);
-        return personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByEmailSpecification);
+        return personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByEmailSpecification, asNoTracking);
     }
 
     public async Task<Person?> GetPersonAsync(Guid id)

@@ -68,9 +68,9 @@ namespace neighbor_chef.Repositories.GenericRepository
         }
         
         public async Task<TEntity?> FindFirstOrDefaultWithSpecificationPatternAsync(
-            ISpecification<TEntity> specification = null)
+            ISpecification<TEntity> specification = null, bool asNoTracking = false)
         {
-            return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification).FirstOrDefault();
+            return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification, asNoTracking).FirstOrDefault();
         }
         
         public async Task AddAsync(TEntity entity)

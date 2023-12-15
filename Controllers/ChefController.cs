@@ -20,6 +20,7 @@ public class ChefController : ControllerBase
       _chefService = chefService;
    }
 
+   [IsSame("chefId")]
    [HttpPost("{chefId}/dates")]
    public async Task<IActionResult> AddAvailableDate(Guid chefId, [FromBody] DateDto date)
    {
@@ -53,6 +54,7 @@ public class ChefController : ControllerBase
       return Ok(chef.AvailableDates);
    }
 
+   [IsSame("chefId")]
    [HttpDelete("{chefId}/dates")]
    public async Task<IActionResult> DeleteAvailableDate(Guid chefId, DateDto date)
    {

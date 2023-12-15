@@ -5,7 +5,7 @@ namespace neighbor_chef.Specifications;
 
 public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
 {
-    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
+    public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification, bool asNoTracking = false)
     {
         var query = inputQuery;
 
@@ -36,6 +36,11 @@ public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
         if (specification.GroupBy != null)
         {
             query = query.GroupBy(specification.GroupBy).SelectMany(x => x);
+        }
+        
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
         }
 
         // Apply paging if enabled
