@@ -11,6 +11,7 @@ using neighbor_chef.Models.DTOs;
 using neighbor_chef.TokenService;
 using neighbor_chef.UnitOfWork;
 using AutoMapper;
+using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
 using neighbor_chef.Services.Reviews;
@@ -64,6 +65,9 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
+builder.Services.AddScoped<CustomerAuthorizeAttribute>();
+builder.Services.AddScoped<ChefAuthorizeAttribute>();
+
 
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 var app = builder.Build();

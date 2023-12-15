@@ -17,9 +17,9 @@ public class Chef : Person
     public string? AvailableDatesJson { get; set; }
     
     [NotMapped]
-    public List<DateTime>? AvailableDates
+    public List<DateTime> AvailableDates
     {
-        get => JsonConvert.DeserializeObject<List<DateTime>>(AvailableDatesJson ?? "[]");
+        get => JsonConvert.DeserializeObject<List<DateTime>>(AvailableDatesJson ?? "[]") ?? new List<DateTime>();
         set => AvailableDatesJson = JsonConvert.SerializeObject(value);
     }
     
