@@ -3,9 +3,7 @@ namespace neighbor_chef.Models;
 public enum OrderStatus
 {
     Placed,
-    Accepted,
-    Rejected,
+    Preparing,
     Ready,
-    Delivered,
-    Cancelled
+    Delivered
 }
