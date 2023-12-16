@@ -110,6 +110,32 @@ public class OrderService : IOrderService
         return order;
     }
 
+    public async Task UpdateOrderStatusAsync(Guid orderId, OrderStatus newStatus, bool isChef)
+    {
+        var order = await _unitOfWork.GetRepository<Order>().GetByIdAsync(orderId);
+        if (order == null)
+        {
+            throw new OrderNotFoundException();
+        }
+        
+        Console.WriteLine("Old status: " + order.Status);
+
+        switch (isChef)
+        {
+            case true when !(order.Status == OrderStatus.Placed && newStatus == OrderStatus.Preparing)
+                           && !(order.Status == OrderStatus.Preparing && newStatus == OrderStatus.Ready):
+                throw new InvalidOrderStatusTransitionException(order.Status, newStatus);
+            case false when !(order.Status == OrderStatus.Ready && newStatus == OrderStatus.Delivered):
+                throw new InvalidOrderStatusTransitionException(order.Status, newStatus);
+        }
+        
+        Console.WriteLine("New status: " + newStatus);
+
+        order.Status = newStatus;
+        await _unitOfWork.GetRepository<Order>().UpdateAsync(order);
+        await _unitOfWork.CompleteAsync();
+    }
+    
     public async Task<Order> UpdateOrderAsync(Guid orderId, UpdateOrderDto orderDto)
     {
         var order = await _unitOfWork.GetRepository<Order>().GetByIdNoTrackingAsync(orderId);

@@ -1,10 +1,15 @@
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Exceptions.Dates;
+using neighbor_chef.Exceptions.Orders;
 using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
 using neighbor_chef.Services;
 using neighbor_chef.Models.DTOs;
+using neighbor_chef.Models.DTOs.Orders;
+using neighbor_chef.Services.Orders;
 
 namespace neighbor_chef.Controllers;
 
@@ -13,10 +18,12 @@ namespace neighbor_chef.Controllers;
 public class ChefController : ControllerBase
 {
    private readonly IChefService _chefService;
+   private readonly IOrderService _orderService;
    
-   public ChefController(IChefService chefService)
+   public ChefController(IChefService chefService, IOrderService orderService)
    {
       _chefService = chefService;
+      _orderService = orderService;
    }
    
    [HttpGet("{chefId:guid}")]
@@ -30,6 +37,38 @@ public class ChefController : ControllerBase
       return Ok(chef);
    }
 
+   
+   [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
+   [HttpPut("orders/{orderId:guid}")]
+   public async Task<IActionResult> UpdateOrderStatus(Guid orderId, [FromBody] UpdateOrderStatusDto orderStatusDto)
+   {
+      var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+      if (chefEmail == null)
+      {
+         return BadRequest("Invalid chef email");
+      }
+      var chef = await _chefService.GetPersonAsync(chefEmail);
+      if (chef == null)
+      {
+         return NotFound("chef with email " + chefEmail + " not found");
+      }
+      var order = await _orderService.GetOrderByIdAsync(orderId);
+      if (order.ChefId != chef.Id)
+      {
+         return BadRequest("Chef with email " + chefEmail + " is not the owner of order with id " + orderId);
+      }
+
+      try
+      {
+         await _orderService.UpdateOrderStatusAsync(orderId, orderStatusDto.Status, true);
+      }
+      catch (InvalidOrderStatusTransitionException e)
+      {
+         return BadRequest(e.Message);
+      }
+      return NoContent();
+   }
+  
    [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
    [HttpPost("{chefId}/dates")]
@@ -68,7 +107,7 @@ public class ChefController : ControllerBase
 
    [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
-   [HttpDelete("{chefId}/dates")]
+   [HttpDelete("{chefId:guid}/dates")]
    public async Task<IActionResult> DeleteAvailableDate(Guid chefId, DateDto date)
    {
       try

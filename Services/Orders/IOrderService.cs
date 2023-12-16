@@ -9,4 +9,5 @@ public interface IOrderService
     Task<Order> GetOrderByIdAsync(Guid orderId);
     Task<Order> UpdateOrderAsync(Guid orderId, UpdateOrderDto orderDto);
     Task DeleteOrderAsync(Guid customerId, Guid orderId);
+    Task UpdateOrderStatusAsync(Guid orderId, OrderStatus newStatus, bool isChef);
 }

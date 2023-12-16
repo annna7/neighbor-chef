@@ -12,7 +12,6 @@ public class Order : BaseEntity
     
     public string Observations { get; set; } = null!;
     public DateTime DeliveryDate { get; set; }
-    public DateTime DeliveryTime { get; set; }
     public OrderStatus Status { get; set; }
     
     public virtual ICollection<OrderMeal> OrderMeals { get; set; } = new List<OrderMeal>();    
