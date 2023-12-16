@@ -40,9 +40,16 @@ namespace neighbor_chef.Repositories.GenericRepository
             return entity;
         }
 
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync(bool asNoTracking = false)
         {
-            return await _table.AsNoTracking().ToListAsync();
+            if (asNoTracking)
+            {
+                return await _table.AsNoTracking().ToListAsync();
+            }
+            else
+            {
+                return await _table.ToListAsync();
+            }
         }
 
         public async Task<TEntity?> GetFirstOrDefaultAsync(

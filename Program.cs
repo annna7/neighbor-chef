@@ -69,6 +69,7 @@ builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+
 builder.Services.AddScoped<CustomerAuthorizeAttribute>();
 builder.Services.AddScoped<ChefAuthorizeAttribute>();
 
@@ -119,7 +120,8 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await DbInitializer.DbInitialize(context, userManager, roleManager);
+    await DbInitializer.DbInitialize(context, roleManager, services.GetRequiredService<IChefService>(),
+        services.GetRequiredService<ICustomerService>());
 }
 
 app.Run();

@@ -3,6 +3,4 @@
 ## Description
 
 ## TODO
-* remove DeliveryTime from Order
-* add OrderStatus handling
-* sa dea eroare in loc de null metodele
+* add quantity to order meals

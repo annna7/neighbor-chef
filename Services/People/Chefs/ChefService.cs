@@ -171,4 +171,10 @@ public class ChefService : PersonService, IChefService
         await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
         await _unitOfWork.CompleteAsync();
     }
+    
+    public async Task<List<Chef>> GetAllChefsAsync(bool asNoTracking = false)
+    {
+        var chefs = await _unitOfWork.GetRepository<Chef>().GetAllAsync(asNoTracking);
+        return chefs.ToList();
+    }
 }

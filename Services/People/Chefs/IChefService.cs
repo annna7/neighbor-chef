@@ -11,4 +11,5 @@ public interface IChefService : IPersonService
     Task<List<DateTime>> GetAvailableDatesAsync(Guid chefId);
     Task RemoveAvailableDateAsync(Guid chefId, DateDto date);
     Task<bool> IsDateAvailable(Chef chef, DateTime date);
+    Task<List<Chef>> GetAllChefsAsync(bool asNoTracking = false);
 }

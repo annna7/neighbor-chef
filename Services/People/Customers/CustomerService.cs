@@ -58,4 +58,10 @@ public class CustomerService : PersonService, ICustomerService
         var customer = await _unitOfWork.GetRepository<Customer>().FindFirstOrDefaultWithSpecificationPatternAsync(new FullCustomerWithIdSpecification(id), asNoTracking);
         return customer;
     }
+    
+    public async Task<List<Customer>> GetAllCustomersAsync(bool asNoTracking = false)
+    {
+        var customers = await _unitOfWork.GetRepository<Customer>().GetAllAsync(asNoTracking);
+        return customers;
+    }
 }

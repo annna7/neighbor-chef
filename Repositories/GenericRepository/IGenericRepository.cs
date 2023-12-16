@@ -12,7 +12,7 @@ namespace neighbor_chef.Repositories.GenericRepository
         Task<TEntity?> GetByIdNoTrackingAsync(Guid id);
         
         // Get all
-        Task<List<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetAllAsync(bool asNoTracking = false);
 
         Task<TEntity?> GetFirstOrDefaultAsync(
             Expression<Func<TEntity, bool>> predicate = null,
