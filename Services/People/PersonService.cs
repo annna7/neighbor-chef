@@ -67,6 +67,8 @@ public class PersonService : IPersonService
     public async Task<Person?> GetPersonAsync(Guid id)
     {
         var personRepository = _unitOfWork.GetRepository<Person>();
+        var partialPerson = await personRepository.GetByIdAsync(id);
+        if (partialPerson == null) return null;
         var fullPersonByIdSpecification = new FullPersonWithIdSpecification(id);
         return await personRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullPersonByIdSpecification);
     }

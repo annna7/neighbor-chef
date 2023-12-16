@@ -14,6 +14,8 @@ using AutoMapper;
 using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
+using neighbor_chef.Services.Orders;
+using neighbor_chef.Services.People.Chefs;
 using neighbor_chef.Services.Reviews;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +67,8 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 builder.Services.AddScoped<CustomerAuthorizeAttribute>();
 builder.Services.AddScoped<ChefAuthorizeAttribute>();
 

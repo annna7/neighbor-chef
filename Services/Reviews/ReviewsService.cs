@@ -1,3 +1,4 @@
+using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Reviews;
 using neighbor_chef.UnitOfWork;
@@ -15,6 +16,18 @@ public class ReviewsService : IReviewsService
 
     public async Task<Review> CreateReviewAsync(Guid customerId, CreateReviewDto reviewDto)
     {
+        var customer = await _unitOfWork.GetRepository<Customer>().GetByIdAsync(customerId);
+        if (customer == null)
+        {
+            throw new CustomerNotFoundException();
+        }
+        
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdAsync(reviewDto.ChefId);
+        if (chef == null)
+        {
+            throw new ChefNotFoundException();
+        }
+        
         var review = new Review
         {
             CustomerId = customerId,
@@ -22,8 +35,16 @@ public class ReviewsService : IReviewsService
             Rating = reviewDto.Rating,
             Comment = reviewDto.Comment,
         };
-
+        
         await _unitOfWork.GetRepository<Review>().AddAsync(review);
+        await _unitOfWork.CompleteAsync();
+        
+        chef.ReviewsReceived.Add(review);
+        await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
+        await _unitOfWork.CompleteAsync();
+
+        customer.ReviewsLeft.Add(review);
+        await _unitOfWork.GetRepository<Customer>().UpdateAsync(customer);
         await _unitOfWork.CompleteAsync();
 
         return review;
@@ -31,7 +52,7 @@ public class ReviewsService : IReviewsService
 
     public async Task<Review> GetReviewAsync(Guid id)
     {
-        var review = await _unitOfWork.GetRepository<Review>().GetByIdAsync(id);
+        var review = await _unitOfWork.GetRepository<Review>().GetByIdNoTrackingAsync(id);
         if (review == null)
         {
             throw new KeyNotFoundException("Review not found.");
@@ -54,7 +75,7 @@ public class ReviewsService : IReviewsService
     public async Task<Review> UpdateReviewAsync(Guid customerId, Guid reviewId, UpdateReviewDto reviewDto)
     {
         var reviewRepository = _unitOfWork.GetRepository<Review>();
-        var review = await reviewRepository.GetByIdAsync(reviewId);
+        var review = await reviewRepository.GetByIdNoTrackingAsync(reviewId);
 
         if (review == null)
         {
@@ -78,14 +99,14 @@ public class ReviewsService : IReviewsService
     public async Task DeleteReviewAsync(Guid id, Guid customerId)
     {
         var reviewRepository = _unitOfWork.GetRepository<Review>();
-        var review = await reviewRepository.GetByIdAsync(id);
+        var review = await reviewRepository.GetByIdNoTrackingAsync(id);
 
         if (review == null)
         {
             throw new KeyNotFoundException("Review not found.");
         }
         
-        var customer = await _unitOfWork.GetRepository<Customer>().GetByIdAsync(customerId);
+        var customer = await _unitOfWork.GetRepository<Customer>().GetByIdNoTrackingAsync(customerId);
         if (customer == null)
         {
             throw new KeyNotFoundException("Customer not found.");

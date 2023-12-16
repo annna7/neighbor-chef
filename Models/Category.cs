@@ -6,5 +6,5 @@ public class Category : BaseEntity
 {
     public string Name { get; set; } = null!;
     
-    public ICollection<Meal> Meals { get; set; } = new List<Meal>();
+    public virtual ICollection<Meal> Meals { get; set; } = new List<Meal>();
 }

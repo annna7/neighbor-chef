@@ -15,5 +15,5 @@ public class Order : BaseEntity
     public DateTime DeliveryTime { get; set; }
     public OrderStatus Status { get; set; }
     
-    public ICollection<OrderMeal> OrderMeals { get; set; } = new List<OrderMeal>();    
+    public virtual ICollection<OrderMeal> OrderMeals { get; set; } = new List<OrderMeal>();    
 }

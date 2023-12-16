@@ -26,6 +26,13 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderMeal> OrderMeals { get; set; } = null!;
     
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.LogTo(Console.WriteLine);
+        // optionsBuilder.EnableSensitiveDataLogging();
+        // optionsBuilder.EnableDetailedErrors();
+        // optionsBuilder.UseLazyLoadingProxies();
+    }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

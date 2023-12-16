@@ -28,7 +28,7 @@ namespace neighbor_chef.Controllers
             {
                 var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 if (customerEmail == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
-                var customer = await _customerService.GetPersonAsync(customerEmail);
+                var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
                 var review = await _reviewsService.CreateReviewAsync(customer.Id, createReviewDto);
                 return Ok(review);
@@ -75,7 +75,7 @@ namespace neighbor_chef.Controllers
             {
                 var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 if (customerEmail == null) return Unauthorized("Please log in as a customer.");
-                var customer = await _customerService.GetPersonAsync(customerEmail);
+                var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You can only update your own reviews.");
                 var review = await _reviewsService.UpdateReviewAsync(customer.Id, id, updateReviewDto);
                 return Ok(review);
@@ -98,7 +98,7 @@ namespace neighbor_chef.Controllers
             {
                 var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 if (customerEmail == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
-                var customer = await _customerService.GetPersonAsync(customerEmail);
+                var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
                 await _reviewsService.DeleteReviewAsync(id, customer.Id);
                 return NoContent();

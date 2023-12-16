@@ -18,7 +18,18 @@ namespace neighbor_chef.Repositories.GenericRepository
             _table = _context.Set<TEntity>();
         }
 
-        public async Task<TEntity?> GetByIdAsync(Guid id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
+        {
+            var entity = await _table.FirstOrDefaultAsync(entity => entity.Id == id);
+            if (entity == null)
+            {
+                throw new Exception($"Entity with id {id} not found.");
+            }
+
+            return entity;
+        }
+
+        public async Task<TEntity?> GetByIdNoTrackingAsync(Guid id)
         {
             var entity = await _table.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == id);
             if (entity == null)

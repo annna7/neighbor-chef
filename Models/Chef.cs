@@ -28,6 +28,5 @@ public class Chef : Person
     
     public virtual ICollection<Meal> Meals { get; set; } = new List<Meal>();
     public virtual ICollection<Review> ReviewsReceived { get; set; } = new List<Review>();
-    
     public virtual ICollection<Order> OrdersReceived { get; set; } = new List<Order>();
 }

@@ -22,7 +22,7 @@ public class CategoryService : ICategoryService
 
     public async Task<Category?> GetCategoryAsync(Guid id)
     {
-        return await _unitOfWork.GetRepository<Category>().GetByIdAsync(id);
+        return await _unitOfWork.GetRepository<Category>().GetByIdNoTrackingAsync(id);
     }
     
     public async Task<Category?> GetCategoryAsync(string name)

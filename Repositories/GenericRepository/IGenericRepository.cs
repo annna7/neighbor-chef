@@ -9,6 +9,7 @@ namespace neighbor_chef.Repositories.GenericRepository
     {
         // Get by id
         Task<TEntity?> GetByIdAsync(Guid id);
+        Task<TEntity?> GetByIdNoTrackingAsync(Guid id);
         
         // Get all
         Task<List<TEntity>> GetAllAsync();

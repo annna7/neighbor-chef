@@ -13,15 +13,11 @@ namespace neighbor_chef.Controllers;
 public class MealController : ControllerBase
 {
     private readonly IMealService _mealService;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IPersonService _peopleService;
     private readonly IChefService _chefService;
 
-    public MealController(IChefService chefService, IMealService mealService, UserManager<ApplicationUser> userManager, IPersonService peopleService)
+    public MealController(IChefService chefService, IMealService mealService)
     {
         _mealService = mealService;
-        _userManager = userManager;
-        _peopleService = peopleService;
         _chefService = chefService;
     }
     
@@ -32,7 +28,7 @@ public class MealController : ControllerBase
     {
         var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         if (chefEmail == null) return Unauthorized("You are not authorized to create a meal, please log in as a chef.");
-        var chef = await _peopleService.GetPersonAsync(chefEmail);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null) return Unauthorized("You are not authorized to create a meal, please log in as a chef.");
         var meal = await _mealService.CreateMealAsync(createMealDto, chef.Id);
         return Ok(meal);
@@ -59,7 +55,7 @@ public class MealController : ControllerBase
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
         
-        var chef = await _peopleService.GetPersonAsync(chefEmail);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null || chef.Id != meal.ChefId) return Forbid("You can only update your own meals.");
         
         return Ok(await _mealService.UpdateMealAsync(id, updateMealDto));
@@ -75,7 +71,7 @@ public class MealController : ControllerBase
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
     
-        var chef = await _peopleService.GetPersonAsync(chefEmail);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null || chef.Id != meal.ChefId) return Forbid("You can only add ingredients to your own meals.");
     
         meal = await _mealService.AddIngredientAsync(id, addIngredientDto);
@@ -93,7 +89,7 @@ public class MealController : ControllerBase
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
     
-        var chef = await _peopleService.GetPersonAsync(chefEmail);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null || chef.Id != meal.ChefId) return Forbid("You can only remove ingredients from your own meals.");
     
         meal = await _mealService.RemoveIngredientAsync(id, removeIngredientDto);
@@ -111,7 +107,7 @@ public class MealController : ControllerBase
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
         
-        var chef = await _peopleService.GetPersonAsync(chefEmail);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null || chef.Id != meal.ChefId) return Forbid("You can only delete your own meals.");
         
         await _mealService.DeleteMealAsync(id);

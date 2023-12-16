@@ -44,13 +44,13 @@ public class MealService : IMealService
     public async Task<Meal?> GetMealAsync(Guid id)
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        return await mealRepository.GetByIdAsync(id);
+        return await mealRepository.GetByIdNoTrackingAsync(id);
     }
 
     public async Task<Meal> UpdateMealAsync(Guid id, UpdateMealDto updateMealDto)
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        var meal = await mealRepository.GetByIdAsync(id);
+        var meal = await mealRepository.GetByIdNoTrackingAsync(id);
         if (meal == null)
         {
             throw new KeyNotFoundException("Meal not found.");
@@ -70,7 +70,7 @@ public class MealService : IMealService
     public async Task<Meal> AddIngredientAsync(Guid id, AddIngredientDto addIngredientDto)
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        var meal = await mealRepository.GetByIdAsync(id);
+        var meal = await mealRepository.GetByIdNoTrackingAsync(id);
         if (meal == null)
         {
             throw new KeyNotFoundException("Meal not found.");
@@ -90,7 +90,7 @@ public class MealService : IMealService
     public async Task<Meal> RemoveIngredientAsync(Guid id, RemoveIngredientDto removeIngredientDto)
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        var meal = await mealRepository.GetByIdAsync(id);
+        var meal = await mealRepository.GetByIdNoTrackingAsync(id);
         if (meal == null)
         {
             throw new KeyNotFoundException("Meal not found.");
@@ -112,8 +112,9 @@ public class MealService : IMealService
 
     public async Task<Meal> DeleteMealAsync(Guid id)
     {
+        // TODO: Check that the meal is not in any pending orders!
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        var meal = await mealRepository.GetByIdAsync(id);
+        var meal = await mealRepository.GetByIdNoTrackingAsync(id);
         if (meal == null)
         {
             throw new KeyNotFoundException("Meal not found.");
