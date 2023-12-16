@@ -8,7 +8,6 @@ using neighbor_chef.Models.DTOs;
 
 namespace neighbor_chef.Controllers;
 
-[Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("[controller]")]
 public class ChefController : ControllerBase
@@ -19,7 +18,19 @@ public class ChefController : ControllerBase
    {
       _chefService = chefService;
    }
+   
+   [HttpGet("{chefId:guid}")]
+   public async Task<IActionResult> GetChef(Guid chefId)
+   {
+      var chef = await _chefService.GetChefAsync(chefId);
+      if (chef == null)
+      {
+        return NotFound("Chef with id " + chefId + " not found");
+      }
+      return Ok(chef);
+   }
 
+   [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
    [HttpPost("{chefId}/dates")]
    public async Task<IActionResult> AddAvailableDate(Guid chefId, [FromBody] DateDto date)
@@ -43,7 +54,8 @@ public class ChefController : ControllerBase
          return BadRequest(e.Message);
       }
    }
-
+   
+   
    [HttpGet("{chefId}/dates")]
    public async Task<IActionResult> GetAvailableDates(Guid chefId)
    {
@@ -54,6 +66,7 @@ public class ChefController : ControllerBase
       return Ok(chef.AvailableDates);
    }
 
+   [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
    [HttpDelete("{chefId}/dates")]
    public async Task<IActionResult> DeleteAvailableDate(Guid chefId, DateDto date)

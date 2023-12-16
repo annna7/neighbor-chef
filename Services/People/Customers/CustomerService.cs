@@ -1,6 +1,7 @@
 using AutoMapper;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Authentication;
+using neighbor_chef.Specifications.People.Customers;
 using neighbor_chef.UnitOfWork;
 using Newtonsoft.Json;
 
@@ -50,5 +51,11 @@ public class CustomerService : PersonService, ICustomerService
         await _unitOfWork.CompleteAsync();
         
         return customerObject;
+    }
+    
+    public async Task<Customer?> GetCustomerAsync(Guid id, bool asNoTracking = false)
+    {
+        var customer = await _unitOfWork.GetRepository<Customer>().FindFirstOrDefaultWithSpecificationPatternAsync(new FullCustomerWithIdSpecification(id), asNoTracking);
+        return customer;
     }
 }

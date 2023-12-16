@@ -5,13 +5,14 @@ using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
 using neighbor_chef.Models.DTOs.Authentication;
+using neighbor_chef.Specifications;
 using neighbor_chef.UnitOfWork;
 using Newtonsoft.Json;
 
 // using Newtonsoft.Json;
 // using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
-namespace neighbor_chef.Services;
+namespace neighbor_chef.Services.People.Chefs;
 
 public class ChefService : PersonService, IChefService
 {
@@ -61,16 +62,47 @@ public class ChefService : PersonService, IChefService
         
         return chefObject;
     }
+
+    public async Task<List<Order>> GetOrdersForChef(Guid chefId, DateTime? dateTime = null)
+    {
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
+        if (chef == null)
+        {
+            throw new ChefNotFoundException();
+        }
+        if (dateTime.HasValue)
+        {
+            var orders = await _unitOfWork.GetRepository<Order>().FindWithSpecificationPatternAsync(
+                new OrdersForChefAndDate(chefId, dateTime.Value));
+            return orders.ToList();
+        } else {
+            var orders = await _unitOfWork.GetRepository<Order>().FindWithSpecificationPatternAsync(
+                new OrdersForChefAndDate(chefId));
+            return orders.ToList();
+        }
+    }
     
-    private static bool IsDateAvailable(Chef chef, DateTime date)
+    public async Task<Chef?> GetChefAsync(Guid id, bool asNoTracking = false)
+    {
+        var chefRepository = _unitOfWork.GetRepository<Chef>();
+        var fullChefByIdSpecification = new FullChefWithIdSpecification(id);
+        return await chefRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullChefByIdSpecification, asNoTracking);
+    }
+
+    public async Task<bool> IsDateAvailable(Chef chef, DateTime date)
     {
         // TODO: Check if orders are already placed for this date.
-        return date >= DateTime.Now.AddDays(chef.AdvanceNoticeDays);
+        if (date < DateTime.Now.AddDays(chef.AdvanceNoticeDays))
+        {
+            return false;
+        }
+        var ordersOnDate = await GetOrdersForChef(chef.Id, date);
+        return ordersOnDate.Count < chef.MaxOrdersPerDay;
     }
     
     public async Task<string> AddAvailableDateAsync(Guid chefId, DateDto date)
     {
-        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdAsync(chefId);
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
         if (chef == null)
         {
             throw new ChefNotFoundException();
@@ -85,7 +117,7 @@ public class ChefService : PersonService, IChefService
         }
         
         Console.WriteLine("Adding date" + parsedDate);
-        if (!IsDateAvailable(chef, parsedDate))
+        if (!(await IsDateAvailable(chef, parsedDate)))
         {
             throw new DateCantBeAvailableException();
         }
@@ -100,14 +132,22 @@ public class ChefService : PersonService, IChefService
     
     public async Task<List<DateTime>> GetAvailableDatesAsync(Guid chefId)
     {
-        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdAsync(chefId);
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
         if (chef == null)
         {
             throw new ChefNotFoundException();
         }
-
-        chef.AvailableDates = chef.AvailableDates.Where(date => IsDateAvailable(chef, date)).ToList();
-       
+        
+        var availableDates = new List<DateTime>();
+        foreach (var date in chef.AvailableDates)
+        {
+            if (await IsDateAvailable(chef, date))
+            {
+                availableDates.Add(date);
+            }
+        }
+        chef.AvailableDates = availableDates;
+        
         await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
         await _unitOfWork.CompleteAsync();
          
@@ -116,7 +156,7 @@ public class ChefService : PersonService, IChefService
 
     public async Task RemoveAvailableDateAsync(Guid chefId, DateDto date)
     {
-        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdAsync(chefId);
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
         if (chef == null)
         {
             throw new ChefNotFoundException();
