@@ -1,0 +1,16 @@
+@import '../../custom-theme.scss';
+
+* {
+  background-color: $primary-color;
+  height: 3em;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+p {
+  color: $light-primary-text-color;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

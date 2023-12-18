@@ -1,0 +1,44 @@
+@import '../../custom-theme.scss';
+
+* {
+  font-family: map-get($custom-typo, font-family);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Ensures navbar takes full width */
+  background-color: $primary-color;
+  color: $light-primary-text-color;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  color: $light-primary-text-color;
+  font-size: 70px;
+  font-family: 'Satisfy', cursive;
+}
+
+.spacer {
+  flex-grow: 1; /* Takes up all available space */
+}
+
+.menu-items a {
+  margin-left: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .menu-items {
+    display: none; /* Hides menu items on smaller screens */
+  }
+
+  .navbar {
+    justify-content: space-around; /* Adjusts spacing for smaller screens */
+  }
+}
+
+

@@ -28,7 +28,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.LogTo(Console.WriteLine);
+        // optionsBuilder.LogTo(Console.WriteLine);
         // optionsBuilder.EnableSensitiveDataLogging();
         // optionsBuilder.EnableDetailedErrors();
         // optionsBuilder.UseLazyLoadingProxies();
