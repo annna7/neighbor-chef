@@ -17,6 +17,7 @@ import {FooterComponent} from "./components/footer/footer.component";
 import {LoginComponent} from "./components/login/login.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
   declarations: [
@@ -30,10 +31,7 @@ import {AuthInterceptor} from "./interceptors/auth.interceptor";
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
-    RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
-      {path: 'login', component: LoginComponent},
-    ]),
+    AppRoutingModule,
     MatButtonModule,
     MatCardModule,
     MatToolbarModule,

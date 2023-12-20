@@ -24,7 +24,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('auth_token');
   }
 
   // Method for user registration
