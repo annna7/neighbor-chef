@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ServiceResponse } from '../models/service-response.dto';
 
 import { PersonDto } from '../models/person.dto';
 
@@ -15,13 +14,13 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   // Get user details
-  getUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiBaseUrl}/Person/getByEmail`);
+  getUser(): Observable<PersonDto> {
+    return this.http.get<PersonDto>(`${this.apiBaseUrl}/Person/getByEmail`);
   }
 
   // Update user profile
-  updatePerson(personData: PersonDto): Observable<ServiceResponse<PersonDto>> {
-    return this.http.put<ServiceResponse<PersonDto>>(`${this.apiBaseUrl}/person/update`, personData);
+  updatePerson(personData: PersonDto): Observable<PersonDto> {
+    return this.http.put<PersonDto>(`${this.apiBaseUrl}/Person/update`, personData);
   }
 
   // Add other person-related methods as needed

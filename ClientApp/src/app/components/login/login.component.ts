@@ -38,29 +38,27 @@ export class LoginComponent {
     });
   }
   login() {
-    console.log(this.loginForm.value);
     if (this.loginForm.invalid) {
       return;
     }
 
     const credentials: LoginDto = this.loginForm.value;
-    this.authService.login(credentials).subscribe(response => {
-      if (response) {
-        this.storageService.setToken((response as any).token);
-        this.userService.getUser().subscribe(response => {
-          if (response) {
-            this.storageService.setUser(response);
-            this.router.navigate(['/']);
-          } else {
-            // TODO: Handle
-            console.error(response, "Error at parsing response");
-          }
-        });
-      } else {
-        // TODO: Handle
-        console.error("Error at parsing response");
-      }
+    this.authService.login(credentials).subscribe({
+      next: (response) => {
+        this.storageService.setToken(response.token);
+        this.getUserDetails();
+      },
+      error: (err) => console.error('Login Error:', err)
     });
+  }
 
+  private getUserDetails() {
+    this.userService.getUser().subscribe({
+      next: (response) => {
+        this.storageService.setUser(response);
+        this.router.navigate(['/']);
+      },
+      error: (err) => console.error('User Details Error:', err)
+    });
   }
 }

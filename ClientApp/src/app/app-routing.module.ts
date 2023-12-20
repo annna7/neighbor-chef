@@ -7,7 +7,7 @@ import {HomeComponent} from "./components/home/home.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: HomeComponent },
+  { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
   { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [LoggedInGuard] },
   { path: 'dashboard', pathMatch: 'full', component: ChefDashboardComponent, canActivate: [AuthGuard] }
 ];
