@@ -1,5 +1,9 @@
 <mat-toolbar class="navbar">
   <a class="navbar-brand" [routerLink]="['/']">Neighbor Chef</a>
   <span class="spacer"></span>
-<!--  <app-login-menu></app-login-menu>-->
+  <a *ngIf="!authService.isLoggedIn()" mat-button [routerLink]="['/']">Home</a>
+  <a *ngIf="!authService.isLoggedIn()" mat-button [routerLink]="['/login']">Login</a>
+  <a *ngIf="!authService.isLoggedIn()" mat-button [routerLink]="['/register']">Register</a>
+  <a *ngIf="authService.isLoggedIn()" mat-button [routerLink]="['/dashboard']">Dashboard</a>
+  <a *ngIf="authService.isLoggedIn()" mat-button (click)="authService.logout()">Log out</a>
 </mat-toolbar>

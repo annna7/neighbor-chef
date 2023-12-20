@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {LoginComponent} from "./components/login/login.component";
-import {ChefDashboardComponent} from "./chef-dashboard/chef-dashboard.component";
+import {ChefDashboardComponent} from "./components/chef-dashboard/chef-dashboard.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {HomeComponent} from "./components/home/home.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";

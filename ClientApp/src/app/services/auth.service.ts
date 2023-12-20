@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment';
 import {LoginDto} from '../models/login.dto';
 import {Observable} from 'rxjs';
 import {TokenDto} from "../models/token.dto";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +12,18 @@ import {TokenDto} from "../models/token.dto";
 export class AuthService {
   private apiBaseUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   // Method for user login
   login(credentials: LoginDto): Observable<TokenDto> {
     return this.http.post<TokenDto>(`${this.apiBaseUrl}/Account/Login`, credentials);
+  }
+
+  async logout(): Promise<void> {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user_data');
+    await this.router.navigate(['/']);
   }
 
   test() : Observable<string> {
