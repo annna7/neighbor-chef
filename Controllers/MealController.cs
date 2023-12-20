@@ -14,10 +14,12 @@ public class MealController : ControllerBase
 {
     private readonly IMealService _mealService;
     private readonly IChefService _chefService;
-
-    public MealController(IChefService chefService, IMealService mealService)
+    private readonly IAccountService _accountService;
+    
+    public MealController(IChefService chefService, IMealService mealService, IAccountService accountService)
     {
         _mealService = mealService;
+        _accountService = accountService;
         _chefService = chefService;
     }
     
@@ -26,8 +28,7 @@ public class MealController : ControllerBase
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")] // Only chefs can create meals
     public async Task<IActionResult> CreateMeal([FromBody] CreateMealDto createMealDto)
     {
-        var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (chefEmail == null) return Unauthorized("You are not authorized to create a meal, please log in as a chef.");
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
         var chef = await _chefService.GetPersonAsync(chefEmail, true);
         if (chef == null) return Unauthorized("You are not authorized to create a meal, please log in as a chef.");
         var meal = await _mealService.CreateMealAsync(createMealDto, chef.Id);
@@ -49,8 +50,7 @@ public class MealController : ControllerBase
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")] // Only the owning chef can update the meal
     public async Task<IActionResult> UpdateMeal(Guid id, [FromBody] UpdateMealDto updateMealDto)
     {
-        var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (chefEmail == null) return Unauthorized("You are not authorized to create a meal, please log in as a chef.");
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
         
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
@@ -65,9 +65,8 @@ public class MealController : ControllerBase
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> AddIngredientToMeal(Guid id, [FromBody] AddIngredientDto addIngredientDto)
     {
-        var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (chefEmail == null) return Unauthorized("You are not authorized to add ingredients, please log in as a chef.");
-    
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
     
@@ -83,9 +82,8 @@ public class MealController : ControllerBase
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> RemoveIngredientFromMeal(Guid id, [FromBody] RemoveIngredientDto removeIngredientDto)
     {
-        var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (chefEmail == null) return Unauthorized("You are not authorized to remove ingredients, please log in as a chef.");
-    
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
     
@@ -101,9 +99,8 @@ public class MealController : ControllerBase
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
     public async Task<IActionResult> DeleteMeal(Guid id)
     {
-        var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (chefEmail == null) return Unauthorized("You are not authorized to delete meals, please log in as a chef.");
-        
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+
         var meal = await _mealService.GetMealAsync(id);
         if (meal == null) return NotFound("Meal not found.");
         

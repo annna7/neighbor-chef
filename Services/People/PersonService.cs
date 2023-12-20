@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
 using neighbor_chef.Models.DTOs.Authentication;
@@ -11,9 +10,9 @@ namespace neighbor_chef.Services;
 public class PersonService : IPersonService
 {
     protected readonly IUnitOfWork _unitOfWork;
-    protected readonly AccountService _accountService;
-
-    public PersonService(IUnitOfWork unitOfWork, AccountService accountService)
+    protected readonly IAccountService _accountService;
+    
+    public PersonService(IUnitOfWork unitOfWork, IAccountService accountService)
     {
         _unitOfWork = unitOfWork;
         _accountService = accountService;
@@ -25,14 +24,15 @@ public class PersonService : IPersonService
         {
             Email = personDto.Email,
             UserName = personDto.Email,
-            PasswordHash = personDto.Password,
             EmailConfirmed = true,
             PhoneNumber = personDto.PhoneNumber,
         };
         
+        // await _userManager.CreateAsync(user, personDto.Password);
+        
         var address = new Address
         {
-            StreetNumber = personDto.Address.StreetNumber ?? "NaN",
+            StreetNumber = personDto.Address.StreetNumber,
             County = personDto.Address.County,
             Street = personDto.Address.Street,
             City = personDto.Address.City,

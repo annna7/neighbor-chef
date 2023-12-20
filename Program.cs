@@ -11,14 +11,41 @@ using neighbor_chef.Models.DTOs;
 using neighbor_chef.TokenService;
 using neighbor_chef.UnitOfWork;
 using AutoMapper;
+using Duende.IdentityServer.EntityFramework.Services;
+using Duende.IdentityServer.Services;
 using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
+using neighbor_chef.Services.Cors;
 using neighbor_chef.Services.Orders;
 using neighbor_chef.Services.People.Chefs;
 using neighbor_chef.Services.Reviews;
+using ITokenService = neighbor_chef.TokenService.ITokenService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("MyCorsPolicy",
+//         builder =>
+//         {
+//             builder.WithOrigins("https://localhost:44475", "https://localhost:7013")
+//                 .AllowAnyMethod()
+//                 .AllowAnyHeader();
+//         });
+// });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
@@ -34,11 +61,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
+builder.Services.AddSingleton<ICorsPolicyService, MyCorsPolicyService>();
+
 builder.Services.AddAuthentication()
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Account/Login";
-    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -60,7 +85,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(context =>
     new UnitOfWork(context.GetRequiredService<ApplicationDbContext>()));
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IChefService, ChefService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
@@ -75,6 +100,9 @@ builder.Services.AddScoped<ChefAuthorizeAttribute>();
 
 
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
+
+logger.LogInformation("Hello, world!");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -88,9 +116,11 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseCors("MyCorsPolicy");
 
 app.UseAuthentication();
 app.UseIdentityServer();
@@ -110,6 +140,7 @@ app.Use(async (context, next) =>
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.MapFallbackToFile("index.html");
@@ -120,8 +151,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<ApplicationDbContext>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await DbInitializer.DbInitialize(context, roleManager, services.GetRequiredService<IChefService>(),
-        services.GetRequiredService<ICustomerService>());
+    await DbInitializer.DbInitialize(context, roleManager, userManager);
 }
 
 app.Run();

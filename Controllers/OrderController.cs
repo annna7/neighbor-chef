@@ -16,19 +16,20 @@ public class OrderController : ControllerBase
     private readonly IOrderService _orderService;
     private readonly IChefService _chefService;
     private readonly ICustomerService _customerService;
+    private readonly IAccountService _accountService;
 
-    public OrderController(IOrderService orderService, IChefService chefService, ICustomerService customerService)
+    public OrderController(IOrderService orderService, IChefService chefService, ICustomerService customerService, IAccountService accountService)
     {
         _orderService = orderService;
         _chefService = chefService;
+        _accountService = accountService;
         _customerService = customerService;
     }
 
     [HttpPost("{chefId:guid}")]
     public async Task<IActionResult> CreateOrder(Guid chefId, [FromBody] CreateOrderDto orderDto)
     {
-        var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        if (customerEmail == null) return Unauthorized("You are not authorized to create an order, please log in as a customer.");
+        var customerEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
         var customer = await _customerService.GetPersonAsync(customerEmail, true);
         if (customer == null) return Unauthorized("You are not authorized to create an order, please log in as a customer.");
         var order = await _orderService.CreateOrderAsync(customer.Id, chefId, orderDto);

@@ -19,11 +19,20 @@ public class ChefController : ControllerBase
 {
    private readonly IChefService _chefService;
    private readonly IOrderService _orderService;
+   private readonly IAccountService _accountService;
    
-   public ChefController(IChefService chefService, IOrderService orderService)
+   public ChefController(IChefService chefService, IOrderService orderService, IAccountService accountService)
    {
       _chefService = chefService;
       _orderService = orderService;
+      _accountService = accountService;
+   }
+
+   [HttpGet]
+   [Authorize(Roles = "Chef, Customer", AuthenticationSchemes = "Bearer")]
+   public async Task<IActionResult> Test()
+   {
+      return Ok("Chef controller");
    }
    
    [HttpGet("{chefId:guid}")]
@@ -42,11 +51,7 @@ public class ChefController : ControllerBase
    [HttpPut("orders/{orderId:guid}")]
    public async Task<IActionResult> UpdateOrderStatus(Guid orderId, [FromBody] UpdateOrderStatusDto orderStatusDto)
    {
-      var chefEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-      if (chefEmail == null)
-      {
-         return BadRequest("Invalid chef email");
-      }
+      var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
       var chef = await _chefService.GetPersonAsync(chefEmail);
       if (chef == null)
       {

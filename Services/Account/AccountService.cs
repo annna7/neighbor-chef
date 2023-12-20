@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+
 
 namespace neighbor_chef.Services
 {
@@ -14,6 +16,21 @@ namespace neighbor_chef.Services
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        
+
+        public string GetEmailFromToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+            var email = jsonToken?.Claims.First(claim => claim.Type == "email").Value;
+
+            if (email == null)
+            {
+                throw new Exception("No email claim found.");
+            }
+            return email;
+        }
+
 
         public async Task<IdentityResult> RegisterUserAsync(ApplicationUser user)
         {

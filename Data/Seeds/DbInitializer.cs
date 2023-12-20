@@ -12,6 +12,7 @@ public class DbInitializer
 {
     private static Task SeedRoles(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
     {
+        if (roleManager.Roles.Any()) return Task.CompletedTask;
         var roles = new List<IdentityRole>
         {
             new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" },
@@ -25,17 +26,21 @@ public class DbInitializer
         return Task.CompletedTask;
     }
 
-    private static async Task SeedChefs(ApplicationDbContext context, IChefService chefService)
+    private static async Task SeedChefs(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
-        // if (context.Chefs.Any()) return;
+        if (context.Chefs.Any()) return;
         var gordonApplication = new ApplicationUser
         {
             Email = "gordon@gmail.com",
             EmailConfirmed = true,
             UserName = "gordon@gmail.com",
+            NormalizedUserName = "gordon@gmail.com",
             PhoneNumber = "123456789",
-            PasswordHash = "Password123!", 
         };
+        
+        await userManager.CreateAsync(gordonApplication, "Password123!");
+        await userManager.AddToRoleAsync(gordonApplication, "Chef");
+        
         
         var gordonAddress = new Address
         {
@@ -61,24 +66,32 @@ public class DbInitializer
             AddressId = gordonAddress.Id,
             ApplicationUserId = gordonApplication.Id,
             ApplicationUser = gordonApplication,
-            AvailableDatesJson = "[{\"Year\":2024,\"Month\":10,\"Day\":1},{\"Year\":2024,\"Month\":10,\"Day\":2},{\"Year\":2024,\"Month\":10,\"Day\":3}]",
+            AvailableDatesJson = JsonConvert.SerializeObject(new List<DateTime>
+            {
+                new DateTime(2024, 10, 1),
+                new DateTime(2024, 10, 2),
+                new DateTime(2024, 10, 3)
+            })
         };
         
         await context.Chefs.AddAsync(gordon);
         await context.SaveChangesAsync();
     }
 
-    private static async Task SeedCustomers(ApplicationDbContext context, ICustomerService customerService)
+    private static async Task SeedCustomers(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
-        // if (context.Customers.Any()) return;
+        if (context.Customers.Any()) return;
         var johnApplication = new ApplicationUser
         {
             Email = "john@gmail.com",
             EmailConfirmed = true,
             UserName = "john@gmail.com",
             PhoneNumber = "123456789",
-            PasswordHash = "Password123!"
+            NormalizedUserName = "john@gmail.com"
         };
+        
+        await userManager.CreateAsync(johnApplication, "Password123!");
+        await userManager.AddToRoleAsync(johnApplication, "Customer");
 
         var johnAddress = new Address
         {
@@ -135,10 +148,10 @@ public class DbInitializer
         return context.SaveChangesAsync();
     }
 
-    private static async Task SeedMeals(ApplicationDbContext context, IChefService chefService)
+    private static async Task SeedMeals(ApplicationDbContext context)
     {
-        // if (context.Meals.Any()) return;
-        var chefId = (await chefService.GetAllChefsAsync(true))[0].Id;
+        if (context.Meals.Any()) return;
+        var chefId = context.Chefs.FirstOrDefault().Id;
         var meals = new List<Meal>
         {
             new Meal
@@ -184,9 +197,9 @@ public class DbInitializer
         await context.SaveChangesAsync();
     }
     
-    private static async Task SeedOrders(ApplicationDbContext context, ICustomerService customerService, IChefService chefService)
+    private static async Task SeedOrders(ApplicationDbContext context)
     {
-        // if (context.Orders.Any()) return;
+        if (context.Orders.Any()) return;
         var customerId = await context.Customers.Select(c => c.Id).FirstOrDefaultAsync();
         var chef = await context.Chefs.Select(c => c).FirstOrDefaultAsync(c => c.AvailableDatesJson != null);
         chef.AvailableDates = JsonConvert.DeserializeObject<List<DateTime>>(chef.AvailableDatesJson);
@@ -239,9 +252,9 @@ public class DbInitializer
         await context.SaveChangesAsync();
     }
     
-    private static async Task SeedReviews(ApplicationDbContext context, ICustomerService customerService, IChefService chefService)
+    private static async Task SeedReviews(ApplicationDbContext context)
     {
-        // if (context.Reviews.Any()) return;
+        if (context.Reviews.Any()) return;
         var customerId = await context.Customers.Select(c => c.Id).FirstOrDefaultAsync();
         var chef = await context.Chefs.Select(c => c).FirstOrDefaultAsync();
         
@@ -278,15 +291,15 @@ public class DbInitializer
     }
     
     public static async Task DbInitialize(ApplicationDbContext context,
-        RoleManager<IdentityRole> roleManager, IChefService chefService, ICustomerService customerService)
+        RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
         await SeedRoles(context, roleManager);
-        await SeedChefs(context, chefService);
+        await SeedChefs(context, userManager);
         await SeedCategories(context);
-        await SeedCustomers(context, customerService);
-        await SeedMeals(context, chefService);
-        await SeedOrders(context, customerService, chefService);
-        await SeedReviews(context, customerService, chefService);
+        await SeedCustomers(context, userManager);
+        await SeedMeals(context);
+        await SeedOrders(context);
+        await SeedReviews(context);
     }
 }
 

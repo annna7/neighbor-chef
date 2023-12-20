@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Authentication;
 using neighbor_chef.Specifications.People.Customers;
@@ -9,11 +10,8 @@ namespace neighbor_chef.Services;
 
 public class CustomerService : PersonService, ICustomerService
 {
-    protected readonly IMapper _mapper;
-    
-    public CustomerService(IUnitOfWork unitOfWork, AccountService accountService, IMapper mapper) : base(unitOfWork, accountService)
+    public CustomerService(IUnitOfWork unitOfWork, IAccountService accountService) : base(unitOfWork, accountService)
     {
-        _mapper = mapper;
     }
     
     public override async Task<Person> CreatePersonAsync(PersonRegisterDto customerDto)

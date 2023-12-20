@@ -9,4 +9,6 @@ public interface IAccountService
     public Task<IdentityResult> RegisterUserAsync(ApplicationUser user);
     public Task<SignInResult> LoginUserAsync(UserLoginDto userLoginDto);
     public Task LogoutUserAsync();
+    public string GetEmailFromToken(string token);
+    public Task AssignRoleAsync(ApplicationUser user, string role);
 }

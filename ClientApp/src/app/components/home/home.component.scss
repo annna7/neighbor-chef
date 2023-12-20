@@ -1,4 +1,4 @@
-@import '../../custom-theme.scss';
+@import '../../../custom-theme.scss';
 
 .hero-section {
   display: flex;
@@ -30,7 +30,7 @@
 
 .hero-image {
   flex: 1;
-  background-image: url("../../assets/family-meals/pexels-cottonbro-studio-3171151.jpg");
+  background-image: url("../../../assets/family-meals/pexels-cottonbro-studio-3171151.jpg");
   background-size: cover;
 }
 

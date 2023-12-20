@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
@@ -10,10 +11,22 @@ namespace neighbor_chef.Controllers;
 public class PersonController : ControllerBase
 {
     private readonly IPersonService _personService;
+    private readonly IAccountService _accountService;
     
-    public PersonController(IPersonService personService)
+    public PersonController(IPersonService personService, IAccountService accountService)
     {
         _personService = personService;
+        _accountService = accountService;
+    }
+    
+    [HttpGet("getByEmail")]
+    public async Task<IActionResult> GetPersonByEmail()
+    {
+        Console.WriteLine("SUNT AICI");
+        var email = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+        var person = await _personService.GetPersonAsync(email);
+        if (person == null) return NotFound("Person with email " + email + " not found.");
+        return Ok(person);
     }
     
     [HttpGet("getByEmail/{email}")]

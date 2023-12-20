@@ -13,10 +13,12 @@ namespace neighbor_chef.Controllers
     {
         private readonly IReviewsService _reviewsService;
         private readonly ICustomerService _customerService;
+        private readonly IAccountService _accountService;
 
-        public ReviewController(IReviewsService reviewsService, ICustomerService customerService)
+        public ReviewController(IReviewsService reviewsService, ICustomerService customerService, IAccountService accountService)
         {
             _reviewsService = reviewsService;
+            _accountService = accountService;
             _customerService = customerService;
         }
 
@@ -26,8 +28,7 @@ namespace neighbor_chef.Controllers
         {
             try
             {
-                var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                if (customerEmail == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
+                var customerEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
                 var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
                 var review = await _reviewsService.CreateReviewAsync(customer.Id, createReviewDto);
@@ -73,8 +74,7 @@ namespace neighbor_chef.Controllers
         {
             try
             {
-                var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                if (customerEmail == null) return Unauthorized("Please log in as a customer.");
+                var customerEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
                 var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You can only update your own reviews.");
                 var review = await _reviewsService.UpdateReviewAsync(customer.Id, id, updateReviewDto);
@@ -96,8 +96,7 @@ namespace neighbor_chef.Controllers
         {
             try
             {
-                var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                if (customerEmail == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
+                var customerEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
                 var customer = await _customerService.GetPersonAsync(customerEmail, true);
                 if (customer == null) return Unauthorized("You are not authorized to create a review, please log in as a customer.");
                 await _reviewsService.DeleteReviewAsync(id, customer.Id);

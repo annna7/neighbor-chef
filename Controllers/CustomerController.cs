@@ -19,11 +19,13 @@ public class CustomerController : ControllerBase
 {
    private readonly ICustomerService _customerService;
    private readonly IOrderService _orderService;
+   private readonly IAccountService _accountService;
    
-   public CustomerController(ICustomerService customerService, IOrderService orderService)
+   public CustomerController(ICustomerService customerService, IOrderService orderService, IAccountService accountService)
    {
       _customerService = customerService;
       _orderService = orderService;
+      _accountService = accountService;
    }
    
    [HttpGet("{customerId:guid}")]
@@ -41,11 +43,7 @@ public class CustomerController : ControllerBase
    [HttpPut("orders/{orderId:guid}")]
    public async Task<IActionResult> UpdateOrderStatus(Guid orderId, [FromBody] UpdateOrderStatusDto orderStatusDto)
    {
-       var customerEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-       if (customerEmail == null)
-       {
-           return BadRequest("Invalid customer email");
-       }
+       var customerEmail =  _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
        var customer = await _customerService.GetPersonAsync(customerEmail);
        if (customer == null)
        {

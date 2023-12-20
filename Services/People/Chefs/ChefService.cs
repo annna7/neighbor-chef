@@ -1,5 +1,6 @@
 // using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Exceptions.Dates;
 using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
@@ -16,11 +17,8 @@ namespace neighbor_chef.Services.People.Chefs;
 
 public class ChefService : PersonService, IChefService
 {
-    protected readonly IMapper _mapper;
-    
-    public ChefService(IUnitOfWork unitOfWork, AccountService accountService, IMapper mapper) : base(unitOfWork, accountService)
+    public ChefService(IUnitOfWork unitOfWork, IAccountService accountService) : base(unitOfWork, accountService)
     {
-        _mapper = mapper;
     }
     
     public override async Task<Person> CreatePersonAsync(PersonRegisterDto chefDto)
