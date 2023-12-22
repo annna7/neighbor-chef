@@ -18,6 +18,9 @@ import {LoginComponent} from "./components/login/login.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AuthInterceptor} from "./interceptors/auth.interceptor";
 import {AppRoutingModule} from "./app-routing.module";
+import {ChefRegisterComponent} from "./components/register/chef-register/chef-register.component";
+import {CommonRegisterComponent} from "./components/register/common-register/common-register.component";
+import {CustomerRegisterComponent} from "./components/register/customer-register/customer-register.component";
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import {AppRoutingModule} from "./app-routing.module";
     NavMenuComponent,
     FetchDataComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    ChefRegisterComponent,
+    CommonRegisterComponent,
+    CustomerRegisterComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

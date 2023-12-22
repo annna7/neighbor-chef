@@ -5,10 +5,16 @@ import {ChefDashboardComponent} from "./components/chef-dashboard/chef-dashboard
 import {AuthGuard} from "./guards/auth.guard";
 import {HomeComponent} from "./components/home/home.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
+import {CommonRegisterComponent} from "./components/register/common-register/common-register.component";
+import {ChefRegisterComponent} from "./components/register/chef-register/chef-register.component";
+import {CustomerRegisterComponent} from "./components/register/customer-register/customer-register.component";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
   { path: 'login', pathMatch: 'full', component: LoginComponent, canActivate: [LoggedInGuard] },
+  { path: 'register', pathMatch: 'full', component: CommonRegisterComponent, canActivate: [LoggedInGuard] },
+  { path: 'register/chef', pathMatch: 'full', component: ChefRegisterComponent, canActivate: [LoggedInGuard] },
+  { path: 'register/customer', pathMatch: 'full', component: CustomerRegisterComponent, canActivate: [LoggedInGuard] },
   { path: 'dashboard', pathMatch: 'full', component: ChefDashboardComponent, canActivate: [AuthGuard] }
 ];
 

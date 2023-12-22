@@ -54,8 +54,9 @@ export class LoginComponent {
 
   private getUserDetails() {
     this.userService.getUser().subscribe({
-      next: (response) => {
+      next: (response: PersonDto) => {
         this.storageService.setUser(response);
+        console.log(this.storageService.getUser());
         this.router.navigate(['/']);
       },
       error: (err) => console.error('User Details Error:', err)
