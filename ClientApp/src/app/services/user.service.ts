@@ -3,7 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-import { PersonDto } from '../models/person.dto';
+import { PersonDto } from '../models/people/person.dto';
+import {ChefRegisterDto} from "../models/people/chef-register.dto";
+import {CustomerRegisterDto} from "../models/people/customer-register.dto";
+import {Chef, Customer} from "../../swagger";
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +16,20 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Get user details
-  getUser(): Observable<PersonDto> {
-    return this.http.get<PersonDto>(`${this.apiBaseUrl}/Person/getByEmail`);
+  getChef(): Observable<Chef> {
+    return this.http.get<Chef>(`${this.apiBaseUrl}/Chef`);
   }
 
-  // Update user profile
+  getCustomer(): Observable<Customer> {
+    return this.http.get<Customer>(`${this.apiBaseUrl}/Customer`);
+  }
+
   updatePerson(personData: PersonDto): Observable<PersonDto> {
     return this.http.put<PersonDto>(`${this.apiBaseUrl}/Person/update`, personData);
   }
 
-  // Add other person-related methods as needed
+  register(userData: ChefRegisterDto | CustomerRegisterDto): Observable<any> {
+    return this.http.post<any>(`${this.apiBaseUrl}/Account/register`, userData);
+  }
+
 }

@@ -26,6 +26,7 @@ public class PersonService : IPersonService
             UserName = personDto.Email,
             EmailConfirmed = true,
             PhoneNumber = personDto.PhoneNumber,
+            PasswordHash = personDto.Password,
         };
         
         // await _userManager.CreateAsync(user, personDto.Password);

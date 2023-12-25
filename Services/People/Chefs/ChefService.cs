@@ -80,6 +80,13 @@ public class ChefService : PersonService, IChefService
         }
     }
     
+    public async Task<Chef?> GetChefAsync(string email, bool asNoTracking = false)
+    {
+        var chefRepository = _unitOfWork.GetRepository<Chef>();
+        var fullChefByEmailSpecification = new FullChefWithEmailSpecification(email);
+        return await chefRepository.FindFirstOrDefaultWithSpecificationPatternAsync(fullChefByEmailSpecification, asNoTracking);
+    }
+    
     public async Task<Chef?> GetChefAsync(Guid id, bool asNoTracking = false)
     {
         var chefRepository = _unitOfWork.GetRepository<Chef>();

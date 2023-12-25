@@ -27,12 +27,18 @@ public class ChefController : ControllerBase
       _orderService = orderService;
       _accountService = accountService;
    }
-
-   [HttpGet]
-   [Authorize(Roles = "Chef, Customer", AuthenticationSchemes = "Bearer")]
-   public async Task<IActionResult> Test()
+   
+   
+   [HttpGet("")]
+   public async Task<IActionResult> GetChef()
    {
-      return Ok("Chef controller");
+      var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+      var chef = await _chefService.GetChefAsync(chefEmail);
+      if (chef == null)
+      {
+         return NotFound("Chef with email " + chefEmail + " not found");
+      }
+      return Ok(chef);
    }
    
    [HttpGet("{chefId:guid}")]

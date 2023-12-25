@@ -1,3 +1,3 @@
 export interface TokenDto {
-  token: string;
+  Token: string;
 }

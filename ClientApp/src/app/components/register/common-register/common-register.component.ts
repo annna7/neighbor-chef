@@ -1,28 +1,44 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-common-register',
   templateUrl: './common-register.component.html',
-  styleUrl: './common-register.component.css'
+  styleUrls: ['./common-register.component.css']
 })
+export class CommonRegisterComponent implements OnInit {
+  commonForm!: FormGroup;
+  addressFields = ['street', 'city', 'county', 'country', 'zipCode', 'streetNumber', 'apartmentNumber'];
 
-export class CommonRegisterComponent {
-  commonForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private router: Router) {}
+
+  ngOnInit(): void {
     this.commonForm = this.formBuilder.group({
-      // ...common fields
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      phoneNumber: ['', Validators.required],
+      pictureUrl: [''],
+      address: this.formBuilder.group({
+        street: ['', Validators.required],
+        city: ['', Validators.required],
+        county: ['', Validators.required],
+        country: ['', Validators.required],
+        zipCode: ['', Validators.required],
+        streetNumber: [''],
+        apartmentNumber: ['']
+      }),
+      type: ['', Validators.required] // 'chef' or 'customer'
     });
   }
 
-  confirmSelection(role: string) {
-    // Save common data to a service or local storage
-    // Navigate to specific form based on role
-    if (role === 'chef') {
-      this.router.navigate(['/register/chef']);
-    } else if (role === 'customer') {
-      this.router.navigate(['/register/customer']);
+  confirmSelection(): void {
+    if (this.commonForm.valid) {
+      localStorage.setItem('form_common_data', JSON.stringify(this.commonForm.value));
+      const role = this.commonForm.value.type.toLowerCase();
+      this.router.navigate([`/register/${role}`]);
     }
   }
 }

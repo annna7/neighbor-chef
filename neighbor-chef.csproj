@@ -25,6 +25,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
@@ -33,8 +34,11 @@
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="ClientApp\src\app\components\" />
+      <Folder Include="api\" />
+      <Folder Include="ClientApp\src\app\components\customer-dashboard\" />
       <Folder Include="ClientApp\src\app\garbage\" />
+      <Folder Include="docs\" />
+      <Folder Include="model\" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -13,6 +13,7 @@ using neighbor_chef.UnitOfWork;
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Services;
 using Duende.IdentityServer.Services;
+using Microsoft.OpenApi.Models;
 using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
@@ -24,16 +25,10 @@ using ITokenService = neighbor_chef.TokenService.ITokenService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("MyCorsPolicy",
-//         builder =>
-//         {
-//             builder.WithOrigins("https://localhost:44475", "https://localhost:7013")
-//                 .AllowAnyMethod()
-//                 .AllowAnyHeader();
-//         });
-// });
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Neighbor Chef API", Version = "v1" });
+});
 
 builder.Services.AddCors(options =>
 {
@@ -78,8 +73,13 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-    );
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
+        {
+            NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy()
+        };
+    });
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(context =>
     new UnitOfWork(context.GetRequiredService<ApplicationDbContext>()));
@@ -101,9 +101,16 @@ builder.Services.AddScoped<ChefAuthorizeAttribute>();
 
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
-logger.LogInformation("Hello, world!");
 
 var app = builder.Build();
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neighbor Chef API V1");
+    c.RoutePrefix = string.Empty;
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

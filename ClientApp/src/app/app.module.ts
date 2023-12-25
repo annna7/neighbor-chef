@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -21,7 +19,11 @@ import {AppRoutingModule} from "./app-routing.module";
 import {ChefRegisterComponent} from "./components/register/chef-register/chef-register.component";
 import {CommonRegisterComponent} from "./components/register/common-register/common-register.component";
 import {CustomerRegisterComponent} from "./components/register/customer-register/customer-register.component";
-
+import { CamelCaseToFormattedTextPipe } from './pipes/camel-case-to-formatted-text.pipe';
+import {JsonFormatInterceptor} from "./interceptors/json-format.interceptor";
+import {ParentDashboardComponent} from "./components/dashboard/parent-dashboard/parent-dashboard.component";
+import {ChefDashboardComponent} from "./components/dashboard/chef-dashboard/chef-dashboard.component";
+import {CustomerDashboardComponent} from "./components/dashboard/customer-dashboard/customer-dashboard.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +35,10 @@ import {CustomerRegisterComponent} from "./components/register/customer-register
     ChefRegisterComponent,
     CommonRegisterComponent,
     CustomerRegisterComponent,
+    CamelCaseToFormattedTextPipe,
+    ParentDashboardComponent,
+    CustomerDashboardComponent,
+    ChefDashboardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -45,10 +51,11 @@ import {CustomerRegisterComponent} from "./components/register/customer-register
     MatIconModule,
     MatMenuModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JsonFormatInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

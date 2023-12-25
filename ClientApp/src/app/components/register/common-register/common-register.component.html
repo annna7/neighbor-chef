@@ -1,1 +1,82 @@
-<p>register works!</p>
+<div class="registration-container">
+  <h2>Register</h2>
+  <form [formGroup]="commonForm" (ngSubmit)="confirmSelection()">
+
+    <!-- Name Fields -->
+    <div class="form-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" formControlName="firstName">
+      <!-- Error message for first name -->
+      <div *ngIf="commonForm.get('firstName')?.invalid && commonForm.get('firstName')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('firstName')?.errors?.['required']">First name is required.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" formControlName="lastName">
+      <!-- Error message for last name -->
+      <div *ngIf="commonForm.get('lastName')?.invalid && commonForm.get('lastName')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('lastName')?.errors?.['required']">Last name is required.</div>
+      </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" formControlName="email">
+      <!-- Error message for email -->
+      <div *ngIf="commonForm.get('email')?.invalid && commonForm.get('email')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="commonForm.get('email')?.errors?.['email']">Enter a valid email.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" formControlName="password">
+      <!-- Error message for password -->
+      <div *ngIf="commonForm.get('password')?.invalid && commonForm.get('password')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('password')?.errors?.['required']">Password is required.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" formControlName="phoneNumber">
+      <!-- Error message for phone number -->
+      <div *ngIf="commonForm.get('phoneNumber')?.invalid && commonForm.get('phoneNumber')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('phoneNumber')?.errors?.['required']">Phone number is required.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="pictureUrl">Picture URL:</label>
+      <input type="text" id="pictureUrl" formControlName="pictureUrl">
+    </div>
+
+    <h5>Address:</h5>
+    <div formGroupName="address">
+      <!-- Address Fields -->
+      <div *ngFor="let field of addressFields">
+        <div class="form-group">
+          <label for="{{field}}">{{field | camelCaseToFormattedText}}:</label>
+          <input type="text" [id]="field" formControlName="{{field}}">
+          <!-- Error message for each address field -->
+          <div *ngIf="commonForm.get('address')?.get(field)?.invalid && commonForm.get('address')?.get(field)?.touched" class="alert alert-danger">
+            <div *ngIf="commonForm.get('address')?.get(field)?.errors?.['required']">{{ field | titlecase }} is required.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="type">Register as:</label>
+      <select id="type" formControlName="type">
+        <option value="Chef">Chef</option>
+        <option value="Customer">Customer</option>
+      </select>
+      <div *ngIf="commonForm.get('type')?.invalid && commonForm.get('type')?.touched" class="alert alert-danger">
+        <div *ngIf="commonForm.get('type')?.errors?.['required']">Selecting a role is required.</div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!commonForm.valid">Confirm</button>
+  </form>
+</div>

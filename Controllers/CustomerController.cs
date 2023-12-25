@@ -28,6 +28,18 @@ public class CustomerController : ControllerBase
       _accountService = accountService;
    }
    
+   [HttpGet("")]
+   public async Task<IActionResult> GetCustomer()
+   {
+      var customerEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+      var customer = await _customerService.GetCustomerAsync(customerEmail);
+      if (customer == null)
+      {
+         return NotFound("Customer with email " + customerEmail + " not found");
+      }
+      return Ok(customer);
+   }
+   
    [HttpGet("{customerId:guid}")]
    public async Task<IActionResult> GetCustomer(Guid customerId)
    {
