@@ -8,9 +8,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* Ensures navbar takes full width */
+  width: 100%;
   background-color: $primary-color;
   color: $light-primary-text-color;
+  height: 4.5em;
 }
 
 .navbar-brand {

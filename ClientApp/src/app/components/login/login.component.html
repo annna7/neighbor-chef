@@ -1,35 +1,37 @@
-<div class="login-container">
+<mat-card>
   <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="login()">
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter email">
-      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="alert alert-danger">
-        <div *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</div>
-        <div *ngIf="loginForm.get('email')?.errors?.['email']">Email must be a valid email address.</div>
-      </div>
-    </div>
+  <form [formGroup]="loginForm" (ngSubmit)="login()" class="example-form">
 
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" formControlName="password" class="form-control" placeholder="Enter password">
-      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="alert alert-danger">
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" id="email" formControlName="email" placeholder="Enter email">
+      <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Email must be a valid email address.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" id="password" formControlName="password" placeholder="Enter password">
+      <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         Password is required.
-      </div>
-    </div>
+      </mat-error>
+    </mat-form-field>
 
-    <div class="form-group">
-      <label for="role">Login as:</label>
-      <select id="role" formControlName="role">
-        <option value="Chef">Chef</option>
-        <option value="Customer">Customer</option>
-      </select>
-      <div *ngIf="loginForm.get('type')?.invalid && loginForm.get('type')?.touched" class="alert alert-danger">
-        <div *ngIf="loginForm.get('type')?.errors?.['required']">Selecting a role is required.</div>
-      </div>
-    </div>
+    <mat-form-field class="example-full-width">
+      <mat-label>Login as</mat-label>
+      <mat-select id="role" formControlName="role">
+        <mat-option value="Chef">Chef</mat-option>
+        <mat-option value="Customer">Customer</mat-option>
+      </mat-select>
+      <mat-error *ngIf="loginForm.get('type')?.invalid && loginForm.get('type')?.touched">
+        <span *ngIf="loginForm.get('type')?.errors?.['required']">Selecting a role is required.</span>
+      </mat-error>
+    </mat-form-field>
 
-    <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
   </form>
   <p>Don't have an account? <a routerLink="/register">Register here</a></p>
-</div>
+</mat-card>
+

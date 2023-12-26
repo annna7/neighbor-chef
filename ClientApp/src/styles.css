@@ -1,3 +1,5 @@
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+
 a {
   color: #0366d6;
 }
@@ -16,9 +18,49 @@ code {
   border-color: #1861ac;
 }
 
-html, body { height: 100%; width: 100%}
+html, body { height: 100%; width: 100%;}
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+
+mat-form-field {
+  padding: 10px;
+}
+
+h2 {
+  margin: 20px;
+  padding: 0;
+  font-size: 1.5em;
+  font-weight: 400;
+}
+
+mat-card {
+  margin: 20px;
+  padding: 50px;
+}
+
+form {
+  display: grid;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+button {
+  margin: 20px auto;
+  width: 300px;
+}
+
+.address-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.address-form mat-form-field {
+  flex: 1 1 45%;
+}

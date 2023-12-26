@@ -46,7 +46,7 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        this.storageService.setToken(response.Token);
+        this.storageService.setToken(response.token);
         this.getUserDetails();
       },
       error: (err) => console.error('Login Error:', err)
@@ -58,7 +58,7 @@ export class LoginComponent {
     switch (role) {
       case 'Chef':
         localStorage.setItem('role', 'Chef');
-        this.userService.getChef().subscribe({
+        this.userService.getCurrentChef().subscribe({
           next: (response) => {
             this.storageService.setUser(response);
           },
@@ -67,7 +67,7 @@ export class LoginComponent {
         break;
       case 'Customer':
         localStorage.setItem('role', 'Customer');
-        this.userService.getCustomer().subscribe({
+        this.userService.getCurrentCustomer().subscribe({
           next: (response) => {
             this.storageService.setUser(response);
           },

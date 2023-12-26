@@ -1,0 +1,72 @@
+<mat-card class="profile-card">
+  <form [formGroup]="profileForm" [ngClass]="{'read-only' : !isEditable}">
+    <mat-form-field appearance="outline" >
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" [readonly]="!isEditable">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" [readonly]="!isEditable">
+    </mat-form-field>
+
+    <div class="address-form" formGroupName="applicationUser">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber" [readonly]="!isEditable">
+      </mat-form-field>
+    </div>
+
+    <div class="address-form" formGroupName="address">
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Zip Code</mat-label>
+        <input matInput formControlName="zipCode" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Street Number</mat-label>
+        <input matInput formControlName="streetNumber" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Apartment Number</mat-label>
+        <input matInput formControlName="apartment" [readonly]="!isEditable">
+      </mat-form-field>
+    </div>
+
+    <div class="chef-profile form-row" *ngIf="role === 'Chef'">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rating</mat-label>
+        <input matInput formControlName="rating" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Advance Notice Days</mat-label>
+        <input matInput formControlName="advanceNoticeDays" [readonly]="!isEditable">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Maximum Orders Per Day</mat-label>
+        <input matInput formControlName="maxOrdersPerDay" [readonly]="!isEditable">
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" type="submit" *ngIf="isEditable" (click)="saveProfile()">Save Changes</button>
+  </form>
+</mat-card>
+

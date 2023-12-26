@@ -1,19 +1,17 @@
-@import '../../../custom-theme.scss';
-
 .hero-section {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; // This will make the hero section fill the screen height
   padding: 60px;
-  color: $primary-color;
-  background-color: $light-theme-background; // Use the background color from the theme
+  height:100%;
 }
 
 .hero-text {
   flex: 1;
-  padding-right: 70px; // Adjust as needed
-  text-align: justify;
+  padding-right: 70px;
+  text-align: center;
+  line-height: 250%;
+  font-family: 'Roboto', sans-serif;
 }
 
 .hero-text h1 {
@@ -30,10 +28,9 @@
 
 .hero-image {
   flex: 1;
-  background-image: url("../../../assets/family-meals/pexels-cottonbro-studio-3171151.jpg");
-  background-size: cover;
 }
 
 .hero-image img {
   width: 100%;
+  border-radius: 10px;
 }

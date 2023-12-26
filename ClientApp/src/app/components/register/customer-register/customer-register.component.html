@@ -1,5 +1,5 @@
-<div class="customer-register-container">
+<mat-card>
   <form [formGroup]="customerForm" (ngSubmit)="registerCustomer()">
-    <button class="btn btn-primary" id="customer-register-btn">Register as a Customer!</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!customerForm.valid">Register as Chef</button>
   </form>
-</div>
+</mat-card>

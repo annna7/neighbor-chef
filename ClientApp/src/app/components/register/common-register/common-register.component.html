@@ -1,82 +1,83 @@
-<div class="registration-container">
-  <h2>Register</h2>
-  <form [formGroup]="commonForm" (ngSubmit)="confirmSelection()">
+<mat-card>
+  <h2> Register! </h2>
+  <form [formGroup]="commonForm" (ngSubmit)="confirmSelection()" class="example-form">
 
-    <!-- Name Fields -->
-    <div class="form-group">
-      <label for="firstName">First Name:</label>
-      <input type="text" id="firstName" formControlName="firstName">
-      <!-- Error message for first name -->
-      <div *ngIf="commonForm.get('firstName')?.invalid && commonForm.get('firstName')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('firstName')?.errors?.['required']">First name is required.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="lastName">Last Name:</label>
-      <input type="text" id="lastName" formControlName="lastName">
-      <!-- Error message for last name -->
-      <div *ngIf="commonForm.get('lastName')?.invalid && commonForm.get('lastName')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('lastName')?.errors?.['required']">Last name is required.</div>
-      </div>
-    </div>
+    <div class="form-row">
+    <mat-form-field class="example-full-width">
+      <mat-label>First Name</mat-label>
+      <input matInput id="firstName" formControlName="firstName">
+      <mat-error *ngIf="commonForm.get('firstName')?.invalid && commonForm.get('firstName')?.touched">
+        <span *ngIf="commonForm.get('firstName')?.errors?.['required']">First name is required.</span>
+      </mat-error>
+    </mat-form-field>
 
-    <!-- Contact Information -->
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" id="email" formControlName="email">
-      <!-- Error message for email -->
-      <div *ngIf="commonForm.get('email')?.invalid && commonForm.get('email')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('email')?.errors?.['required']">Email is required.</div>
-        <div *ngIf="commonForm.get('email')?.errors?.['email']">Enter a valid email.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" formControlName="password">
-      <!-- Error message for password -->
-      <div *ngIf="commonForm.get('password')?.invalid && commonForm.get('password')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('password')?.errors?.['required']">Password is required.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="phoneNumber">Phone Number:</label>
-      <input type="text" id="phoneNumber" formControlName="phoneNumber">
-      <!-- Error message for phone number -->
-      <div *ngIf="commonForm.get('phoneNumber')?.invalid && commonForm.get('phoneNumber')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('phoneNumber')?.errors?.['required']">Phone number is required.</div>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="pictureUrl">Picture URL:</label>
-      <input type="text" id="pictureUrl" formControlName="pictureUrl">
+    <mat-form-field class="example-full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput id="lastName" formControlName="lastName">
+      <mat-error *ngIf="commonForm.get('lastName')?.invalid && commonForm.get('lastName')?.touched">
+        <span *ngIf="commonForm.get('lastName')?.errors?.['required']">Last name is required.</span>
+      </mat-error>
+    </mat-form-field>
     </div>
 
-    <h5>Address:</h5>
-    <div formGroupName="address">
-      <!-- Address Fields -->
-      <div *ngFor="let field of addressFields">
-        <div class="form-group">
-          <label for="{{field}}">{{field | camelCaseToFormattedText}}:</label>
-          <input type="text" [id]="field" formControlName="{{field}}">
-          <!-- Error message for each address field -->
-          <div *ngIf="commonForm.get('address')?.get(field)?.invalid && commonForm.get('address')?.get(field)?.touched" class="alert alert-danger">
-            <div *ngIf="commonForm.get('address')?.get(field)?.errors?.['required']">{{ field | titlecase }} is required.</div>
-          </div>
+        <div class="form-row">
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" id="email" formControlName="email">
+      <mat-error *ngIf="commonForm.get('email')?.invalid && commonForm.get('email')?.touched">
+        <span *ngIf="commonForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="commonForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" id="password" formControlName="password">
+      <mat-error *ngIf="commonForm.get('password')?.invalid && commonForm.get('password')?.touched">
+        <span *ngIf="commonForm.get('password')?.errors?.['required']">Password is required.</span>
+      </mat-error>
+    </mat-form-field>
         </div>
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="type">Register as:</label>
-      <select id="type" formControlName="type">
-        <option value="Chef">Chef</option>
-        <option value="Customer">Customer</option>
-      </select>
-      <div *ngIf="commonForm.get('type')?.invalid && commonForm.get('type')?.touched" class="alert alert-danger">
-        <div *ngIf="commonForm.get('type')?.errors?.['required']">Selecting a role is required.</div>
-      </div>
-    </div>
+      <div class="form-row">
 
-    <button type="submit" class="btn btn-primary" [disabled]="!commonForm.valid">Confirm</button>
+    <mat-form-field class="example-full-width">
+      <mat-label>Phone Number</mat-label>
+      <input matInput type="text" id="phoneNumber" formControlName="phoneNumber">
+      <mat-error *ngIf="commonForm.get('phoneNumber')?.invalid && commonForm.get('phoneNumber')?.touched">
+        <span *ngIf="commonForm.get('phoneNumber')?.errors?.['required']">Phone number is required.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Picture URL</mat-label>
+      <input matInput type="text" id="pictureUrl" formControlName="pictureUrl">
+    </mat-form-field>
+          </div>
+
+
+    <div formGroupName="address" class="address-form">
+      <div *ngFor="let field of addressFields">
+        <mat-form-field>
+          <mat-label>{{field | camelCaseToFormattedText}}</mat-label>
+          <input matInput [id]="field" formControlName="{{field}}">
+          <mat-error *ngIf="commonForm.get('address')?.get(field)?.invalid && commonForm.get('address')?.get(field)?.touched">
+            <span *ngIf="commonForm.get('address')?.get(field)?.errors?.['required']">{{ field | titlecase }} is required.</span>
+          </mat-error>
+        </mat-form-field>
+    </div>
+    </div>
+    <mat-form-field>
+      <mat-label>Register as</mat-label>
+      <mat-select id="type" formControlName="type">
+        <mat-option value="Chef">Chef</mat-option>
+        <mat-option value="Customer">Customer</mat-option>
+      </mat-select>
+      <mat-error *ngIf="commonForm.get('type')?.invalid && commonForm.get('type')?.touched">
+        <span *ngIf="commonForm.get('type')?.errors?.['required']">Selecting a role is required.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!commonForm.valid">Continue</button>
   </form>
-</div>
+</mat-card>

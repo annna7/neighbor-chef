@@ -1,0 +1,39 @@
+mat-form-field {
+  padding: 10px;
+}
+
+h2 {
+  margin: 20px;
+  padding: 0;
+  font-size: 1.5em;
+  font-weight: 400;
+}
+
+mat-card {
+  margin: 20px;
+  padding: 50px;
+}
+
+form {
+  display: grid;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.address-form {
+  display: flex;
+  justify-content: space-between;
+}
+
+.address-form mat-form-field {
+  flex: 1 1 45%;
+}
+
+button {
+  margin: 20px auto;
+  width: 300px;
+}

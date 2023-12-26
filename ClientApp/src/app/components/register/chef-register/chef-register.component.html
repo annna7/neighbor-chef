@@ -1,20 +1,22 @@
-<div class="chef-registration-container">
+<mat-card>
   <h2>Chef Registration</h2>
-  <form [formGroup]="chefForm" (ngSubmit)="registerChef()">
-    <!-- Chef-specific Fields -->
-    <div class="form-group">
-      <label for="description">Description:</label>
-      <textarea id="description" formControlName="description" required></textarea>
-    </div>
-    <div class="form-group">
-      <label for="advanceNoticeDays">Advance Notice Days:</label>
-      <input type="number" id="advanceNoticeDays" formControlName="advanceNoticeDays" required>
-    </div>
-    <div class="form-group">
-      <label for="maxOrdersPerDay">Max Orders Per Day:</label>
-      <input type="number" id="maxOrdersPerDay" formControlName="maxOrdersPerDay" required>
-    </div>
+  <form [formGroup]="chefForm" (ngSubmit)="registerChef()" class="example-form">
 
-    <button type="submit" [disabled]="!chefForm.valid">Register as Chef</button>
+    <mat-form-field class="example-full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput id="description" formControlName="description" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Advance Notice Days</mat-label>
+      <input matInput type="number" id="advanceNoticeDays" formControlName="advanceNoticeDays" required>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Max Orders Per Day</mat-label>
+      <input matInput type="number" id="maxOrdersPerDay" formControlName="maxOrdersPerDay" required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!chefForm.valid">Register as Chef</button>
   </form>
-</div>
+</mat-card>

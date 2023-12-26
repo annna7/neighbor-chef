@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {LoginComponent} from "./components/login/login.component";
-import {ChefDashboardComponent} from "./components/dashboard/chef-dashboard/chef-dashboard.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {HomeComponent} from "./components/home/home.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
@@ -9,6 +8,7 @@ import {CommonRegisterComponent} from "./components/register/common-register/com
 import {ChefRegisterComponent} from "./components/register/chef-register/chef-register.component";
 import {CustomerRegisterComponent} from "./components/register/customer-register/customer-register.component";
 import {ParentDashboardComponent} from "./components/dashboard/parent-dashboard/parent-dashboard.component";
+import {ProfileComponent} from "./components/profile/profile.component";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'register/chef', pathMatch: 'full', component: ChefRegisterComponent, canActivate: [LoggedInGuard] },
   { path: 'register/customer', pathMatch: 'full', component: CustomerRegisterComponent, canActivate: [LoggedInGuard] },
   { path: 'dashboard', pathMatch: 'full', component: ParentDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'profile/:id', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

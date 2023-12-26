@@ -1,0 +1,15 @@
+mat-form-field.read-only .mat-form-field-label {
+  pointer-events: none;  /* This will disable hover effects */
+}
+mat-form-field.read-only .mat-form-field-underline {
+  display: none; /* This will disable the underline */
+}
+
+
+mat.form-field.read-only .mat-input {
+  pointer-events: none;
+}
+
+form.read-only .mdc-text-field__input {
+  pointer-events: none;
+}

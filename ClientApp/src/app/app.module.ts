@@ -24,6 +24,11 @@ import {JsonFormatInterceptor} from "./interceptors/json-format.interceptor";
 import {ParentDashboardComponent} from "./components/dashboard/parent-dashboard/parent-dashboard.component";
 import {ChefDashboardComponent} from "./components/dashboard/chef-dashboard/chef-dashboard.component";
 import {CustomerDashboardComponent} from "./components/dashboard/customer-dashboard/customer-dashboard.component";
+import {ProfileComponent} from "./components/profile/profile.component";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {MatOptionModule} from "@angular/material/core";
+import {MatExpansionModule} from "@angular/material/expansion";
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +43,8 @@ import {CustomerDashboardComponent} from "./components/dashboard/customer-dashbo
     CamelCaseToFormattedTextPipe,
     ParentDashboardComponent,
     CustomerDashboardComponent,
-    ChefDashboardComponent
+    ChefDashboardComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -51,7 +57,11 @@ import {CustomerDashboardComponent} from "./components/dashboard/customer-dashbo
     MatIconModule,
     MatMenuModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatExpansionModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

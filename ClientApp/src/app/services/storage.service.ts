@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {PersonDto} from "../models/people/person.dto";
+import {Person} from "../../swagger";
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
@@ -19,7 +20,7 @@ export class StorageService {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
-  getUser(): PersonDto {
+  getUser(): Person {
     const user = localStorage.getItem(this.userKey);
     return user ? JSON.parse(user) : null;
   }

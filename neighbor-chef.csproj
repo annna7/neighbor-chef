@@ -35,7 +35,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="api\" />
-      <Folder Include="ClientApp\src\app\components\customer-dashboard\" />
       <Folder Include="ClientApp\src\app\garbage\" />
       <Folder Include="docs\" />
       <Folder Include="model\" />

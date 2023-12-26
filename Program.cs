@@ -77,7 +77,7 @@ builder.Services.AddControllersWithViews()
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver
         {
-            NamingStrategy = new Newtonsoft.Json.Serialization.DefaultNamingStrategy()
+            NamingStrategy = new Newtonsoft.Json.Serialization.CamelCaseNamingStrategy()
         };
     });
 builder.Services.AddRazorPages();

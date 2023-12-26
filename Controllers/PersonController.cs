@@ -22,7 +22,6 @@ public class PersonController : ControllerBase
     [HttpGet("getByEmail")]
     public async Task<IActionResult> GetPersonByEmail()
     {
-        Console.WriteLine("SUNT AICI");
         var email = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
         var person = await _personService.GetPersonAsync(email);
         if (person == null) return NotFound("Person with email " + email + " not found.");
