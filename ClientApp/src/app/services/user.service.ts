@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {catchError, map, Observable, throwError} from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import { PersonDto } from '../models/people/person.dto';
@@ -27,7 +27,25 @@ export class UserService {
     }
   }
 
-  getUserById(id: string): Observable<Chef | Customer> {
+
+  getRole(id: string): Observable<string> {
+    return this.getUserById(id).pipe(
+      map((user: Chef | Customer) => {
+        if ('maxOrdersPerDay' in user) {
+          return 'Chef';
+        } else {
+          return 'Customer';
+        }
+        }),
+      catchError(err => throwError(() => new Error('An error occurred: ' + err)))
+    );
+  }
+
+
+
+
+
+getUserById(id: string): Observable<Chef | Customer> {
     return this.http.get<Chef | Customer>(`${this.apiBaseUrl}/Person/getById/${id}`);
   }
 

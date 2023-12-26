@@ -1,4 +1,5 @@
 <mat-card class="profile-card">
+  <h3> {{role}} </h3>
   <form [formGroup]="profileForm" [ngClass]="{'read-only' : !isEditable}">
     <mat-form-field appearance="outline" >
       <mat-label>First Name</mat-label>
