@@ -9,6 +9,8 @@ import {ChefRegisterComponent} from "./components/register/chef-register/chef-re
 import {CustomerRegisterComponent} from "./components/register/customer-register/customer-register.component";
 import {ParentDashboardComponent} from "./components/dashboard/parent-dashboard/parent-dashboard.component";
 import {ProfileComponent} from "./components/profile/profile.component";
+import {ChefMealsComponent} from "./components/chef-meals/chef-meals.component";
+import {ChefGuard} from "./guards/chef.guard";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
@@ -18,6 +20,7 @@ const routes: Routes = [
   { path: 'register/customer', pathMatch: 'full', component: CustomerRegisterComponent, canActivate: [LoggedInGuard] },
   { path: 'dashboard', pathMatch: 'full', component: ParentDashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile/:id', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'meals', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, ChefGuard] },
 ];
 
 @NgModule({

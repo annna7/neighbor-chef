@@ -1,16 +1,14 @@
 <mat-card class="profile-card">
   <h3> {{role}} </h3>
-  <form [formGroup]="profileForm" [ngClass]="{'read-only' : !isEditable}">
+  <form *ngIf="profileForm" [formGroup]="profileForm" [ngClass]="{'read-only' : !isEditable}">
     <mat-form-field appearance="outline" >
       <mat-label>First Name</mat-label>
       <input matInput formControlName="firstName" [readonly]="!isEditable">
     </mat-form-field>
-
     <mat-form-field appearance="outline">
       <mat-label>Last Name</mat-label>
       <input matInput formControlName="lastName" [readonly]="!isEditable">
     </mat-form-field>
-
     <div class="address-form" formGroupName="applicationUser">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
@@ -49,23 +47,26 @@
       </mat-form-field>
     </div>
 
-    <div class="chef-profile form-row" *ngIf="role === 'Chef'">
-      <mat-form-field appearance="outline">
-        <mat-label>Description</mat-label>
-        <input matInput formControlName="description" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Rating</mat-label>
-        <input matInput formControlName="rating" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Advance Notice Days</mat-label>
-        <input matInput formControlName="advanceNoticeDays" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Maximum Orders Per Day</mat-label>
-        <input matInput formControlName="maxOrdersPerDay" [readonly]="!isEditable">
-      </mat-form-field>
+    <div *ngIf="role === 'Chef'">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" [readonly]="!isEditable">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Rating</mat-label>
+          <input matInput formControlName="rating" [readonly]="!isEditable">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Advance Notice Days</mat-label>
+          <input matInput formControlName="advanceNoticeDays" [readonly]="!isEditable">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Maximum Orders Per Day</mat-label>
+          <input matInput formControlName="maxOrdersPerDay" [readonly]="!isEditable">
+        </mat-form-field>
+      </div>
+      <app-chef-reviews [chefId]="this.profileId"></app-chef-reviews>
     </div>
     <button mat-raised-button color="primary" type="submit" *ngIf="isEditable" (click)="saveProfile()">Save Changes</button>
   </form>

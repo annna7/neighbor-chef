@@ -1,0 +1,22 @@
+.review-card {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: dimgray;
+}
+
+.review-container {
+  display: flex;
+  flex-direction: column;
+  width: 97%;
+  margin: 0 auto;
+}
+
+h2 {
+  font-family: 'Satisfy', cursive;
+  font-size: 2rem;
+}
+
+mat-card-title b {
+  color: #dbaeae;
+}

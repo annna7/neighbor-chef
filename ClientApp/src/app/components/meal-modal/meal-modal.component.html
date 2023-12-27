@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Meal Details</h1>
+<div mat-dialog-content>
+  <form [formGroup]="mealForm">
+    <mat-form-field>
+      <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Description" formControlName="description">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Picture" formControlName="pictureUrl">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onSave()">Save</button>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+</div>

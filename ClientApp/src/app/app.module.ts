@@ -29,23 +29,32 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatOptionModule} from "@angular/material/core";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {ChefReviewsComponent} from "./components/chef-reviews/chef-reviews.component";
+import {ChefMealsComponent} from "./components/chef-meals/chef-meals.component";
+import {MealCardComponent} from "./components/meal-card/meal-card.component";
+import {MatListModule} from "@angular/material/list";
+import {MealModalComponent} from "./components/meal-modal/meal-modal.component";
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    NavMenuComponent,
-    FetchDataComponent,
-    FooterComponent,
-    LoginComponent,
-    ChefRegisterComponent,
-    CommonRegisterComponent,
-    CustomerRegisterComponent,
-    CamelCaseToFormattedTextPipe,
-    ParentDashboardComponent,
-    CustomerDashboardComponent,
-    ChefDashboardComponent,
-    ProfileComponent
-  ],
+    declarations: [
+      AppComponent,
+      HomeComponent,
+      NavMenuComponent,
+      FetchDataComponent,
+      FooterComponent,
+      LoginComponent,
+      ChefRegisterComponent,
+      CommonRegisterComponent,
+      CustomerRegisterComponent,
+      CamelCaseToFormattedTextPipe,
+      ParentDashboardComponent,
+      CustomerDashboardComponent,
+      ChefDashboardComponent,
+      ProfileComponent,
+      ChefReviewsComponent,
+      ChefMealsComponent,
+      MealCardComponent,
+      MealModalComponent
+    ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
@@ -61,7 +70,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatListModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

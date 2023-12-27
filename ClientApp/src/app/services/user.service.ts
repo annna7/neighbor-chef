@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { PersonDto } from '../models/people/person.dto';
 import {ChefRegisterDto} from "../models/people/chef-register.dto";
 import {CustomerRegisterDto} from "../models/people/customer-register.dto";
-import {Chef, Customer, Person} from "../../swagger";
+import {Chef, Customer, Meal, Person} from "../../swagger";
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,15 @@ export class UserService {
     }
   }
 
+  getMeals(): Observable<Meal[]> {
+    return this.getCurrentUser().pipe(
+      map(user => {
+        console.log("GET MEALS", user);
+        return (user as Chef).meals;
+      })
+    );
+  }
+
 
   getRole(id: string): Observable<string> {
     return this.getUserById(id).pipe(
@@ -36,17 +45,18 @@ export class UserService {
         } else {
           return 'Customer';
         }
-        }),
+      },
       catchError(err => throwError(() => new Error('An error occurred: ' + err)))
+      )
     );
   }
 
-
-
-
-
-getUserById(id: string): Observable<Chef | Customer> {
-    return this.http.get<Chef | Customer>(`${this.apiBaseUrl}/Person/getById/${id}`);
+  getUserById(id: string): Observable<Chef | Customer> {
+    return this.getChefById(id).pipe(
+      catchError(err => {
+        return this.getCustomerById(id);
+      })
+    );
   }
 
   getChefById(id: string): Observable<Chef> {

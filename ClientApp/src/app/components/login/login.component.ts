@@ -61,6 +61,7 @@ export class LoginComponent {
         this.userService.getCurrentChef().subscribe({
           next: (response) => {
             this.storageService.setUser(response);
+            console.log(response);
           },
           error: (err) => console.error('Login Error:', err)
         });

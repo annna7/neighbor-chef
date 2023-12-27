@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import {ActivatedRoute} from "@angular/router";
+import {Chef, Customer} from "../../../swagger";
 
 @Component({
   selector: 'app-profile',
@@ -12,6 +13,7 @@ export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
   isEditable: boolean = false;
   role !: string;
+  profileId !: string;
 
   constructor(
     private fb: FormBuilder,
@@ -22,7 +24,8 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.userService.getRole(params['id']).subscribe(role => {
+      this.profileId = params['id'];
+      this.userService.getRole(this.profileId).subscribe(role => {
         this.role = role;
         this.initializeForm();
         this.loadUserData();
@@ -84,6 +87,3 @@ export class ProfileComponent implements OnInit {
     }
   }
 }
-
-
-

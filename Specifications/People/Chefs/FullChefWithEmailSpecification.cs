@@ -11,5 +11,6 @@ public class FullChefWithEmailSpecification : BaseSpecification<Chef>
         AddInclude(chef => chef.ApplicationUser);
         AddInclude(chef => chef.ReviewsReceived);
         AddInclude(chef => chef.OrdersReceived);
+        AddInclude(chef => chef.Meals);
     }
 }

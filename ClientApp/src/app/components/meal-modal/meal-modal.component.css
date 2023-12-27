@@ -1,0 +1,30 @@
+h1 {
+  font-family: 'Satisfy', cursive;
+  font-size: 3em;
+  color: #dbaeae;
+}
+
+mat-dialog-content {
+  width: fit-content;
+  margin: 20px auto;
+}
+
+.mat-dialog-containre {
+  max-height: 100%;
+  max-width: 100%;
+  width: fit-content;
+  height: fit-content;
+  padding: 30px;
+}
+
+.mat-mdc-dialog-container,
+.mat-mdc-dialog-container .mdc-dialog__container,
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  max-height:inherit;
+  min-height:inherit;
+  min-width:inherit;
+  max-width:inherit;
+  width: fit-content;
+  height: fit-content;
+  padding: 30px;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {PersonDto} from "../models/people/person.dto";
-import {Person} from "../../swagger";
+import {Chef, Customer, Person} from "../../swagger";
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
@@ -16,7 +16,7 @@ export class StorageService {
     return localStorage.getItem(this.tokenKey);
   }
 
-  setUser(user: any): void {
+  setUser(user: Chef | Customer): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 

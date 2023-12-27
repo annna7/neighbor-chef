@@ -1,0 +1,20 @@
+<mat-card class="meal-card">
+  <div class="meal-info">
+    <h2 class="meal-title">{{ meal.name }} - {{ meal.price | currency }}</h2>
+    <p class="meal-description">{{ meal.description }}</p>
+
+    <button mat-button (click)="toggleIngredients()">
+      {{ showIngredients ? 'Hide' : 'Show' }} Ingredients
+    </button>
+
+    <div *ngIf="showIngredients" class="ingredients-container">
+      <mat-list class="ingredients-list">
+        <mat-list-item *ngFor="let ingredient of ingredients"> + {{ ingredient }}</mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+  <div class="meal-photo">
+    <img mat-card-image *ngIf="meal.pictureUrl" [src]="meal.pictureUrl" alt="{{ meal.name }}">
+    <img mat-card-image *ngIf="!meal.pictureUrl" src="assets/logos/favicon2.png" alt="Default meal image">
+  </div>
+</mat-card>

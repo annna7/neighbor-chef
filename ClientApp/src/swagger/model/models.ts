@@ -23,3 +23,4 @@ export * from "./customer";
 export * from "./review";
 export * from "./order";
 export * from "./orderMeal"
+export * from "./meal";

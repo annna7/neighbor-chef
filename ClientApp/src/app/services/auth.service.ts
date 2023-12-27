@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {LoginDto} from '../models/people/login.dto';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {TokenDto} from "../models/token.dto";
 import {Router} from "@angular/router";
 import {UserService} from "./user.service";
@@ -12,6 +12,8 @@ import {UserService} from "./user.service";
 })
 export class AuthService {
   private apiBaseUrl = environment.apiBaseUrl;
+  private roleSubject = new BehaviorSubject<string | undefined>(undefined);
+  role = this.roleSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router, private userService: UserService) {
   }
@@ -27,10 +29,6 @@ export class AuthService {
     await this.router.navigate(['/']);
   }
 
-  test() : Observable<string> {
-    return this.http.get<string>(`${this.apiBaseUrl}/Chef`);
-  }
-
   isLoggedIn(): boolean {
     return !!localStorage.getItem('auth_token');
   }
@@ -39,8 +37,16 @@ export class AuthService {
     await this.userService.register(userData).toPromise();
     await this.router.navigate(['/login']);
   }
-  // Method for user registration
-  // register(data: RegisterDto): Observable<ServiceResponse<any>> {
-  //   return this.http.post<ServiceResponse<any>>(`${this.apiBaseUrl}/Account/Register`, data);
-  // }
+
+  fetchUserRole(userId: string): void {
+    this.userService.getRole(userId).subscribe(
+      role => {
+        this.roleSubject.next(role);
+      },
+      error => {
+        console.error("Failed to fetch user role", error);
+        this.roleSubject.next(undefined);
+      }
+    );
+  }
 }

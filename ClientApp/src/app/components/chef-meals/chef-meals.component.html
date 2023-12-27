@@ -1,0 +1,8 @@
+<div class="meal-container">
+  <div class="meal-cards-container">
+    <h1> Your Meals: </h1>
+    <app-meal-card *ngFor="let meal of meals" [meal]="meal"></app-meal-card>
+    <button mat-raised-button (click)="openMealModal()">Add New Meal</button>
+  </div>
+</div>
+
