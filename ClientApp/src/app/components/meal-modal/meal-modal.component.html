@@ -2,17 +2,47 @@
 <div mat-dialog-content>
   <form [formGroup]="mealForm">
     <mat-form-field>
+      <mat-label>Name</mat-label>
       <input matInput placeholder="Name" formControlName="name">
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Description</mat-label>
       <input matInput placeholder="Description" formControlName="description">
     </mat-form-field>
     <mat-form-field>
+      <mat-label>Picture Url</mat-label>
       <input matInput placeholder="Picture" formControlName="pictureUrl">
     </mat-form-field>
-  </form>
-</div>
-<div mat-dialog-actions>
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input matInput placeholder="Price" formControlName="price">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="categoryName">
+        <mat-option *ngFor="let category of this.categories" [value]="category.name">{{category.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ingredients</mat-label>
+      <mat-chip-grid #myChipGrid formControlName="ingredients"
+                     aria-label="enter meal ingredients">
+        @for (ingredient of this.ingredients; track ingredient) {
+        <mat-chip-row (removed)="removeIngredient(ingredient)">
+        {{ingredient}}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+        }
+        <input [matChipInputFor]="myChipGrid"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               (matChipInputTokenEnd)="addIngredient($event)" />
+      </mat-chip-grid>
+    </mat-form-field>
+</form>
+<div mat-dialog-actions class="modal-actions">
   <button mat-button (click)="onSave()">Save</button>
   <button mat-button (click)="dialogRef.close()">Cancel</button>
+</div>
 </div>

@@ -60,10 +60,16 @@ public class MealService : IMealService
         meal.Description = updateMealDto.Description ?? meal.Description;
         meal.PictureUrl = updateMealDto.PictureUrl ?? meal.PictureUrl;
         meal.Price = updateMealDto.Price ?? meal.Price;
-
+        meal.CategoryId = updateMealDto.CategoryName != null ? (await _categoryService.GetCategoryAsync(updateMealDto.CategoryName)).Id : meal.CategoryId;
+        // meal.IngredientsJson = updateMealDto.Ingredients != null ? JsonConvert.SerializeObject(updateMealDto.Ingredients) : meal.IngredientsJson;
+        meal.Ingredients = updateMealDto.Ingredients ?? meal.Ingredients;
+        
         await mealRepository.UpdateAsync(meal);
         await _unitOfWork.CompleteAsync();
 
+        Console.Error.WriteLine(meal.IngredientsJson);
+        Console.Error.WriteLine(meal.Ingredients);
+        Console.Error.WriteLine("ALO");
         return meal;
     }
 

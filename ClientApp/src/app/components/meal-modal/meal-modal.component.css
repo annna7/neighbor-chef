@@ -17,14 +17,19 @@ mat-dialog-content {
   padding: 30px;
 }
 
-.mat-mdc-dialog-container,
-.mat-mdc-dialog-container .mdc-dialog__container,
-.mat-mdc-dialog-container .mdc-dialog__surface {
-  max-height:inherit;
-  min-height:inherit;
-  min-width:inherit;
-  max-width:inherit;
-  width: fit-content;
-  height: fit-content;
-  padding: 30px;
+.mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat-mdc-dialog-container .mdc-dialog__surface  {
+  width: 50vh !important;
+  height: 50vh !important;
+  padding: 30px !important;
+}
+
+h1 {
+  padding: 50px;
+  padding-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 50px 50px 50px;
 }

@@ -2,7 +2,9 @@
   <div class="meal-info">
     <h2 class="meal-title">{{ meal.name }} - {{ meal.price | currency }}</h2>
     <p class="meal-description">{{ meal.description }}</p>
-
+    <button mat-button class="edit-button" (click)="editMeal.emit(meal)">Edit</button>
+    <button mat-button class="delete-button" (click)="deleteMeal.emit(meal)">Delete</button>
+    <br>
     <button mat-button (click)="toggleIngredients()">
       {{ showIngredients ? 'Hide' : 'Show' }} Ingredients
     </button>

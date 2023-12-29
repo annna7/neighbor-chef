@@ -10,7 +10,7 @@ public class FullChefWithIdSpecification : BaseSpecification<Chef>
         AddInclude(chef => chef.Address);
         AddInclude(chef => chef.ApplicationUser);
         AddInclude(chef => chef.ReviewsReceived);
-        AddInclude(chef => chef.OrdersReceived);
         AddInclude(chef => chef.Meals);
+        AddInclude("OrdersReceived.OrderMeals.Meal");
     }
 }

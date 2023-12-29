@@ -11,6 +11,7 @@ import {ParentDashboardComponent} from "./components/dashboard/parent-dashboard/
 import {ProfileComponent} from "./components/profile/profile.component";
 import {ChefMealsComponent} from "./components/chef-meals/chef-meals.component";
 import {ChefGuard} from "./guards/chef.guard";
+import {ChefOrdersComponent} from "./components/chef-orders/chef-orders.component";
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'dashboard', pathMatch: 'full', component: ParentDashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile/:id', pathMatch: 'full', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'meals', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, ChefGuard] },
+  { path: 'orders', pathMatch: 'full', component: ChefOrdersComponent, canActivate: [AuthGuard, ChefGuard ] },
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { Meal } from '../../../swagger';
 
 @Component({
@@ -8,6 +8,8 @@ import { Meal } from '../../../swagger';
 })
 export class MealCardComponent {
   @Input() meal!: Meal;
+  @Output() deleteMeal = new EventEmitter<Meal>();
+  @Output() editMeal = new EventEmitter<Meal>();
   showIngredients: boolean = false;
 
   toggleIngredients() {

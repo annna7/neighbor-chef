@@ -34,6 +34,11 @@ import {ChefMealsComponent} from "./components/chef-meals/chef-meals.component";
 import {MealCardComponent} from "./components/meal-card/meal-card.component";
 import {MatListModule} from "@angular/material/list";
 import {MealModalComponent} from "./components/meal-modal/meal-modal.component";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {ChefOrdersComponent} from "./components/chef-orders/chef-orders.component";
+import {OrderCardComponent} from "./components/order-card/order-card.component";
+
 @NgModule({
     declarations: [
       AppComponent,
@@ -53,7 +58,9 @@ import {MealModalComponent} from "./components/meal-modal/meal-modal.component";
       ChefReviewsComponent,
       ChefMealsComponent,
       MealCardComponent,
-      MealModalComponent
+      MealModalComponent,
+      ChefOrdersComponent,
+      OrderCardComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -71,7 +78,9 @@ import {MealModalComponent} from "./components/meal-modal/meal-modal.component";
     MatSelectModule,
     MatOptionModule,
     MatExpansionModule,
-    MatListModule
+    MatListModule,
+    MatChipsModule,
+    MatAutocompleteModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

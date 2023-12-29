@@ -1,0 +1,24 @@
+<mat-card class="order-card">
+  <mat-card-title>Order for {{ order.deliveryDate }}</mat-card-title>
+  <mat-card-content>
+    <p>Status: {{ order.status }}</p>
+    <mat-form-field>
+      <mat-label>Update Status</mat-label>
+      <mat-select [(value)]="order.status" (selectionChange)="updateOrderStatus($event.value)">
+        <mat-option value="received">Received</mat-option>
+        <mat-option value="in_preparation">In Preparation</mat-option>
+        <mat-option value="ready_for_delivery">Ready for Delivery</mat-option>
+        <mat-option value="delivered">Delivered</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>
+      <h3>Meals</h3>
+      <mat-list>
+        <mat-list-item *ngFor="let orderMeal of order.orderMeals">
+          <span mat-line>+ {{ orderMeal.meal.name }} - </span>
+          <span mat-line>+ £{{ orderMeal.meal.price }}</span>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>
