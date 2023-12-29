@@ -1,0 +1,117 @@
+.order-card {
+  max-width: 80%;
+  margin: auto;
+  border-radius: 8px;
+  box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.order-card mat-card-header {
+  background: #3a2618;
+  color: white;
+  padding: 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.status-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  flex-gap: 10px;
+}
+
+.order-card mat-card-title {
+  font-size: 1.5em;
+}
+
+.order-card mat-card-subtitle {
+  font-size: 1em;
+  margin-top: 5px;
+}
+
+.current-status {
+  font-size: 1.1em;
+  margin: 10px 0;
+}
+
+.status-buttons button {
+  margin-right: 8px;
+}
+
+.meals-section h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.meals-section mat-list-item {
+  margin-bottom: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px #dbaeae;
+}
+
+button {
+  background: #a98282;
+  color: black;
+  border-radius: 4px;
+  box-shadow: 0 2px 3px #dbaeae;
+  width: fit-content;
+  padding: 5px 10px;
+}
+
+.total {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 1.4em;
+}
+
+.customer-section h3, .chef-section h3 {
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #dbaeae;
+}
+
+.status-buttons {
+  margin-left: 20px;
+}
+
+mat-list-item:hover {
+  background: #a98282;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+a {
+  color: white;
+  font-weight: bold;
+}
+
+a:hover {
+  font-size: 1.1em;
+  transition: 0.3s ease-in-out;
+}
+
+.observations-section {
+  margin-top: 15px;
+  padding: 10px;
+  background: #af887f; /* Light grey background for the box */
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid #dcdcdc; /* subtle border */
+}
+
+.observations-section h4 {
+  margin-top: 0;
+  font-size: 1.1em;
+  color: #333;
+  font-weight: bold;
+}
+
+.observations-section p {
+  font-size: 1em;
+  color: #464545;
+  margin-top: 5px;
+  margin-left: 10px;
+}

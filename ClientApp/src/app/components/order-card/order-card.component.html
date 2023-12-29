@@ -1,24 +1,40 @@
 <mat-card class="order-card">
-  <mat-card-title>Order for {{ order.deliveryDate }}</mat-card-title>
+  <mat-card-header>
+    <mat-card-title>{{this.title}}</mat-card-title>
+    <mat-card-subtitle>Order due on {{ deliveryDate | date:'EEE MMM dd yyyy, \'at\' HH:mm' }}</mat-card-subtitle>
+  </mat-card-header>
+
   <mat-card-content>
-    <p>Status: {{ order.status }}</p>
-    <mat-form-field>
-      <mat-label>Update Status</mat-label>
-      <mat-select [(value)]="order.status" (selectionChange)="updateOrderStatus($event.value)">
-        <mat-option value="received">Received</mat-option>
-        <mat-option value="in_preparation">In Preparation</mat-option>
-        <mat-option value="ready_for_delivery">Ready for Delivery</mat-option>
-        <mat-option value="delivered">Delivered</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <h3>Meals</h3>
+    <div class="status-section">
+      <p class="current-status">Current status: <strong>{{ this.orderService.getStatusMessage(this.order.status) }}</strong></p>
+      <div class="status-buttons" *ngIf="order.status === OrderStatus.PLACED || order.status === OrderStatus.PREPARING">
+        <button mat-button (click)="updateOrderStatus(OrderStatus.PREPARING)" *ngIf="order.status === OrderStatus.PLACED">Mark as Preparing</button>
+        <button mat-button (click)="updateOrderStatus(OrderStatus.READY)" *ngIf="order.status === OrderStatus.PREPARING">Mark as Ready for Pick Up</button>
+      </div>
+    </div>
+
+    <div class="meals-section">
+      <h2>Meals</h2>
       <mat-list>
         <mat-list-item *ngFor="let orderMeal of order.orderMeals">
-          <span mat-line>+ {{ orderMeal.meal.name }} - </span>
-          <span mat-line>+ £{{ orderMeal.meal.price }}</span>
+          <span mat-line>{{ orderMeal.meal.name }} - {{ orderMeal.meal.price | currency }}</span>
         </mat-list-item>
       </mat-list>
+      <h2 class="total">Total: {{ this.total | currency }}</h2>
     </div>
+
+    <div class="customer-section" *ngIf="isChef">
+      <h3><b>Customer</b>: <a [routerLink]="['/profile', order.customerId]">{{ displayName }}</a></h3>
+    </div>
+
+    <div class="chef-section" *ngIf="!isChef">
+      <h3><b>Chef</b>: <a [routerLink]="['/profile', order.chefId]">{{ displayName }}</a></h3>
+    </div>
+
+    <div class="observations-section" *ngIf="order.observations">
+      <h4>Customer Observations:</h4>
+      <p>{{ order.observations }}</p>
+    </div>
+
   </mat-card-content>
 </mat-card>

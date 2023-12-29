@@ -1,8 +1,8 @@
 <section>
   <h2> Upcoming Orders </h2>
-  <app-order-card *ngFor="let order of upcomingOrders" [order]="order"></app-order-card>
+  <app-order-card *ngFor="let order of upcomingOrders" [order]="order" [isChef]="true" [title]="'Upcoming Order!'" (changeOrderStatus)="changeOrderStatus($event)"></app-order-card>
 </section>
 <section>
   <h2> Past Orders </h2>
-  <app-order-card *ngFor="let order of pastOrders" [order]="order"></app-order-card>
+  <app-order-card *ngFor="let order of pastOrders" [order]="order" [isChef]="true" [title]="'Past Order'"></app-order-card>
 </section>

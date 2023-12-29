@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {Chef, Customer, Order} from "../../swagger";
+import {Chef, Customer, Order, OrderStatus} from "../../swagger";
 import {catchError, map, Observable, throwError} from "rxjs";
 
 @Injectable({
@@ -43,8 +43,11 @@ export class OrdersService {
     )
   }
 
-  updateOrder(order: Order) {
-    this.http.put(`${this.apiUrl}/Order/${order.id}`, order).subscribe(
+  updateOrderStatusAsChef(status: OrderStatus, orderId: string) {
+    const reqBody = {
+      status: status
+    };
+    this.http.put<Order>(`${this.apiUrl}/Chef/orders/${orderId}`, reqBody).subscribe(
       (order: any) => {
         return order;
       },
@@ -54,4 +57,31 @@ export class OrdersService {
     )
   }
 
+  updateOrderStatusAsCustomer(status: OrderStatus, orderId: string) {
+    const reqBody = {
+      status: status
+    };
+    this.http.put(`${this.apiUrl}/Customer/orders/${orderId}`, reqBody).subscribe(
+      (order: any) => {
+        return order;
+      },
+      error => {
+        console.error(error);
+      }
+    )
+  }
+  getStatusMessage(status: OrderStatus) {
+    switch (status) {
+      case OrderStatus.PLACED:
+        return "Placed";
+      case OrderStatus.READY:
+        return "Ready for pickup";
+      case OrderStatus.PREPARING:
+        return "Preparing";
+      case OrderStatus.DELIVERED:
+        return "Delivered";
+      default:
+        return "Unknown";
+    }
+  }
 }

@@ -18,3 +18,4 @@ export const OrderStatus = {
     READY: 2 as OrderStatus,
     DELIVERED: 3 as OrderStatus
 };
+

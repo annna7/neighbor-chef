@@ -28,4 +28,8 @@ export class ChefOrdersComponent implements OnInit{
         throw new Error("failed to fetch orders for chef!");
       }
     )};
+
+  changeOrderStatus(order: Order) {
+    this.orderService.updateOrderStatusAsChef(order.status, order.id);
+  }
 }
