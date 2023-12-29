@@ -17,18 +17,24 @@ export class AuthInterceptor implements HttpInterceptor {
     request = request.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-      }
+      },
     });
 
     console.log(request);
 
     const token = this.storageService.getToken();
 
+    if (request.body && request.headers.get('Content-Type') === 'application/json') {
+      let newBody = JSON.parse(JSON.stringify(request.body).trim());
+      request = request.clone({ body: newBody });
+    }
+    
     if (token) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
-        }
+        },
+
       });
     }
 

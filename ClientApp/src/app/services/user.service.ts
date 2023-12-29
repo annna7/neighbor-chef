@@ -89,4 +89,14 @@ export class UserService {
     }
     return undefined;
   }
+
+  addDate(date: string): Observable<Chef> {
+    console.log("ADD DATE", date)
+    return this.http.post<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates`, JSON.stringify(date));
+  }
+
+  deleteDate(date: string): Observable<Chef> {
+    console.log("DELETE DATE", date);
+    return this.http.delete<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates/${date}`);
+  }
 }

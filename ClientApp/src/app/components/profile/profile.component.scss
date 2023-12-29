@@ -1,8 +1,8 @@
 mat-form-field.read-only .mat-form-field-label {
-  pointer-events: none;  /* This will disable hover effects */
+  pointer-events: none;
 }
 mat-form-field.read-only .mat-form-field-underline {
-  display: none; /* This will disable the underline */
+  display: none;
 }
 
 
@@ -12,4 +12,21 @@ mat.form-field.read-only .mat-input {
 
 form.read-only .mdc-text-field__input {
   pointer-events: none;
+}
+
+
+h2 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-family: 'Satisfy', cursive;
+  font-size: 2rem;
+}
+
+.toggle-header {
+  display: flex;
+}
+
+.mat-mdc-slide-toggle {
+  align-self: center;
+  margin-left: 10px;
 }

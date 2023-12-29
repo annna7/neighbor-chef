@@ -1,74 +1,33 @@
 <mat-card class="profile-card">
-  <h3> {{role}} </h3>
-  <form *ngIf="profileForm" [formGroup]="profileForm" [ngClass]="{'read-only' : !isEditable}">
-    <mat-form-field appearance="outline" >
-      <mat-label>First Name</mat-label>
-      <input matInput formControlName="firstName" [readonly]="!isEditable">
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Last Name</mat-label>
-      <input matInput formControlName="lastName" [readonly]="!isEditable">
-    </mat-form-field>
-    <div class="address-form" formGroupName="applicationUser">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput formControlName="phoneNumber" [readonly]="!isEditable">
-      </mat-form-field>
-    </div>
-
-    <div class="address-form" formGroupName="address">
-      <mat-form-field appearance="outline">
-        <mat-label>Country</mat-label>
-        <input matInput formControlName="country" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>City</mat-label>
-        <input matInput formControlName="city" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Street</mat-label>
-        <input matInput formControlName="street" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Zip Code</mat-label>
-        <input matInput formControlName="zipCode" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Street Number</mat-label>
-        <input matInput formControlName="streetNumber" [readonly]="!isEditable">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Apartment Number</mat-label>
-        <input matInput formControlName="apartment" [readonly]="!isEditable">
-      </mat-form-field>
-    </div>
-
-    <div *ngIf="role === 'Chef'">
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="description" [readonly]="!isEditable">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Rating</mat-label>
-          <input matInput formControlName="rating" [readonly]="!isEditable">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Advance Notice Days</mat-label>
-          <input matInput formControlName="advanceNoticeDays" [readonly]="!isEditable">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Maximum Orders Per Day</mat-label>
-          <input matInput formControlName="maxOrdersPerDay" [readonly]="!isEditable">
-        </mat-form-field>
+  <section id="profile">
+    <div class="toggle-section">
+      <div class="toggle-header">
+        <h2 *ngIf="isSelf"> Edit your Personal Details! </h2>
+        <h2 *ngIf="!isSelf"> Personal Details </h2>
+        <mat-slide-toggle color="secondary" (change)="showProfile = !showProfile" [checked]="showProfile"></mat-slide-toggle>
       </div>
-      <app-chef-reviews [chefId]="this.profileId"></app-chef-reviews>
+      <app-details *ngIf="showProfile" [profileId]="profileId" [profileRole]="profileRole" [isSelf]="isSelf"></app-details>
     </div>
-    <button mat-raised-button color="primary" type="submit" *ngIf="isEditable" (click)="saveProfile()">Save Changes</button>
-  </form>
+  </section>
+   <section id="reviews" *ngIf="profileRole === 'Chef'">
+     <div class="toggle-section">
+       <div class="toggle-header">
+         <h2> Reviews </h2>
+         <mat-slide-toggle color="secondary" (change)="showReviews = !showReviews" [checked]="showReviews"></mat-slide-toggle>
+       </div>
+       <app-chef-reviews *ngIf="showReviews" [chefId]="this.profileId"></app-chef-reviews>
+     </div>
+   </section>
+   <section id="availability" *ngIf="profileRole === 'Chef'">
+     <div class="toggle-section">
+       <div class="toggle-header">
+         <h2>{{isSelf ? "Edit your availability!" : "Availability"}}</h2>
+         <mat-slide-toggle color="secondary" (change)="showAvailability = !showAvailability" [checked]="showAvailability"></mat-slide-toggle>
+       </div>
+       <div class="availability" *ngIf="profileRole === 'Chef' && showAvailability">
+         <app-availability-calendar [availableDates]="this.availableDates" (toggleDateAvailability)="updateDates($event)"></app-availability-calendar>
+       </div>
+     </div>
+   </section>
 </mat-card>
 

@@ -1,0 +1,74 @@
+.calendar-card {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.available-date {
+  background-color: green;
+  border-radius: 50%;
+}
+
+.calendar {
+  display: flex;
+  width: 50%;
+  margin: 0 auto;
+  justify-content: space-around;
+}
+
+
+.mat-calendar {
+  border: 3px solid #dbaeae;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.mat-calendar-body-cell {
+  color: #102a43;
+  border-radius: 50%;
+}
+
+.mat-calendar-body-today {
+  background-color: red !important;
+}
+
+mat-list-item {
+  padding: 10px;
+}
+
+mat-list-item:hover {
+  background-color: #dbaeae;
+  transition: 0.5s ease-in-out;
+}
+
+mat-list {
+  border: 3px solid #dbaeae;
+  border-radius: 10px;
+  padding: 15px;
+  height: fit-content;
+  align-self: center;
+}
+
+.date-entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.date-entry button {
+  border: none;
+  padding: 5px;
+  margin: 0 5px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-entry button:hover {
+  transition: 0.5s ease-out;
+  background-color: coral;
+}
+
+.mat-mdc-unelevated-button > .mat-icon, .mat-mdc-raised-button > .mat-icon, .mat-mdc-outlined-button > .mat-icon {
+  margin: 0 auto;
+}

@@ -27,7 +27,7 @@ import {CustomerDashboardComponent} from "./components/dashboard/customer-dashbo
 import {ProfileComponent} from "./components/profile/profile.component";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
-import {MatOptionModule} from "@angular/material/core";
+import {MatNativeDateModule, MatOptionModule} from "@angular/material/core";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {ChefReviewsComponent} from "./components/chef-reviews/chef-reviews.component";
 import {ChefMealsComponent} from "./components/chef-meals/chef-meals.component";
@@ -38,6 +38,10 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {ChefOrdersComponent} from "./components/chef-orders/chef-orders.component";
 import {OrderCardComponent} from "./components/order-card/order-card.component";
+import {DetailsComponent} from "./components/details/details.component";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {AvailabilityCalendarComponent} from "./components/availability-calendar/availability-calendar.component";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
     declarations: [
@@ -60,7 +64,9 @@ import {OrderCardComponent} from "./components/order-card/order-card.component";
       MealCardComponent,
       MealModalComponent,
       ChefOrdersComponent,
-      OrderCardComponent
+      OrderCardComponent,
+      DetailsComponent,
+      AvailabilityCalendarComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -81,6 +87,9 @@ import {OrderCardComponent} from "./components/order-card/order-card.component";
     MatListModule,
     MatChipsModule,
     MatAutocompleteModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -1,0 +1,69 @@
+<form *ngIf="profileForm" [formGroup]="profileForm" [ngClass]="{'read-only' : !isSelf}">
+  <mat-form-field appearance="outline" >
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName" [readonly]="!isSelf">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName" [readonly]="!isSelf">
+  </mat-form-field>
+  <div class="address-form" formGroupName="applicationUser">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" [readonly]="!isSelf">
+    </mat-form-field>
+  </div>
+
+  <div class="address-form" formGroupName="address">
+    <mat-form-field appearance="outline">
+      <mat-label>Country</mat-label>
+      <input matInput formControlName="country" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input matInput formControlName="city" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Street</mat-label>
+      <input matInput formControlName="street" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Zip Code</mat-label>
+      <input matInput formControlName="zipCode" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Street Number</mat-label>
+      <input matInput formControlName="streetNumber" [readonly]="!isSelf">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Apartment Number</mat-label>
+      <input matInput formControlName="apartment" [readonly]="!isSelf">
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="profileRole === 'Chef'">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" [readonly]="!isSelf">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rating</mat-label>
+        <input matInput formControlName="rating" [readonly]="!isSelf">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Advance Notice Days</mat-label>
+        <input matInput formControlName="advanceNoticeDays" [readonly]="!isSelf">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Maximum Orders Per Day</mat-label>
+        <input matInput formControlName="maxOrdersPerDay" [readonly]="!isSelf">
+      </mat-form-field>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" type="submit" *ngIf="isSelf" (click)="saveProfile()">Save Changes</button>
+</form>

@@ -3,18 +3,23 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import {ActivatedRoute} from "@angular/router";
 import {Chef, Customer} from "../../../swagger";
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
   profileForm!: FormGroup;
-  isEditable: boolean = false;
-  role !: string;
+  isSelf: boolean = false;
+  profileRole !: string;
   profileId !: string;
 
+  showProfile: boolean = true;
+  showReviews: boolean = true;
+  showAvailability: boolean = true;
+  availableDates: Date[] = [];
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -26,39 +31,10 @@ export class ProfileComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.profileId = params['id'];
       this.userService.getRole(this.profileId).subscribe(role => {
-        this.role = role;
-        this.initializeForm();
+        this.profileRole = role;
         this.loadUserData();
       });
     });
-  }
-
-  private initializeForm(): void {
-    this.profileForm = this.fb.group({
-      firstName: '',
-      lastName: '',
-      applicationUser: this.fb.group({
-        email: '',
-        phoneNumber: ''
-      }),
-      address: this.fb.group({
-        street: '',
-        city: '',
-        county: '',
-        country: '',
-        zipCode: '',
-        streetNumber: '',
-        apartment: '',
-      }),
-      profilePictureUrl: ''
-    });
-
-    if (this.role === 'Chef') {
-      this.profileForm.addControl('description', this.fb.control(''));
-      this.profileForm.addControl('rating', this.fb.control(0));
-      this.profileForm.addControl('maxOrdersPerDay', this.fb.control(0));
-      this.profileForm.addControl('advanceNoticeDays', this.fb.control(0));
-    }
   }
 
   private loadUserData(): void {
@@ -67,23 +43,29 @@ export class ProfileComponent implements OnInit {
       return;
     }
     this.userService.getUserById(profileId).subscribe(user => {
-      console.log(user);
-      this.profileForm.patchValue(user);
-      this.checkEditPermission(profileId);
+      const currentUserId = this.userService.getCurrentUserId();
+      this.isSelf = currentUserId === profileId;
+      this.availableDates = (user as Chef).availableDates;
     });
   }
 
-  private checkEditPermission(profileId: string): void {
-    const currentUserId = this.userService.getCurrentUserId();
-    this.isEditable = currentUserId === profileId;
-  }
+  updateDates(date: Date | string) {
+    if (this.isSelf) {
+      if (!(date instanceof Date)) {
+        date = new Date(date);
+      }
 
-  saveProfile(): void {
-    if (this.isEditable && this.profileForm.valid) {
-      const profileData = this.profileForm.value;
-      this.userService.updatePerson(profileData).subscribe(() => {
-        this.profileForm.markAsPristine();
-      });
+      const dateNum = date.getTime();
+      const convertedAvailableDates = this.availableDates.map(d => d instanceof Date ? d : new Date(d));
+      const index = convertedAvailableDates.findIndex(d => d.getTime() === dateNum);
+      const dateString = moment.tz(date, 'Europe/Bucharest').format();
+      if (index > -1) {
+        this.availableDates.splice(index, 1);
+        this.userService.deleteDate(dateString).subscribe();
+      } else {
+        this.availableDates.push(date);
+        this.userService.addDate(dateString).subscribe();
+      }
     }
   }
 }

@@ -1,5 +1,8 @@
 // using System.Text.Json;
+
+using System.Globalization;
 using AutoMapper;
+using Humanizer;
 using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Exceptions.Dates;
 using neighbor_chef.Exceptions.People;
@@ -105,17 +108,16 @@ public class ChefService : PersonService, IChefService
         return ordersOnDate.Count < chef.MaxOrdersPerDay;
     }
     
-    public async Task<string> AddAvailableDateAsync(Guid chefId, DateDto date)
+    public async Task<string> AddAvailableDateAsync(Guid chefId, string date)
     {
         var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
         if (chef == null)
         {
             throw new ChefNotFoundException();
         }
-
-        var availableDates = chef.AvailableDates;
         
-        DateTime parsedDate = new DateTime(date.Year, date.Month, date.Day);
+        var parsedDate = ConvertStringToDateTime(date);
+        var availableDates = chef.AvailableDates;
         if (availableDates.Contains(parsedDate))
         {
             throw new DateAlreadyAvailableException();
@@ -128,10 +130,12 @@ public class ChefService : PersonService, IChefService
         }
         
         availableDates.Add(parsedDate);
-        chef.AvailableDates = availableDates; // this will automatically update AvailableDatesJson
-
+        chef.AvailableDates = availableDates; 
+        
         await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
         await _unitOfWork.CompleteAsync();
+        
+        Console.WriteLine("updated dates hopefully", chef.AvailableDates, chef.AvailableDatesJson);
         return JsonConvert.SerializeObject(chef.AvailableDates);
     }
     
@@ -159,20 +163,25 @@ public class ChefService : PersonService, IChefService
         return chef.AvailableDates;
     }
 
-    public async Task RemoveAvailableDateAsync(Guid chefId, DateDto date)
+    public async Task RemoveAvailableDateAsync(Guid chefId, string date)
     {
-        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(chefId);
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdAsync(chefId);
         if (chef == null)
         {
             throw new ChefNotFoundException();
         }
-        
-        DateTime parsedDate = new DateTime(date.Year, date.Month, date.Day);
+
+        var parsedDate = ConvertStringToDateTime(date);
         if (!chef.AvailableDates.Contains(parsedDate))
         {
             throw new DateNotFoundException();
         }
-        chef.AvailableDates.Remove(parsedDate);
+        
+        var dates = chef.AvailableDates;
+        dates.Remove(parsedDate);
+        chef.AvailableDates = dates;
+
+        chef.AvailableDatesJson = JsonConvert.SerializeObject(chef.AvailableDates);
         await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
         await _unitOfWork.CompleteAsync();
     }
@@ -181,5 +190,48 @@ public class ChefService : PersonService, IChefService
     {
         var chefs = await _unitOfWork.GetRepository<Chef>().GetAllAsync(asNoTracking);
         return chefs.ToList();
+    }
+
+    private static DateTime ConvertStringToDateTime(string date)
+    {
+        var dateTimeOffset = DateTimeOffset.Parse(date);
+        return dateTimeOffset.DateTime;
+    }
+    
+    private static DateDto ConvertToDateDtoFirstFormat(string isoDate)
+    {
+        Console.WriteLine("Converting date" + isoDate);
+        DateTime parsedDate;
+        if(DateTime.TryParseExact(isoDate, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out parsedDate))
+        {
+            return new DateDto
+            {
+                Day = parsedDate.Day,
+                Month = parsedDate.Month,
+                Year = parsedDate.Year
+            };
+        }
+        else
+        {
+            throw new ArgumentException("Invalid date format");
+        }
+    }
+    
+    public static DateDto ConvertToDateDtoSecondFormat(string isoDate)
+    {
+        Console.WriteLine("Converting date" + isoDate);
+        if (DateTime.TryParse(isoDate, out var parsedDate))
+        {
+            return new DateDto
+            {
+                Day = parsedDate.Day,
+                Month = parsedDate.Month,
+                Year = parsedDate.Year
+            };
+        }
+        else
+        {
+            throw new ArgumentException("Invalid date format");
+        }
     }
 }

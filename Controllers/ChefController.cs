@@ -83,7 +83,7 @@ public class ChefController : ControllerBase
    [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
    [HttpPost("{chefId}/dates")]
-   public async Task<IActionResult> AddAvailableDate(Guid chefId, [FromBody] DateDto date)
+   public async Task<IActionResult> AddAvailableDate(Guid chefId, [FromBody] string date)
    {
       try
       {
@@ -118,8 +118,8 @@ public class ChefController : ControllerBase
 
    [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")]
    [IsSame("chefId")]
-   [HttpDelete("{chefId:guid}/dates")]
-   public async Task<IActionResult> DeleteAvailableDate(Guid chefId, DateDto date)
+   [HttpDelete("{chefId:guid}/dates/{date}")]
+   public async Task<IActionResult> DeleteAvailableDate(Guid chefId, string date)
    {
       try
       {
