@@ -29,15 +29,6 @@ export class UserService {
     }
   }
 
-  getMeals(): Observable<Meal[]> {
-    return this.getCurrentUser().pipe(
-      map(user => {
-        console.log("GET MEALS", user);
-        return (user as Chef).meals;
-      })
-    );
-  }
-
   getRole(id: string): Observable<string> {
     return this.getUserById(id).pipe(
       map((user: Chef | Customer) => {
@@ -88,15 +79,6 @@ export class UserService {
   register(userData: ChefRegisterDto | CustomerRegisterDto): Observable<any> {
     return this.http.post<any>(`${this.apiBaseUrl}/Account/register`, userData);
   }
-
-  addDate(date: string): Observable<Chef> {
-    return this.http.post<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates`, JSON.stringify(date));
-  }
-
-  deleteDate(date: string): Observable<Chef> {
-    return this.http.delete<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates/${date}`);
-  }
-
 
   updateUserId(userId: string | undefined): void {
     console.log('new user id', userId);

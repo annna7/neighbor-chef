@@ -1,0 +1,17 @@
+<mat-card class="app-card">
+  <div class="chef-info">
+    <h2>Chef {{ this.chef.firstName + ' ' + this.chef.lastName }} </h2>
+    <div class="chef-info-small">
+      <h4> <b>Rating:</b> {{ this.chefService.getRating(chef) }} / 5 </h4>
+      <div class="buttons-container">
+        <button mat-raised-button color="primary" [routerLink]="['/profile', chef.id]">Go to Profile</button>
+        <button mat-raised-button color="primary" [routerLink]="['/profile', chef.id]">Go to Meals</button>
+      </div>
+      <p>{{ this.chef.description }}</p>
+    </div>
+  </div>
+  <div class="chef-photo">
+    <img mat-card-image *ngIf="this.chef.profilePictureUrl" [src]="this.chef.profilePictureUrl" alt="{{ this.chef.lastName + ' picture'}}">
+    <img mat-card-image *ngIf="!this.chef.profilePictureUrl" src="assets/logos/favicon2.png" alt="Default chef profile image">
+  </div>
+</mat-card>

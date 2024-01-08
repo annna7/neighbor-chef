@@ -16,6 +16,7 @@ import {CustomerDashboardComponent} from "./components/dashboard/customer-dashbo
 import {CustomerGuard} from "./guards/customer.guard";
 import {CustomerOrdersComponent} from "./components/customer-orders/customer-orders.component";
 import {AuthService, UserService} from "./services";
+import {BrowseComponent} from "./components/browse/browse.component";
 
 const standardRoutes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [LoggedInGuard] },
@@ -30,33 +31,33 @@ const standardRoutes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(standardRoutes)],
   exports: [RouterModule],
-  providers: [
-    {
-      provide: ROUTES,
-      useFactory: () => {
-        let routes: Routes = [];
-        let userRole = localStorage.getItem('role');
-        console.log(userRole, 'ROUTING');
-        if (userRole === 'Chef') {
-          routes = [
-            { path: 'meals', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, ChefGuard] },
-            { path: 'orders', pathMatch: 'full', component: ChefOrdersComponent, canActivate: [AuthGuard, ChefGuard ] },
-          ];
-        } else if (userRole === 'Customer') {
-          routes = [
-            { path: 'orders', pathMatch: 'full', component: CustomerOrdersComponent, canActivate: [AuthGuard, CustomerGuard ] },
-            { path: 'browse', pathMatch: 'full', component: CustomerDashboardComponent, canActivate: [AuthGuard, CustomerGuard ] },
-          ];
-        }
-
-      return [
-        ...standardRoutes,
-        ...routes
-      ];
-      },
-      multi: true
-    }
-  ]
+  // providers: [
+  //   {
+  //     provide: ROUTES,
+  //     useFactory: () => {
+  //       let routes: Routes = [];
+  //       let userRole = localStorage.getItem('role');
+  //       console.log(userRole, 'ROUTING');
+  //       if (userRole === 'Chef') {
+  //         routes = [
+  //           { path: 'meals', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, ChefGuard] },
+  //           { path: 'orders', pathMatch: 'full', component: ChefOrdersComponent, canActivate: [AuthGuard, ChefGuard ] },
+  //         ];
+  //       } else if (userRole === 'Customer') {
+  //         routes = [
+  //           { path: 'orders', pathMatch: 'full', component: CustomerOrdersComponent, canActivate: [AuthGuard, CustomerGuard ] },
+  //           { path: 'browse', pathMatch: 'full', component: BrowseComponent, canActivate: [AuthGuard, CustomerGuard ] },
+  //         ];
+  //       }
+  //
+  //     return [
+  //       ...standardRoutes,
+  //       ...routes
+  //     ];
+  //     },
+  //     multi: true
+  //   }
+  // ]
 })
 
 export class AppRoutingModule {
@@ -78,7 +79,7 @@ export class AppRoutingModule {
       routes = [
         ...routes,
         { path: 'orders', pathMatch: 'full', component: CustomerOrdersComponent, canActivate: [AuthGuard, CustomerGuard ] },
-        { path: 'browse', pathMatch: 'full', component: CustomerDashboardComponent, canActivate: [AuthGuard, CustomerGuard ] },
+        { path: 'browse', pathMatch: 'full', component: BrowseComponent, canActivate: [AuthGuard, CustomerGuard ] },
       ];
     }
 

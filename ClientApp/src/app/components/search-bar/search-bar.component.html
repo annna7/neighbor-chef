@@ -1,0 +1,19 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <div class="flex-container">
+      <div class="search-line">
+        <mat-form-field appearance="fill">
+          <mat-label>Search</mat-label>
+          <input matInput placeholder="What are you craving?" [(ngModel)]="this.searchQuery">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="performSearch()">Go!</button>
+      </div>
+
+    <mat-radio-group aria-label="Select a search type" [(ngModel)]="this.searchType">
+      <mat-radio-button value="chefs">Chefs</mat-radio-button>
+      <mat-radio-button value="meals">Meals</mat-radio-button>
+    </mat-radio-group>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -188,7 +188,8 @@ public class ChefService : PersonService, IChefService
     
     public async Task<List<Chef>> GetAllChefsAsync(bool asNoTracking = false)
     {
-        var chefs = await _unitOfWork.GetRepository<Chef>().GetAllAsync(asNoTracking);
+        var chefs = await _unitOfWork.GetRepository<Chef>()
+            .FindWithSpecificationPatternAsync(new FullAllChefsSpecification());
         return chefs.ToList();
     }
 

@@ -28,7 +28,15 @@ public class ChefController : ControllerBase
       _accountService = accountService;
    }
    
+   [Authorize(AuthenticationSchemes = "Bearer")]
+   [HttpGet("all")]
+   public async Task<IActionResult> GetAllChefs()
+   {
+      var chefList = await _chefService.GetAllChefsAsync();
+      return Ok(chefList);
+   }
    
+   [Authorize(AuthenticationSchemes = "Bearer")]
    [HttpGet("")]
    public async Task<IActionResult> GetChef()
    {
@@ -41,6 +49,7 @@ public class ChefController : ControllerBase
       return Ok(chef);
    }
    
+   [Authorize(AuthenticationSchemes = "Bearer")]
    [HttpGet("{chefId:guid}")]
    public async Task<IActionResult> GetChef(Guid chefId)
    {

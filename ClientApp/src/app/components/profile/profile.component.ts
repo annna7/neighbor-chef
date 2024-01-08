@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import {ActivatedRoute} from "@angular/router";
 import {Chef, Customer} from "../../../swagger";
 import moment from 'moment-timezone';
+import {ChefService} from "../../services";
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +26,8 @@ export class ProfileComponent {
     private fb: FormBuilder,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private chefService: ChefService
   ) {}
 
   ngOnInit(): void {
@@ -62,10 +64,10 @@ export class ProfileComponent {
       const dateString = moment.tz(date, 'Europe/Bucharest').format();
       if (index > -1) {
         this.availableDates.splice(index, 1);
-        this.userService.deleteDate(dateString).subscribe();
+        this.chefService.deleteDate(dateString).subscribe();
       } else {
         this.availableDates.push(date);
-        this.userService.addDate(dateString).subscribe();
+        this.chefService.addDate(dateString).subscribe();
       }
     }
   }

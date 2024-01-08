@@ -44,6 +44,10 @@ import {AvailabilityCalendarComponent} from "./components/availability-calendar/
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatHeaderRow} from "@angular/material/table";
 import {CustomerOrdersComponent} from "./components/customer-orders/customer-orders.component";
+import {SearchBarComponent} from "./components/search-bar/search-bar.component";
+import {MatRadioModule} from "@angular/material/radio";
+import {BrowseComponent} from "./components/browse/browse.component";
+import {ChefCardComponent} from "./components/chef-card/chef-card.component";
 
 @NgModule({
     declarations: [
@@ -69,7 +73,10 @@ import {CustomerOrdersComponent} from "./components/customer-orders/customer-ord
       OrderCardComponent,
       DetailsComponent,
       AvailabilityCalendarComponent,
-      CustomerOrdersComponent
+      CustomerOrdersComponent,
+      SearchBarComponent,
+      BrowseComponent,
+      ChefCardComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -93,6 +100,7 @@ import {CustomerOrdersComponent} from "./components/customer-orders/customer-ord
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

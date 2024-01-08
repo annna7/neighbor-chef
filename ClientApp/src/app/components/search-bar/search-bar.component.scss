@@ -1,0 +1,54 @@
+mat-toolbar {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 10px;
+  background-color: #333333;
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.mat-mdc-form-field {
+  align-self: center;
+  width: 80%;
+}
+
+.mat-mdc-form-field-wrapper {
+  width: 100%;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 1em;
+}
+
+mat-radio-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.search-line {
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.search-line button {
+  margin-left: 10px;
+  width: fit-content;
+}

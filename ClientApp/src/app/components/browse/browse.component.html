@@ -1,0 +1,6 @@
+<mat-card>
+    <app-search-bar></app-search-bar>
+    <div class="browse-list">
+      <app-chef-card *ngFor="let chef of this.currentChefs" [chef]="chef"></app-chef-card>
+    </div>
+</mat-card>

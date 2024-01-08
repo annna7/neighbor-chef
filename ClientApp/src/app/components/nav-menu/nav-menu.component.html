@@ -7,7 +7,7 @@
   <a *ngIf="authService.isLoggedIn()" mat-button [routerLink]="['/dashboard']">Dashboard</a>
   <a *ngIf="authService.isLoggedIn()" mat-button [routerLink]="['/profile', userService.currentUserId | async]">Profile</a>
   <a *ngIf="(authService.currentRole | async) === 'Chef'" mat-button [routerLink]="['/meals']">View your menu</a>
-  <a *ngIf="(authService.currentRole | async) === 'Customer'" mat-button [routerLink]="['/browse']">Browse!</a>
+  <a *ngIf="(authService.currentRole | async) === 'Customer'" mat-button [routerLink]="['/browse']">Browse</a>
   <a *ngIf="authService.isLoggedIn()" mat-button [routerLink]="['/orders']">Orders</a>
   <a *ngIf="authService.isLoggedIn()" mat-button (click)="authService.logout()">Log out</a>
 </mat-toolbar>
