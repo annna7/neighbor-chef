@@ -12,10 +12,19 @@ import {UserService} from "./user.service";
 })
 export class AuthService {
   private apiBaseUrl = environment.apiBaseUrl;
-  private roleSubject = new BehaviorSubject<string | undefined>(undefined);
+  private roleSubject = new BehaviorSubject<string | null>(null);
   role = this.roleSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router, private userService: UserService) {
+    const storedRole = localStorage.getItem('role');
+    this.roleSubject = new BehaviorSubject<string | null>(storedRole);
+    if (storedRole) {
+      this.roleSubject.next(storedRole);
+    }
+    this.userService.userIdSubject = new BehaviorSubject<string | null>(localStorage.getItem('user_id'));
+    if (localStorage.getItem('user_id')) {
+      this.userService.userIdSubject.next(localStorage.getItem('user_id'));
+    }
   }
 
   login(credentials: LoginDto): Observable<TokenDto> {
@@ -26,6 +35,8 @@ export class AuthService {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
     localStorage.removeItem('role');
+    this.roleSubject.next(null);
+    this.userService.userIdSubject.next(null);
     await this.router.navigate(['/']);
   }
 
@@ -38,15 +49,11 @@ export class AuthService {
     await this.router.navigate(['/login']);
   }
 
-  fetchUserRole(userId: string): void {
-    this.userService.getRole(userId).subscribe(
-      role => {
-        this.roleSubject.next(role);
-      },
-      error => {
-        console.error("Failed to fetch user role", error);
-        this.roleSubject.next(undefined);
-      }
-    );
+  updateRole(role: string): void {
+    this.roleSubject.next(role);
+  }
+
+  get currentRole(): Observable<string | null> {
+    return this.roleSubject.asObservable();
   }
 }

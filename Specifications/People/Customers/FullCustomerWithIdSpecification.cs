@@ -10,6 +10,6 @@ public class FullCustomerWithIdSpecification : BaseSpecification<Customer>
         AddInclude(customer => customer.Address);
         AddInclude(customer => customer.ApplicationUser);
         AddInclude(customer => customer.ReviewsLeft);
-        AddInclude(customer => customer.OrdersPlaced);
+        AddInclude("OrdersPlaced.OrderMeals.Meal");
     }
 }

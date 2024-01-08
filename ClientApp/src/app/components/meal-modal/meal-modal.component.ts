@@ -21,6 +21,7 @@ export class MealModalComponent implements OnInit {
   mealCreated = new EventEmitter();
   separatorKeysCodes: number[] = [ENTER, COMMA];
   ingredients: string[] = [];
+  currentUserId !: string;
 
   constructor(
     public dialogRef: MatDialogRef<MealModalComponent>,
@@ -42,6 +43,7 @@ export class MealModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userService.currentUserId.subscribe(id => this.currentUserId = id ?? '');
     this.loadCategories();
   }
 
@@ -83,7 +85,7 @@ export class MealModalComponent implements OnInit {
         ...this.mealForm.value,
         ingredients: this.ingredients,
         id: this.meal.id,
-        chefId: this.userService.getCurrentUserId()
+        chefId: this.currentUserId
       }).subscribe(
         () => {
           this.mealCreated.emit();
@@ -96,7 +98,7 @@ export class MealModalComponent implements OnInit {
     } else {
       this.mealService.createMeal({
         ...this.mealForm.value,
-        chefId: this.userService.getCurrentUserId()
+        chefId: this.currentUserId
       }).subscribe(
         (createdMeal) => {
           this.mealCreated.emit();

@@ -11,6 +11,7 @@ import {UserService} from "../../services/user.service";
 
 export class ChefReviewsComponent {
   @Input() chefId !: string;
+  @Input() title !: string;
   reviews: Review[] = [];
 
   constructor(private userService: UserService) {}

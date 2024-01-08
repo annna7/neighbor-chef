@@ -22,16 +22,25 @@ export class OrderCardComponent {
   displayName!: string;
   total!: number;
 
+  chefDisplayName !: string;
+  customerDisplayName !: string;
+
   constructor(private userService: UserService, protected orderService: OrdersService) {}
   ngOnInit() {
     this.deliveryDate = new Date(this.order.deliveryDate);
     if (this.isChef) {
-      this.userService.getCustomerById(this.order.customerId).subscribe(user => {
-        this.displayName = user.firstName + " " + user.lastName;
+      this.userService.getChefById(this.order.chefId).subscribe(user => {
+        this.chefDisplayName = user.firstName + " " + user.lastName;
+        this.userService.getCustomerById(this.order.customerId).subscribe(user => {
+            this.customerDisplayName = user.firstName + " " + user.lastName;
+            });
       });
     } else {
-      this.userService.getChefById(this.order.chefId).subscribe(user => {
-        this.displayName = user.firstName + " " + user.lastName;
+      this.userService.getCustomerById(this.order.customerId).subscribe(user => {
+        this.customerDisplayName = user.firstName + " " + user.lastName;
+        this.userService.getChefById(this.order.chefId).subscribe(user => {
+          this.chefDisplayName = user.firstName + " " + user.lastName;
+        });
       });
     }
     this.total = this.order.orderMeals.reduce((a, b) => a + b.meal.price, 0);

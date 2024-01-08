@@ -17,6 +17,7 @@ export class DetailsComponent {
   @Input() profileRole !: string;
   @Input() isSelf !: boolean;
   profileForm!: FormGroup;
+  currentUserId !: string;
 
   constructor(
     private fb: FormBuilder,
@@ -26,6 +27,7 @@ export class DetailsComponent {
   ) {}
 
   ngOnInit(): void {
+    this.userService.currentUserId.subscribe(id => this.currentUserId = id ?? '');
     this.loadUserData();
     this.initializeForm();
   }
@@ -72,8 +74,8 @@ export class DetailsComponent {
     }
     this.userService.getUserById(profileId).subscribe(user => {
       this.profileForm.patchValue(user);
-      const currentUserId = this.userService.getCurrentUserId();
-      this.isSelf = currentUserId === profileId;
+
+      this.isSelf = this.currentUserId === profileId;
     });
   }
 

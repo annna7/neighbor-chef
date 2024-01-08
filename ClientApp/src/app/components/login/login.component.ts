@@ -8,6 +8,7 @@ import {UserService} from "../../services/user.service";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PersonDto} from "../../models/people/person.dto";
 import {error} from "@angular/compiler-cli/src/transformers/util";
+import {Chef} from "../../../swagger";
 
 @Component({
   selector: 'app-login',
@@ -59,9 +60,11 @@ export class LoginComponent {
       case 'Chef':
         localStorage.setItem('role', 'Chef');
         this.userService.getCurrentChef().subscribe({
-          next: (response) => {
+          next: (response: Chef) => {
             this.storageService.setUser(response);
-            console.log(response);
+            this.authService.updateRole('Chef');
+            console.log('teoretic', (response as any).id);
+            this.userService.updateUserId(response.id as string);
           },
           error: (err) => console.error('Login Error:', err)
         });
@@ -71,6 +74,9 @@ export class LoginComponent {
         this.userService.getCurrentCustomer().subscribe({
           next: (response) => {
             this.storageService.setUser(response);
+            this.authService.updateRole('Customer');
+            console.log('teoretic', response.id);
+            this.userService.updateUserId(response.id as string);
           },
           error: (err) => console.error('Login Error:', err)
         });

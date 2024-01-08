@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import {PersonDto} from "../models/people/person.dto";
 import {Chef, Customer, Person} from "../../swagger";
+import {UserService} from "./user.service";
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
 
   private readonly tokenKey = 'auth_token';
   private readonly userKey = 'user_data';
+
+  constructor(private userService: UserService) {}
 
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
@@ -18,6 +21,8 @@ export class StorageService {
 
   setUser(user: Chef | Customer): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
+    this.userService.updateUserId(user.id);
+    console.log('AFTER SETTING', this.userService.currentUserId);
   }
 
   getUser(): Person {

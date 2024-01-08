@@ -1,14 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Order} from "../../../swagger";
 import {OrdersService} from "../../services/orders.service";
 import {UserService} from "../../services";
 
 @Component({
-  selector: 'app-chef-orders',
-  templateUrl: './chef-orders.component.html',
-  styleUrl: './chef-orders.component.css'
+  selector: 'app-customer-orders',
+  templateUrl: './customer-orders.component.html',
+  styleUrl: './customer-orders.component.css'
 })
-export class ChefOrdersComponent implements OnInit{
+export class CustomerOrdersComponent {
   @Input() showPastOrders: boolean = true;
   @Input() showUpcomingOrders: boolean = true;
   pastOrders !: Order[];
@@ -18,25 +18,22 @@ export class ChefOrdersComponent implements OnInit{
   constructor(private orderService: OrdersService, private userService: UserService) {}
 
   ngOnInit() {
-    this.userService.currentUserId.subscribe(id => {
-      this.userId = id as string;
-      this.loadOrders();
-    });
+    this.userService.currentUserId.subscribe(id => this.userId = id as string);
+    this.loadOrders();
   }
 
   loadOrders() {
-    console.log('CHEF ORDERS', this.userId);
-    this.orderService.getOrdersForChef(this.userId).subscribe(
+    this.orderService.getOrdersForCustomer(this.userId).subscribe(
       orders => {
         this.pastOrders = orders.filter(order => new Date(order.deliveryDate) < new Date());
         this.upcomingOrders = orders.filter(order => new Date(order.deliveryDate) >= new Date());
       },
       error => {
-        throw new Error("failed to fetch orders for chef!");
+        throw new Error("failed to fetch orders for customer!");
       }
-    )};
+    )}
 
   changeOrderStatus(order: Order) {
-    this.orderService.updateOrderStatusAsChef(order.status, order.id);
+    this.orderService.updateOrderStatusAsCustomer(order.status, order.id);
   }
 }

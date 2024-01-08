@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {catchError, map, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, throwError} from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import { PersonDto } from '../models/people/person.dto';
@@ -13,6 +13,8 @@ import {Chef, Customer, Meal, Person} from "../../swagger";
 })
 export class UserService {
   private apiBaseUrl = environment.apiBaseUrl;
+
+  userIdSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -36,11 +38,10 @@ export class UserService {
     );
   }
 
-
   getRole(id: string): Observable<string> {
     return this.getUserById(id).pipe(
       map((user: Chef | Customer) => {
-        if ('maxOrdersPerDay' in user) {
+        if  (user.hasOwnProperty('maxOrdersPerDay')) {
           return 'Chef';
         } else {
           return 'Customer';
@@ -74,29 +75,44 @@ export class UserService {
     return this.http.get<Customer>(`${this.apiBaseUrl}/Customer`);
   }
 
-  updatePerson(personData: PersonDto): Observable<PersonDto> {
-    return this.http.put<PersonDto>(`${this.apiBaseUrl}/Person/update`, personData);
+  updatePerson(personData: Chef | Customer): Observable<Chef | Customer> {
+    const updateData = personData as Omit<Chef, 'id'> | Omit<Customer, 'id'>;
+    const unpackedApplicationUser = {
+      ...updateData,
+      phoneNumber: updateData?.applicationUser?.phoneNumber,
+      email: updateData?.applicationUser?.email,
+    }
+    return this.http.put<Chef | Customer>(`${this.apiBaseUrl}/Person/update/${this.getCurrentUserId()}`, unpackedApplicationUser);
   }
 
   register(userData: ChefRegisterDto | CustomerRegisterDto): Observable<any> {
     return this.http.post<any>(`${this.apiBaseUrl}/Account/register`, userData);
   }
 
-  getCurrentUserId(): string | undefined {
-    const userString = localStorage.getItem('user_data');
-    if (userString) {
-      return JSON.parse(userString)["id"];
-    }
-    return undefined;
-  }
-
   addDate(date: string): Observable<Chef> {
-    console.log("ADD DATE", date)
     return this.http.post<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates`, JSON.stringify(date));
   }
 
   deleteDate(date: string): Observable<Chef> {
-    console.log("DELETE DATE", date);
     return this.http.delete<Chef>(`${this.apiBaseUrl}/Chef/${this.getCurrentUserId()}/dates/${date}`);
+  }
+
+
+  updateUserId(userId: string | undefined): void {
+    console.log('new user id', userId);
+    this.userIdSubject.next(userId !== undefined ? userId : null);
+  }
+
+  get currentUserId(): Observable<string | null> {
+    return this.userIdSubject.asObservable();
+  }
+
+  getCurrentUserId(): string | undefined {
+      const userString = localStorage.getItem('user_data');
+      if (userString) {
+          console.log("GET CURRENT USER ID", JSON.parse(userString)["id"]);
+          return JSON.parse(userString)["id"];
+      }
+      return undefined;
   }
 }

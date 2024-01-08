@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
 using neighbor_chef.Models.DTOs.Authentication;
+using neighbor_chef.Specifications;
 using neighbor_chef.Specifications.People;
 using neighbor_chef.UnitOfWork;
 
@@ -94,8 +95,8 @@ public class PersonService : IPersonService
             person.FirstName = updateDto.FirstName;
         if (!string.IsNullOrEmpty(updateDto.LastName))
             person.LastName = updateDto.LastName;
-        if (!string.IsNullOrEmpty(updateDto.PhoneNumber))
-            person.ApplicationUser.PhoneNumber = updateDto.PhoneNumber;
+        if (!string.IsNullOrEmpty(updateDto.ApplicationUser.PhoneNumber))
+            person.ApplicationUser.PhoneNumber = updateDto.ApplicationUser.PhoneNumber;
         if (!string.IsNullOrEmpty(updateDto.ProfilePictureUrl))
             person.ProfilePictureUrl = updateDto.ProfilePictureUrl;
 
@@ -111,6 +112,17 @@ public class PersonService : IPersonService
             address.Apartment = updateDto.Address.ApartmentNumber ?? address.Apartment;
             
             await _unitOfWork.GetRepository<Address>().UpdateAsync(address);
+        }
+
+        if (!string.IsNullOrEmpty(updateDto.Description) || updateDto.MaxOrdersPerDay.HasValue || updateDto.AdvanceNoticeDays.HasValue)
+        {
+            var chefRepository = _unitOfWork.GetRepository<Chef>();
+            var chef = await chefRepository.FindFirstOrDefaultWithSpecificationPatternAsync(new FullChefWithIdSpecification(id));
+            if (chef == null) throw new KeyNotFoundException("Chef not found.");
+            chef.Description = updateDto.Description ?? chef.Description;
+            chef.MaxOrdersPerDay = updateDto.MaxOrdersPerDay ?? chef.MaxOrdersPerDay;
+            chef.AdvanceNoticeDays = updateDto.AdvanceNoticeDays ?? chef.AdvanceNoticeDays;
+            await chefRepository.UpdateAsync(chef);
         }
         
         await personRepository.UpdateAsync(person);

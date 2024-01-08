@@ -13,7 +13,7 @@ import { ApplicationUser } from './applicationUser';
 
 
 export interface Person {
-    Id?: string;
+    id?: string;
     dateCreated?: Date;
     dateModified?: Date;
     firstName?: string;

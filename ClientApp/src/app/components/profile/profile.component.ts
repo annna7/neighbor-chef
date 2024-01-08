@@ -15,6 +15,7 @@ export class ProfileComponent {
   isSelf: boolean = false;
   profileRole !: string;
   profileId !: string;
+  sessionUserId !: string;
 
   showProfile: boolean = true;
   showReviews: boolean = true;
@@ -28,6 +29,7 @@ export class ProfileComponent {
   ) {}
 
   ngOnInit(): void {
+    this.userService.currentUserId.subscribe(id => this.sessionUserId = id ?? '');
     this.route.params.subscribe(params => {
       this.profileId = params['id'];
       this.userService.getRole(this.profileId).subscribe(role => {
@@ -43,8 +45,7 @@ export class ProfileComponent {
       return;
     }
     this.userService.getUserById(profileId).subscribe(user => {
-      const currentUserId = this.userService.getCurrentUserId();
-      this.isSelf = currentUserId === profileId;
+      this.isSelf = this.sessionUserId === profileId;
       this.availableDates = (user as Chef).availableDates;
     });
   }

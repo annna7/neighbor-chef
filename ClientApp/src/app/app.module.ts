@@ -42,6 +42,8 @@ import {DetailsComponent} from "./components/details/details.component";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {AvailabilityCalendarComponent} from "./components/availability-calendar/availability-calendar.component";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatHeaderRow} from "@angular/material/table";
+import {CustomerOrdersComponent} from "./components/customer-orders/customer-orders.component";
 
 @NgModule({
     declarations: [
@@ -66,7 +68,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
       ChefOrdersComponent,
       OrderCardComponent,
       DetailsComponent,
-      AvailabilityCalendarComponent
+      AvailabilityCalendarComponent,
+      CustomerOrdersComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -89,7 +92,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     MatAutocompleteModule,
     MatSlideToggleModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

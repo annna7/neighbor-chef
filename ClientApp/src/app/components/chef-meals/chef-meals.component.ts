@@ -13,14 +13,17 @@ import {MealService} from "../../services";
 })
 export class ChefMealsComponent implements OnInit {
   meals: Meal[] = [];
+  userId: string | undefined;
   constructor(public dialog: MatDialog, private userService: UserService, private mealService: MealService) {}
 
   ngOnInit(): void {
+    this.userService.currentUserId.subscribe(id => this.userId = id as string);
+    console.log('THE USER ID', this.userId);
     this.loadMeals();
   }
 
   loadMeals(): void {
-    this.mealService.getMeals(this.userService.getCurrentUserId() as string).subscribe(
+    this.mealService.getMeals(this.userId as string).subscribe(
       meals => {
         this.meals = meals;
       },

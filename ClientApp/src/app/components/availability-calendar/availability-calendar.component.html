@@ -1,5 +1,5 @@
 <div class="calendar">
-  <mat-calendar [selected]="selectedDate" [dateClass]="dateClass" (selectedChange)="onDateSelected($event)"></mat-calendar>
+  <mat-calendar class="cal-class" [selected]="selectedDate" (selectedChange)="onDateSelected($event)" disabled="isSelf"></mat-calendar>
   <mat-list>
     <h3 mat-subheader><b>Available Dates</b></h3>
     <div *ngIf="!availableDates.length" class="no-dates">No dates selected</div>

@@ -1,0 +1,12 @@
+h1 {
+  font-family: 'Satisfy';
+  color: #dbaeae;
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.header {
+  padding: 20px;
+  text-align: center;
+  margin: 0 auto;
+}

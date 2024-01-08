@@ -4,7 +4,7 @@
 }
 
 .available-date {
-  background-color: green;
+  background-color: green !important;
   border-radius: 50%;
 }
 
@@ -15,7 +15,6 @@
   justify-content: space-around;
 }
 
-
 .mat-calendar {
   border: 3px solid #dbaeae;
   border-radius: 10px;
@@ -23,21 +22,11 @@
 }
 
 .mat-calendar-body-cell {
-  color: #102a43;
   border-radius: 50%;
-}
-
-.mat-calendar-body-today {
-  background-color: red !important;
 }
 
 mat-list-item {
   padding: 10px;
-}
-
-mat-list-item:hover {
-  background-color: #dbaeae;
-  transition: 0.5s ease-in-out;
 }
 
 mat-list {
@@ -72,3 +61,4 @@ mat-list {
 .mat-mdc-unelevated-button > .mat-icon, .mat-mdc-raised-button > .mat-icon, .mat-mdc-outlined-button > .mat-icon {
   margin: 0 auto;
 }
+
