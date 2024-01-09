@@ -73,14 +73,19 @@ export class CartService {
   }
 
   orderMeals(chefId: string, observations: string, deliveryDate: Date): void {
-    const mealIds = this.itemsSubject.getValue()[chefId]?.map(item => item.meal.id) || [];
+    const orderItems = this.itemsSubject.getValue()[chefId]?.map(item => {
+        return {
+          mealId: item.meal.id,
+          quantity: item.quantity
+        };
+      }) || [];
 
-    if (mealIds.length === 0) {
+    if (orderItems.length === 0) {
       throw new Error('No meals selected');
     }
 
     const order: CreateOrderDto = {
-      mealIds,
+      mealWithQuantities: orderItems,
       deliveryDate: {day: deliveryDate.getDate(), month: deliveryDate.getMonth() + 1, year: deliveryDate.getFullYear()},
       deliveryTime: {hour: deliveryDate.getHours(), minute: deliveryDate.getMinutes()},
       observations

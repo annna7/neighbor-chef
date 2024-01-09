@@ -181,7 +181,7 @@ public class DbInitializer
                 Name = "Salmon",
                 Description = "Salmon with roasted vegetables and teryaki sauce",
                 Price = 10,
-                CategoryId = context.Categories.FirstOrDefault(c => c.Name == "Burger")?.Id ?? Guid.NewGuid(),
+                CategoryId = context.Categories.FirstOrDefault(c => c.Name == "Fish")?.Id ?? Guid.NewGuid(),
                 ChefId = chefId,
                 IngredientsJson = "[\"salmon\", \"vegetables\", \"teriyaki sauce\"]",
                 DateCreated = DateTime.Now,
@@ -203,8 +203,6 @@ public class DbInitializer
         var customerId = await context.Customers.Select(c => c.Id).FirstOrDefaultAsync();
         var chef = await context.Chefs.Select(c => c).FirstOrDefaultAsync(c => c.AvailableDatesJson != null);
         chef.AvailableDates = JsonConvert.DeserializeObject<List<DateTime>>(chef.AvailableDatesJson);
-        // var customerId = (await customerService.GetAllCustomersAsync(true))[0].Id;
-        // var chef = (await chefService.GetAllChefsAsync(true))[0];
         
         var orders = new List<Order>
         {
@@ -242,6 +240,7 @@ public class DbInitializer
                     Id = Guid.NewGuid(),
                     OrderId = order.Id,
                     MealId = meal.Id,
+                    Quantity = 1,
                     DateCreated = DateTime.Now,
                     DateModified = DateTime.Now,
                 });

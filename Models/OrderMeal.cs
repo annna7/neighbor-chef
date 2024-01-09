@@ -9,4 +9,6 @@ public class OrderMeal : BaseEntity
 
     public Guid MealId { get; set; }
     public virtual Meal Meal { get; set; } = null!;
+    
+    public int Quantity { get; set; }
 }

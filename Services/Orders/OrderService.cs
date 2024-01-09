@@ -24,13 +24,15 @@ public class OrderService : IOrderService
 
     public async Task<Order> CreateOrderAsync(Guid customerId, Guid chefId, CreateOrderDto orderDto)
     {
+        Console.WriteLine("Creating order 1...");
         var customer = await _unitOfWork.GetRepository<Customer>().
             FindFirstOrDefaultWithSpecificationPatternAsync(new FullCustomerWithIdSpecification(customerId));
         if (customer == null)
         {
             throw new CustomerNotFoundException();
         }
-
+        
+        Console.WriteLine("Creating order 2...");
         var chef = await _unitOfWork.GetRepository<Chef>()
             .FindFirstOrDefaultWithSpecificationPatternAsync(new FullChefWithIdSpecification(chefId));
         
@@ -39,11 +41,13 @@ public class OrderService : IOrderService
             throw new ChefNotFoundException();
         }
         
-        var meals = new List<Meal>();
+        Console.WriteLine("Creating order 3...");
         
-        foreach (var mealId in orderDto.MealIds)
+        var orderMeals = new List<OrderMeal>();
+        
+        foreach (var mealWithQuantity in orderDto.MealWithQuantities)
         {
-            var meal = await _unitOfWork.GetRepository<Meal>().GetByIdAsync(mealId);
+            var meal = await _unitOfWork.GetRepository<Meal>().GetByIdAsync(mealWithQuantity.MealId);
             if (meal == null)
             {
                 throw new MealNotFoundException();
@@ -52,13 +56,19 @@ public class OrderService : IOrderService
             {
                 throw new MealBelongsToAnotherChefException(meal.Id, meal.ChefId, chef.Id);
             }
-            meals.Add(meal);
+            
+            orderMeals.Add(new OrderMeal
+            {
+                Id = Guid.NewGuid(),
+                MealId = meal.Id,
+                Quantity = mealWithQuantity.Quantity,
+            });
         }
        
         var deliveryDate = new DateTime(orderDto.DeliveryDate.Year, orderDto.DeliveryDate.Month, orderDto.DeliveryDate.Day,
             orderDto.DeliveryTime.Hour, orderDto.DeliveryTime.Minute, 0);
         
-        if (!_chefService.IsDateAvailable(chef, deliveryDate).Result)
+        if (!await _chefService.IsDateAvailable(chef, deliveryDate))
         {
             throw new InvalidOrderDateException(deliveryDate, chef.Id, customerId);
         }
@@ -71,6 +81,7 @@ public class OrderService : IOrderService
                 orderDto.DeliveryTime.Hour, orderDto.DeliveryTime.Minute, 0),
             Status = OrderStatus.Placed,
             Observations = orderDto.Observations,
+            OrderMeals = orderMeals,
         };
         
         await _unitOfWork.GetRepository<Order>().AddAsync(order);
@@ -84,17 +95,6 @@ public class OrderService : IOrderService
         await _unitOfWork.CompleteAsync();
         await _unitOfWork.GetRepository<Chef>().UpdateAsync(chef);
         await _unitOfWork.CompleteAsync();
-        
-        foreach (var meal in meals)
-        {
-            await _unitOfWork.GetRepository<OrderMeal>().AddAsync(new OrderMeal
-            {
-                // TODO: fix bug, why is this necessary?
-                Id = Guid.NewGuid(),
-                MealId = meal.Id,
-                OrderId = order.Id,
-            });
-        }
         
         return order;
     }
