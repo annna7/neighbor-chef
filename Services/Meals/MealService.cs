@@ -1,5 +1,6 @@
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs;
+using neighbor_chef.Specifications.Orders;
 using neighbor_chef.UnitOfWork;
 using Newtonsoft.Json;
 
@@ -19,7 +20,7 @@ public class MealService : IMealService
     public async Task<IEnumerable<Meal>> GetAllMealsAsync()
     {
         var mealRepository = _unitOfWork.GetRepository<Meal>();
-        return await mealRepository.GetAllAsync();
+        return await mealRepository.FindWithSpecificationPatternAsync(new MealWithCategoryNameSpecification());
     }
     
     public async Task<Meal> CreateMealAsync(CreateMealDto createMealDto, Guid chefId)

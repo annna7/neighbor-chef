@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {Chef, Meal} from "../../../swagger";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Category, Chef, Meal} from "../../../swagger";
 import {SearchType} from "../browse/browse.component";
 
 @Component({
@@ -9,9 +9,16 @@ import {SearchType} from "../browse/browse.component";
 })
 
 export class SearchBarComponent {
+  @Input() categories: Category[] = [];
   @Output() search: EventEmitter<{ searchQuery: string, searchType: SearchType}> = new EventEmitter<{ searchQuery: string, searchType: SearchType}>();
+  @Output() searchTypeChanged: EventEmitter<SearchType> = new EventEmitter<SearchType>();
+  @Output() filterChanged: EventEmitter<string> = new EventEmitter<string>();
+  @Output() sortChanged: EventEmitter<string> = new EventEmitter<string>();
+
   searchQuery: string = '';
   searchType: SearchType = SearchType.CHEFS;
+  currentSort: string = '';
+  currentFilter: string = 'all';
 
   constructor() { }
 

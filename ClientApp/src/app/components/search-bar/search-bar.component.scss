@@ -37,7 +37,6 @@ mat-toolbar {
 mat-radio-group {
   display: flex;
   justify-content: center;
-  margin-bottom: 1em;
 }
 
 .search-line {
@@ -52,3 +51,37 @@ mat-radio-group {
   margin-left: 10px;
   width: fit-content;
 }
+
+.search-param {
+  display: flex;
+}
+
+.search-param {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin: 0 auto;
+  width: 90%;
+  margin-bottom: 1em;
+}
+
+.search-param mat-select {
+  background-color: #3a2618;
+  width: 100px;
+  height: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  align-self: center;
+}
+
+.select-container {
+  margin-left: 20px;
+}
+
+.select-container > * {
+  margin-right: 10px;
+}
+
+
+

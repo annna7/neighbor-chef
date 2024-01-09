@@ -1,5 +1,9 @@
 <mat-card>
-    <app-search-bar (search)="onSearchPerformed($event)"></app-search-bar>
+    <app-search-bar [categories]="this.categories"
+                    (sortChanged)="onSortItems($event)"
+                    (filterChanged)="onFilterItems($event)"
+                    (searchTypeChanged)="onSearchTypeChanged($event)"
+                    (search)="onSearchPerformed($event)"></app-search-bar>
     <div class="browse-list" *ngIf="this.searchType === 'chefs'">
       <app-chef-card *ngFor="let chef of this.currentChefs" [chef]="chef"></app-chef-card>
     </div>

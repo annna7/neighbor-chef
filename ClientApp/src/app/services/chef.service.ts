@@ -43,6 +43,41 @@ export class ChefService {
     );
   }
 
+  sortChefs(sortBy: string): Observable<Chef[]> {
+return this.loadAllChefs().pipe(
+      map(chefs => {
+        switch (sortBy) {
+          case 'rating':
+            return chefs.sort((a, b) => this.getRating(b) - this.getRating(a));
+          case 'name':
+            return chefs.sort((a, b) => {
+              if (a.firstName === b.firstName) {
+                if (a.lastName === b.lastName) {
+                  return 0;
+                }
+                if (!a.lastName) {
+                  return -1;
+                }
+                if (!b.lastName) {
+                  return 1;
+                }
+                return a.lastName.localeCompare(b.lastName);
+              }
+              if (!a.firstName) {
+                return -1;
+              }
+              if (!b.firstName) {
+                return 1;
+              }
+              return a.firstName.localeCompare(b.firstName);
+            });
+          default:
+            return chefs;
+        }
+      })
+    );
+  }
+
   getRating(chef: Chef) {
     let sum = 0;
     const marks = chef.reviewsReceived.map(review => review.rating);

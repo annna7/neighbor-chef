@@ -30,6 +30,51 @@ export class MealService {
     );
   }
 
+  filterMeals(filterBy: string): Observable<Meal[]> {
+    console.log(filterBy);
+    return this.getAllMeals().pipe(
+      map(meals => {
+        console.log(meals);
+        return filterBy === 'all' ?
+          meals : meals.filter(meal => meal.categoryName === filterBy);
+      }),
+      catchError(error => {
+        console.error("Failed to filter meals", error);
+        return throwError(error);
+      })
+    );
+  }
+
+  sortMeals(sortBy: string): Observable<Meal[]> {
+    return this.getAllMeals().pipe(
+      map(meals => {
+        switch (sortBy) {
+          case 'price':
+            return meals.sort((a, b) => a.price - b.price);
+          case 'name':
+            return meals.sort((a, b) => {
+              if (a.name === b.name) {
+                return 0;
+              }
+              if (!a.name) {
+                return -1;
+              }
+              if (!b.name) {
+                return 1;
+              }
+              return a.name.localeCompare(b.name);
+            });
+          default:
+            return meals;
+        }
+      }),
+      catchError(error => {
+        console.error("Failed to sort meals", error);
+        return throwError(error);
+      })
+    );
+  }
+
   getMeals(chefId: string): Observable<Meal[]> {
     return this.userService.getChefById(chefId).pipe(
       switchMap(chef => {
