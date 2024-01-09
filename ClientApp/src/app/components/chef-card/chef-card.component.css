@@ -52,4 +52,5 @@ mat-list-item {
 
 .buttons-container {
   display: flex;
+  width: fit-content;
 }

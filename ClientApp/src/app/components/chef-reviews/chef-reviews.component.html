@@ -1,15 +1,16 @@
-<div class="review-container">
-  <h2 *ngIf="!reviews || reviews.length === 0">No reviews yet</h2>
-  <h2 *ngIf="this.title"> {{this.title}} </h2>
-  <div *ngFor="let review of reviews">
-    <div class="review-card">
-      <mat-card-header>
-        <mat-card-title>Rating: <b>{{review.rating}}/5</b></mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{review.comment}}</p>
-      </mat-card-content>
+<div class="review-container" *ngIf="!reviews || reviews.length == 0">
+  <h2 *ngIf="!reviews || reviews.length === 0" else hasReviews>No reviews yet</h2>
+  <ng-template #hasReviews>
+    <h2>Reviews</h2>
+    <div *ngFor="let review of reviews">
+      <div class="review-card">
+        <mat-card-header>
+          <mat-card-title>Rating: <b>{{review.rating}}/5</b></mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{review.comment}}</p>
+        </mat-card-content>
+      </div>
     </div>
-  </div>
-
+  </ng-template>
 </div>

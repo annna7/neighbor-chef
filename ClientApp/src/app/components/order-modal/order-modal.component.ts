@@ -26,7 +26,8 @@ export class OrderModalComponent implements OnInit {
   ) {
     this.orderForm = this.fb.group({
       observations: [''],
-      deliveryDate: [null]
+      deliveryDate: [null],
+      deliveryTime: ['']
     });
     this.availableDates = data.availableDates;
     this.chefId = data.chefId;
@@ -50,7 +51,9 @@ export class OrderModalComponent implements OnInit {
   onSave(): void {
     const observations = this.orderForm.get('observations')?.value;
     const deliveryDate = this.orderForm.get('deliveryDate')?.value;
-    this.cartService.orderMeals(this.chefId, observations, deliveryDate);
+    const deliveryTime = this.orderForm.get('deliveryTime')?.value;
+    console.log(observations, deliveryDate, deliveryTime);
+    this.cartService.orderMeals(this.chefId, observations, deliveryDate, deliveryTime);
     this.dialogRef.close();
   }
 

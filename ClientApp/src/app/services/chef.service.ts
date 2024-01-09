@@ -8,20 +8,20 @@ import {HttpClient} from "@angular/common/http";
 @Injectable({
   providedIn: 'root'
 })
-export class ChefService implements OnInit {
+export class ChefService {
   private apiBaseUrl = environment.apiBaseUrl;
   currentUserId !: string;
-  constructor(private http: HttpClient, private userService: UserService) {}
-
-  ngOnInit() {
+  constructor(private http: HttpClient, private userService: UserService) {
     this.userService.currentUserId.subscribe(id => this.currentUserId = id ?? '');
   }
 
   addDate(date: string): Observable<Chef> {
+    console.log(this.currentUserId);
     return this.http.post<Chef>(`${this.apiBaseUrl}/Chef/${this.currentUserId}/dates`, JSON.stringify(date));
   }
 
   deleteDate(date: string): Observable<Chef> {
+    console.log(this.currentUserId);
     return this.http.delete<Chef>(`${this.apiBaseUrl}/Chef/${this.currentUserId}/dates/${date}`);
   }
 

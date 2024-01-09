@@ -98,6 +98,7 @@ export class MealModalComponent implements OnInit {
     } else {
       this.mealService.createMeal({
         ...this.mealForm.value,
+        ingredients: this.ingredients,
         chefId: this.currentUserId
       }).subscribe(
         (createdMeal) => {

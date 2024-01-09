@@ -32,9 +32,7 @@ export class BrowseComponent implements OnInit {
 
   loadChefs() {
     this.chefService.loadAllChefs().subscribe(chefs => {
-      this.currentChefs = [
-        chefs[0], chefs[0], chefs[0], chefs[0], chefs[0], chefs[0]
-      ]
+      this.currentChefs = chefs;
     });
   }
 

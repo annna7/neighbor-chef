@@ -43,7 +43,7 @@ export class OrderCardComponent {
         });
       });
     }
-    this.total = this.order.orderMeals.reduce((a, b) => a + b.meal.price, 0);
+    this.total = this.order.orderMeals.reduce((acc, orderMeal) => acc + orderMeal.quantity * orderMeal.meal.price, 0);
   }
 
   updateOrderStatus(status: OrderStatus) {

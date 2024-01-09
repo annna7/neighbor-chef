@@ -13,6 +13,11 @@
       <mat-datepicker #picker [dateClass]="dateClass"></mat-datepicker>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-label>Delivery Time</mat-label>
+      <input matInput type="time" formControlName="deliveryTime">
+    </mat-form-field>
+
     <div *ngFor="let item of this.cartItems">
       <div class="cart-item">
         <h3>{{ item.meal.name }} - {{ item.meal.price | currency }}</h3>

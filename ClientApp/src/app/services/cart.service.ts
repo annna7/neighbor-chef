@@ -71,7 +71,8 @@ export class CartService {
     return currentItems.reduce((acc, item) => acc + item.meal.price * item.quantity, 0);
   }
 
-  orderMeals(chefId: string, observations: string, deliveryDate: Date): void {
+  orderMeals(chefId: string, observations: string, deliveryDate: Date, deliveryTime: string): void {
+    console.log('deliveryTime orderMeals', deliveryTime);
     const orderItems = this.itemsSubject.getValue()[chefId]?.map(item => {
         return {
           mealId: item.meal.id,
@@ -83,12 +84,20 @@ export class CartService {
       throw new Error('No meals selected');
     }
 
+    const deliveryTimeSplit = deliveryTime.split(':');
+    const deliveryTimeDto: TimeDto = {
+      hour: parseInt(deliveryTimeSplit[0]),
+      minute: parseInt(deliveryTimeSplit[1])
+    };
+
     const order: CreateOrderDto = {
       mealWithQuantities: orderItems,
       deliveryDate: {day: deliveryDate.getDate(), month: deliveryDate.getMonth() + 1, year: deliveryDate.getFullYear()},
-      deliveryTime: {hour: deliveryDate.getHours(), minute: deliveryDate.getMinutes()},
-      observations
+      deliveryTime: deliveryTimeDto,
+      observations: observations,
     };
+
+    console.log('orderMeals', order);
 
     this.orderService.createOrder(order, chefId)
       .subscribe({

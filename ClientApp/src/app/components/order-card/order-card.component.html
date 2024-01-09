@@ -24,7 +24,7 @@
       <h2>Meals</h2>
       <mat-list>
         <mat-list-item *ngFor="let orderMeal of order.orderMeals">
-          <span mat-line>{{ orderMeal.meal.name }} - {{ orderMeal.meal.price | currency }}</span>
+          <span mat-line>{{ orderMeal.meal.name }} - {{ orderMeal.meal.price | currency }} ({{ orderMeal.quantity }} pcs)</span>
         </mat-list-item>
       </mat-list>
       <h2 class="total">Total: {{ this.total | currency }}</h2>
