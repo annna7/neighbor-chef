@@ -5,6 +5,7 @@ namespace neighbor_chef.Services;
 
 public interface IMealService
 {
+    Task<IEnumerable<Meal>> GetAllMealsAsync();
     Task<Meal> CreateMealAsync(CreateMealDto createMealDto, Guid chefId);
     Task<Meal?> GetMealAsync(Guid id);
     Task<Meal> UpdateMealAsync(Guid id, UpdateMealDto updateMealDto);

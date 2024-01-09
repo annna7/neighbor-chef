@@ -1,5 +1,5 @@
 import {Injectable, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Chef} from "../../swagger";
 import {environment} from "../../environments/environment";
 import {UserService} from "./user.service";
@@ -29,9 +29,22 @@ export class ChefService implements OnInit {
     return this.http.get<Chef[]>(`${this.apiBaseUrl}/Chef/all`);
   }
 
+  searchChefs(searchQuery: string): Observable<Chef[]> {
+    return this.loadAllChefs().pipe(
+      map(chefs => {
+        if (!searchQuery) {
+          return chefs;
+        }
+        return chefs.filter(chef =>
+          (chef.firstName && chef.firstName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+          (chef.lastName && chef.lastName.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
+      })
+    );
+  }
+
   getRating(chef: Chef) {
     let sum = 0;
-    console.log(chef.reviewsReceived);
     const marks = chef.reviewsReceived.map(review => review.rating);
     for (const mark of marks) {
       sum += mark;

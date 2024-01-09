@@ -30,8 +30,6 @@ export class OrderModalComponent implements OnInit {
     });
     this.availableDates = data.availableDates;
     this.chefId = data.chefId;
-
-    console.log(this.availableDates);
   }
 
   dateClass = (date: any):  MatCalendarCellCssClasses => {
@@ -50,7 +48,6 @@ export class OrderModalComponent implements OnInit {
 
 
   onSave(): void {
-    console.log(this.cartItems);
     const observations = this.orderForm.get('observations')?.value;
     const deliveryDate = this.orderForm.get('deliveryDate')?.value;
     this.cartService.orderMeals(this.chefId, observations, deliveryDate);

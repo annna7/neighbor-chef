@@ -24,6 +24,17 @@ public class MealController : ControllerBase
     }
     
 
+    [HttpGet("all")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    public async Task<IActionResult> GetAllMeals()
+    {
+        var chefEmail = _accountService.GetEmailFromToken(Request.Headers["Authorization"].ToString().Split(" ")[1]);
+        var chef = await _chefService.GetPersonAsync(chefEmail, true);
+        if (chef == null) return Unauthorized("You are not authorized to view meals, please log in as a chef.");
+        var meals = await _mealService.GetAllMealsAsync();
+        return Ok(meals);
+    }
+    
     [HttpPost]
     [Authorize(Roles = "Chef", AuthenticationSchemes = "Bearer")] // Only chefs can create meals
     public async Task<IActionResult> CreateMeal([FromBody] CreateMealDto createMealDto)

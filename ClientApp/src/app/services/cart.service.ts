@@ -27,7 +27,6 @@ export class CartService {
   addMeal(meal: Meal, chefId: string, quantity: number): void {
     const itemsDict = this.itemsSubject.getValue();
     const currentItems = itemsDict[chefId] || [];
-    console.log('currentItems', currentItems);
     this.itemsSubject.next({
       ...itemsDict,
       [chefId]: [...currentItems, { meal, quantity }]

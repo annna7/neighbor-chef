@@ -9,13 +9,19 @@ public class MealService : IMealService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICategoryService _categoryService;
-
+    
     public MealService(IUnitOfWork unitOfWork, ICategoryService categoryService)
     {
         _unitOfWork = unitOfWork;
         _categoryService = categoryService;
     }
 
+    public async Task<IEnumerable<Meal>> GetAllMealsAsync()
+    {
+        var mealRepository = _unitOfWork.GetRepository<Meal>();
+        return await mealRepository.GetAllAsync();
+    }
+    
     public async Task<Meal> CreateMealAsync(CreateMealDto createMealDto, Guid chefId)
     {
         var category = await _categoryService.GetCategoryAsync(createMealDto.CategoryName);

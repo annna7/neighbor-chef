@@ -13,6 +13,23 @@ export class MealService {
 
   constructor(private http: HttpClient, private userService: UserService, private categoryService: CategoryService) { }
 
+  getAllMeals(): Observable<Meal[]> {
+    return this.http.get<Meal[]>(`${this.apiBaseUrl}/Meal/all`);
+  }
+
+  searchMeals(searchQuery: string): Observable<Meal[]> {
+    return this.getAllMeals().pipe(
+      map(meals => {
+        return searchQuery ?
+          meals.filter(meal => meal.name.toLowerCase().includes(searchQuery.toLowerCase())) : meals;
+      }),
+      catchError(error => {
+        console.error("Failed to search meals", error);
+        return throwError(error);
+      })
+    );
+  }
+
   getMeals(chefId: string): Observable<Meal[]> {
     return this.userService.getChefById(chefId).pipe(
       switchMap(chef => {

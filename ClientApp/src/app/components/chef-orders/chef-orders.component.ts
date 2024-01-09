@@ -25,7 +25,6 @@ export class ChefOrdersComponent implements OnInit{
   }
 
   loadOrders() {
-    console.log('CHEF ORDERS', this.userId);
     this.orderService.getOrdersForChef(this.userId).subscribe(
       orders => {
         this.pastOrders = orders.filter(order => new Date(order.deliveryDate) < new Date());

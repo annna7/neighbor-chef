@@ -97,7 +97,6 @@ export class UserService {
   getCurrentUserId(): string | undefined {
       const userString = localStorage.getItem('user_data');
       if (userString) {
-          console.log("GET CURRENT USER ID", JSON.parse(userString)["id"]);
           return JSON.parse(userString)["id"];
       }
       return undefined;

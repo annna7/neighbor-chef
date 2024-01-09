@@ -29,7 +29,7 @@ export class CustomerRegisterComponent implements OnInit {
             this.router.navigate(['/login']);
           },
           error: (err: any) => {
-            console.log(err);
+            console.error(err);
           }
         }
       );

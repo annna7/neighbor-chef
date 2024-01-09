@@ -1,6 +1,9 @@
 <mat-card>
-    <app-search-bar></app-search-bar>
-    <div class="browse-list">
+    <app-search-bar (search)="onSearchPerformed($event)"></app-search-bar>
+    <div class="browse-list" *ngIf="this.searchType === 'chefs'">
       <app-chef-card *ngFor="let chef of this.currentChefs" [chef]="chef"></app-chef-card>
+    </div>
+    <div class="browse-list" *ngIf="this.searchType === 'meals'">
+      <app-meal-card *ngFor="let meal of this.currentMeals" [searchView]="true" [meal]="meal"></app-meal-card>
     </div>
 </mat-card>

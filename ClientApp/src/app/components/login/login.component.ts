@@ -63,7 +63,6 @@ export class LoginComponent {
           next: (response: Chef) => {
             this.storageService.setUser(response);
             this.authService.updateRole('Chef');
-            console.log('teoretic', (response as any).id);
             this.userService.updateUserId(response.id as string);
           },
           error: (err) => console.error('Login Error:', err)
@@ -75,7 +74,6 @@ export class LoginComponent {
           next: (response) => {
             this.storageService.setUser(response);
             this.authService.updateRole('Customer');
-            console.log('teoretic', response.id);
             this.userService.updateUserId(response.id as string);
           },
           error: (err) => console.error('Login Error:', err)

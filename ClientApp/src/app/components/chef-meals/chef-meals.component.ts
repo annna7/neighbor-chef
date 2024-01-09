@@ -76,7 +76,6 @@ export class ChefMealsComponent implements OnInit {
   }
 
   addMealToCart(meal: Meal): void {
-    console.log('addMealToCart')
     this.cartService.addMeal(meal, this.chefId as string, 1);
   }
 

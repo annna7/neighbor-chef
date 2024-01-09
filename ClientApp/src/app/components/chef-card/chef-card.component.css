@@ -28,10 +28,6 @@ p {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
 }
 
-.meal-info {
-  width: 50%;
-}
-
 button {
   margin-left: 5px;
   background-color: #3a2618;
@@ -44,7 +40,7 @@ button {
   border-radius: 10px 10px 0 0;
 }
 
-.chef-info-small {
+.app-card-info {
   text-align: center;
   width: fit-content;
   margin-left: 10px;

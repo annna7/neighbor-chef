@@ -1,38 +1,46 @@
 <mat-card class="app-card">
-  <div class="meal-info">
-    <h2 class="meal-title">{{ meal.name }} - {{ meal.price | currency }}</h2>
-    <p class="meal-description">{{ meal.description }}</p>
-    <div *ngIf="!isChef" class="buttons-line">
-      <ng-container *ngIf="this.cartService.getMealQuantity(meal, meal.chefId); else addMeal">
-        <mat-form-field appearance="fill">
-          <mat-label>Quantity</mat-label>
-          <input matInput type="number" [value]="this.cartService.getMealQuantity(meal, meal.chefId).toString()"
-                 #quantityInput (change)="this.cartService.updateQuantityFromString(meal, meal.chefId, quantityInput.value)" min="1">
-        </mat-form-field>
-        <button class="delete" mat-button (click)="this.cartService.updateQuantity(meal, meal.chefId, 0)" *ngIf="this.cartService.getMealQuantity(meal, meal.chefId) >= 1">
-          <mat-icon>delete</mat-icon> Remove
-        </button>
-      </ng-container>
-      <ng-template #addMeal>
-        <button mat-button class="add-button" (click)="addMealToCart.emit(meal)">Add to Cart</button>
-      </ng-template>
-    </div>
-    <div *ngIf="isChef" class="buttons-line">
-      <button mat-button (click)="editMeal.emit(meal)">Edit</button>
-      <button mat-button (click)="deleteMeal.emit(meal)">Delete</button>
-    </div>
+  <div class="app-card-info-container">
+    <div class="app-card-info">
+      <h2 class="meal-title">{{ meal.name }}</h2>
+      <h4> <b>Price: </b> {{ meal.price | currency }}</h4>
+      <p class="meal-description">{{ meal.description }}</p>
+      <div *ngIf="!isChef" class="buttons-line">
+        <ng-container *ngIf="this.searchView else notSearchView">
+          <button mat-button [routerLink]="['/meals', meal.chefId]">Go to Chef's {{chefDisplayName}} Menu</button>
+        </ng-container>
+        <ng-template #notSearchView>
+          <ng-container *ngIf="this.cartService.getMealQuantity(meal, meal.chefId); else addMeal">
+            <mat-form-field appearance="fill">
+              <mat-label>Quantity</mat-label>
+              <input matInput type="number" [value]="this.cartService.getMealQuantity(meal, meal.chefId).toString()"
+                     #quantityInput (change)="this.cartService.updateQuantityFromString(meal, meal.chefId, quantityInput.value)" min="1">
+            </mat-form-field>
+            <button class="delete" mat-button (click)="this.cartService.updateQuantity(meal, meal.chefId, 0)" *ngIf="this.cartService.getMealQuantity(meal, meal.chefId) >= 1">
+              <mat-icon>delete</mat-icon> Remove
+            </button>
+          </ng-container>
+          <ng-template #addMeal>
+            <button mat-button class="add-button" (click)="addMealToCart.emit(meal)">Add to Cart</button>
+          </ng-template>
+        </ng-template>
+      </div>
+      <div *ngIf="isChef" class="buttons-line">
+        <button mat-button (click)="editMeal.emit(meal)">Edit</button>
+        <button mat-button (click)="deleteMeal.emit(meal)">Delete</button>
+      </div>
 
-    <button class="toggle" mat-button (click)="toggleIngredients()">
-      {{ showIngredients ? 'Hide' : 'Show' }} Ingredients <mat-icon>{{ showIngredients ? 'expand_less' : 'expand_more' }}</mat-icon>
-    </button>
+      <button class="toggle" mat-button (click)="toggleIngredients()">
+        {{ showIngredients ? 'Hide' : 'Show' }} Ingredients <mat-icon>{{ showIngredients ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </button>
 
 
-    <div *ngIf="showIngredients" class="ingredients-container">
-      <mat-list class="ingredients-list">
-        <mat-list-item *ngFor="let ingredient of ingredients"> + {{ ingredient }}</mat-list-item>
-      </mat-list>
+      <div *ngIf="showIngredients" class="ingredients-container">
+        <mat-list class="ingredients-list">
+          <mat-list-item *ngFor="let ingredient of ingredients"> + {{ ingredient }}</mat-list-item>
+        </mat-list>
+      </div>
     </div>
-  </div>
+    </div>
   <div class="meal-photo">
     <img mat-card-image *ngIf="meal.pictureUrl" [src]="meal.pictureUrl" alt="{{ meal.name }}">
     <img mat-card-image *ngIf="!meal.pictureUrl" src="assets/logos/favicon2.png" alt="Default meal image">

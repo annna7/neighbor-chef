@@ -24,12 +24,8 @@ export class AvailabilityCalendarComponent  {
 
   createDateClassFunction(): MatCalendarCellClassFunction<Date> {
     return (date: Date): MatCalendarCellCssClasses => {
-      console.log(date);
-      console.log(this.availableDates);
       const alternative = moment.tz(date, 'Europe/Bucharest').format().split('+')[0];
-      console.log(alternative);
       if (this.availableDates.find(d => (d as any) == alternative)) {
-        console.log("true");
         return 'available-date';
       } else {
         return '';

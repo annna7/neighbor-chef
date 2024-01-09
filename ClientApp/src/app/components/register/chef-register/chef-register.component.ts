@@ -22,7 +22,6 @@ export class ChefRegisterComponent implements OnInit {
   }
 
   registerChef(): void {
-    console.log(this.chefForm.value)
     if (this.chefForm.valid) {
       const chefData = {
         ...JSON.parse(localStorage.getItem('form_common_data') || '{}'),

@@ -103,7 +103,6 @@ export class MealModalComponent implements OnInit {
         (createdMeal) => {
           this.mealCreated.emit();
           this.dialogRef.close();
-          console.log('createdMeal', createdMeal);
         },
         error => {
           console.error('Failed to create meal', error);
