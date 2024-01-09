@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {Chef, Customer, Order, OrderStatus} from "../../swagger";
+import {Chef, CreateOrderDto, Customer, Order, OrderStatus} from "../../swagger";
 import {catchError, map, Observable, throwError} from "rxjs";
 
 @Injectable({
@@ -32,15 +32,13 @@ export class OrdersService {
   }
 
 
-  createOrder(order: Order) {
-    this.http.post(`${this.apiUrl}/Order/${order.chefId}`, order).subscribe(
-      (order: any) => {
-        return order;
-      },
-      error => {
-        console.error(error);
-      }
-    )
+  createOrder(order: CreateOrderDto, chefId: string): Observable<Order> {
+    return this.http.post<Order>(`${this.apiUrl}/Order/${chefId}`, order).pipe(
+      catchError(error => {
+        console.error('Error creating order:', error);
+        return throwError(() => new Error('Error creating order'));
+      })
+    );
   }
 
   updateOrderStatusAsChef(status: OrderStatus, orderId: string) {

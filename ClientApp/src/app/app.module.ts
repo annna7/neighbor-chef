@@ -48,6 +48,8 @@ import {SearchBarComponent} from "./components/search-bar/search-bar.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {BrowseComponent} from "./components/browse/browse.component";
 import {ChefCardComponent} from "./components/chef-card/chef-card.component";
+import {OrderModalComponent} from "./components/order-modal/order-modal.component";
+import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
 
 @NgModule({
     declarations: [
@@ -76,7 +78,8 @@ import {ChefCardComponent} from "./components/chef-card/chef-card.component";
       CustomerOrdersComponent,
       SearchBarComponent,
       BrowseComponent,
-      ChefCardComponent
+      ChefCardComponent,
+      OrderModalComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -101,6 +104,8 @@ import {ChefCardComponent} from "./components/chef-card/chef-card.component";
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
+    MatDialogActions,
+    MatDialogContent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

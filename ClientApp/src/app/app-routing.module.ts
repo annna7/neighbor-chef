@@ -31,33 +31,6 @@ const standardRoutes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(standardRoutes)],
   exports: [RouterModule],
-  // providers: [
-  //   {
-  //     provide: ROUTES,
-  //     useFactory: () => {
-  //       let routes: Routes = [];
-  //       let userRole = localStorage.getItem('role');
-  //       console.log(userRole, 'ROUTING');
-  //       if (userRole === 'Chef') {
-  //         routes = [
-  //           { path: 'meals', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, ChefGuard] },
-  //           { path: 'orders', pathMatch: 'full', component: ChefOrdersComponent, canActivate: [AuthGuard, ChefGuard ] },
-  //         ];
-  //       } else if (userRole === 'Customer') {
-  //         routes = [
-  //           { path: 'orders', pathMatch: 'full', component: CustomerOrdersComponent, canActivate: [AuthGuard, CustomerGuard ] },
-  //           { path: 'browse', pathMatch: 'full', component: BrowseComponent, canActivate: [AuthGuard, CustomerGuard ] },
-  //         ];
-  //       }
-  //
-  //     return [
-  //       ...standardRoutes,
-  //       ...routes
-  //     ];
-  //     },
-  //     multi: true
-  //   }
-  // ]
 })
 
 export class AppRoutingModule {
@@ -80,6 +53,7 @@ export class AppRoutingModule {
         ...routes,
         { path: 'orders', pathMatch: 'full', component: CustomerOrdersComponent, canActivate: [AuthGuard, CustomerGuard ] },
         { path: 'browse', pathMatch: 'full', component: BrowseComponent, canActivate: [AuthGuard, CustomerGuard ] },
+        { path: 'meals/:id', pathMatch: 'full', component: ChefMealsComponent, canActivate: [AuthGuard, CustomerGuard ] },
       ];
     }
 

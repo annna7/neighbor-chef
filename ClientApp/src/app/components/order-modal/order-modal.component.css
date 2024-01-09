@@ -1,0 +1,47 @@
+h1 {
+  font-family: 'Satisfy', cursive;
+  font-size: 3em;
+  color: #dbaeae;
+  padding: 50px;
+  padding-bottom: 0;
+}
+
+.cart-item {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-left: 20px;
+}
+
+.cart-item > h3 {
+  align-self: center;
+}
+
+.cart-item > mat-form-field {
+  width: fit-content;
+  margin-left: 50px;
+}
+
+.cart-item > button {
+  margin-left: 0;
+}
+
+app-order-modal {
+  max-height: 100vh;
+}
+
+.mat-calendar-body:hover {
+  cursor: default;
+}
+.available-date > * {
+  font-weight: bold;
+}
+
+.available-date:hover {
+  cursor: pointer;
+}
+
+.mat-calendar-body-cell.mat-calendar-body-disabled {
+  cursor: default;
+}

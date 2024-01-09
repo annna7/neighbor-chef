@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Create Order</h1>
+<mat-dialog-content>
+  <form [formGroup]="orderForm">
+    <mat-form-field>
+      <mat-label>Observations</mat-label>
+      <textarea matInput placeholder="Add your observations here" formControlName="observations"></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Delivery Date</mat-label>
+      <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" formControlName="deliveryDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker [dateClass]="dateClass"></mat-datepicker>
+    </mat-form-field>
+
+    <div *ngFor="let item of this.cartItems">
+      <div class="cart-item">
+        <h3>{{ item.meal.name }} - {{ item.meal.price | currency }}</h3>
+          <mat-form-field appearance="fill">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" [value]="this.cartService.getMealQuantity(item.meal, chefId).toString()" #quantityInput
+                   (change)="cartService.updateQuantityFromString(item.meal, chefId, quantityInput.value)" min="1">
+          </mat-form-field>
+        <button mat-icon-button color="warn" (click)="cartService.updateQuantity(item.meal, chefId, 0)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="total">
+    <h3>Total: {{ this.cartService.getTotalPrice(chefId) | currency }}</h3>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="modal-actions">
+  <button mat-button (click)="onSave()">Submit Order</button>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+</mat-dialog-actions>

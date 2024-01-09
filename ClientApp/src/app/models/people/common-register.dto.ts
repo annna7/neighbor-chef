@@ -1,4 +1,4 @@
-import {CreateAddressDto} from "../addresses/create-address.dto";
+import {CreateAddressDto} from "../create-address.dto";
 
 export interface CommonRegisterDto {
   email: string;

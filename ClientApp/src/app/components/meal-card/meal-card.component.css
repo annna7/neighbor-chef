@@ -45,3 +45,8 @@ button {
 mat-list-item {
   font-size: 0.5rem;
 }
+
+.toggle, .delete {
+  margin-top: 0;
+}
+

@@ -2,12 +2,30 @@
   <div class="meal-info">
     <h2 class="meal-title">{{ meal.name }} - {{ meal.price | currency }}</h2>
     <p class="meal-description">{{ meal.description }}</p>
-    <button mat-button class="edit-button" (click)="editMeal.emit(meal)">Edit</button>
-    <button mat-button class="delete-button" (click)="deleteMeal.emit(meal)">Delete</button>
-    <br>
-    <button mat-button (click)="toggleIngredients()">
-      {{ showIngredients ? 'Hide' : 'Show' }} Ingredients
+    <div *ngIf="!isChef" class="buttons-line">
+      <ng-container *ngIf="this.cartService.getMealQuantity(meal, meal.chefId); else addMeal">
+        <mat-form-field appearance="fill">
+          <mat-label>Quantity</mat-label>
+          <input matInput type="number" [value]="this.cartService.getMealQuantity(meal, meal.chefId).toString()"
+                 #quantityInput (change)="this.cartService.updateQuantityFromString(meal, meal.chefId, quantityInput.value)" min="1">
+        </mat-form-field>
+        <button class="delete" mat-button (click)="this.cartService.updateQuantity(meal, meal.chefId, 0)" *ngIf="this.cartService.getMealQuantity(meal, meal.chefId) >= 1">
+          <mat-icon>delete</mat-icon> Remove
+        </button>
+      </ng-container>
+      <ng-template #addMeal>
+        <button mat-button class="add-button" (click)="addMealToCart.emit(meal)">Add to Cart</button>
+      </ng-template>
+    </div>
+    <div *ngIf="isChef" class="buttons-line">
+      <button mat-button (click)="editMeal.emit(meal)">Edit</button>
+      <button mat-button (click)="deleteMeal.emit(meal)">Delete</button>
+    </div>
+
+    <button class="toggle" mat-button (click)="toggleIngredients()">
+      {{ showIngredients ? 'Hide' : 'Show' }} Ingredients <mat-icon>{{ showIngredients ? 'expand_less' : 'expand_more' }}</mat-icon>
     </button>
+
 
     <div *ngIf="showIngredients" class="ingredients-container">
       <mat-list class="ingredients-list">

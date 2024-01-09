@@ -1,9 +1,15 @@
 <div class="meal-container">
   <div class="meal-cards-container">
-    <h1> Your Meals: </h1>
-    <app-meal-card *ngFor="let meal of meals" [meal]="meal" (deleteMeal)="deleteMeal($event)" (editMeal)="editMeal($event)">
+    <h1> {{ this.isSelf ? 'Your Meals' : 'Menu'}} </h1>
+    <app-meal-card *ngFor="let meal of meals" [meal]="meal"
+                   (deleteMeal)="deleteMeal($event)"
+                   (editMeal)="editMeal($event)"
+                   (addMealToCart)="addMealToCart($event)"
+                   [quantity]="this.cartService.getMealQuantity(meal, this.chefId ?? '')"
+                   [isChef]="this.isSelf">
     </app-meal-card>
-    <button mat-raised-button (click)="openMealModal()">Add New Meal</button>
+    <button mat-raised-button *ngIf="this.isSelf" (click)="openMealModal()">Add New Meal</button>
+    <button mat-raised-button *ngIf="!this.isSelf" (click)="openOrderModal()">Order</button>
   </div>
 </div>
 

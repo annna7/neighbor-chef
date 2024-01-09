@@ -81,11 +81,16 @@ export class UserService {
   }
 
   updateUserId(userId: string | undefined): void {
-    console.log('new user id', userId);
     this.userIdSubject.next(userId !== undefined ? userId : null);
   }
 
   get currentUserId(): Observable<string | null> {
+    if (this.userIdSubject.getValue() === null) {
+      const localStorageUser = localStorage.getItem('user_data');
+      if (localStorageUser) {
+        this.userIdSubject.next(JSON.parse(localStorageUser)['id']);
+      }
+    }
     return this.userIdSubject.asObservable();
   }
 

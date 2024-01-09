@@ -26,7 +26,7 @@ export class BrowseComponent implements OnInit {
     this.chefService.loadAllChefs().subscribe(chefs => {
       // TODO: fix!! (add more seeds)
       this.currentChefs = [
-        chefs[0], chefs[0], chefs[0], chefs[0]
+        chefs[0], chefs[0], chefs[0], chefs[0], chefs[0], chefs[0]
       ]
       console.log(this.currentChefs);
     });
