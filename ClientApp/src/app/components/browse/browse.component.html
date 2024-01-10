@@ -1,6 +1,7 @@
 <mat-card>
     <app-search-bar [categories]="this.categories"
-                    (sortChanged)="onSortItems($event)"
+                    [sorts]="SortOptions[this.searchType]"
+                    (sortChanged)="onSortChanged($event)"
                     (filterChanged)="onFilterItems($event)"
                     (searchTypeChanged)="onSearchTypeChanged($event)"
                     (search)="onSearchPerformed($event)"></app-search-bar>

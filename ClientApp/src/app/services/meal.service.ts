@@ -14,8 +14,26 @@ export class MealService {
   constructor(private http: HttpClient, private userService: UserService, private categoryService: CategoryService) { }
 
   getAllMeals(): Observable<Meal[]> {
-    return this.http.get<Meal[]>(`${this.apiBaseUrl}/Meal/all`);
+    return this.http.get<Meal[]>(`${this.apiBaseUrl}/Meal/all`).pipe(
+      switchMap(meals => {
+        return forkJoin(meals.map(meal => {
+          return this.categoryService.getCategoryById(meal.categoryId).pipe(
+            map(category => {
+              return {
+                ...meal,
+                categoryName: category.name
+              };
+            })
+          );
+        }));
+      }),
+      catchError(error => {
+        console.error("Failed to fetch meals", error);
+        return throwError(error);
+      })
+    );
   }
+
 
   searchMeals(searchQuery: string): Observable<Meal[]> {
     return this.getAllMeals().pipe(
@@ -25,51 +43,6 @@ export class MealService {
       }),
       catchError(error => {
         console.error("Failed to search meals", error);
-        return throwError(error);
-      })
-    );
-  }
-
-  filterMeals(filterBy: string): Observable<Meal[]> {
-    console.log(filterBy);
-    return this.getAllMeals().pipe(
-      map(meals => {
-        console.log(meals);
-        return filterBy === 'all' ?
-          meals : meals.filter(meal => meal.categoryName === filterBy);
-      }),
-      catchError(error => {
-        console.error("Failed to filter meals", error);
-        return throwError(error);
-      })
-    );
-  }
-
-  sortMeals(sortBy: string): Observable<Meal[]> {
-    return this.getAllMeals().pipe(
-      map(meals => {
-        switch (sortBy) {
-          case 'price':
-            return meals.sort((a, b) => a.price - b.price);
-          case 'name':
-            return meals.sort((a, b) => {
-              if (a.name === b.name) {
-                return 0;
-              }
-              if (!a.name) {
-                return -1;
-              }
-              if (!b.name) {
-                return 1;
-              }
-              return a.name.localeCompare(b.name);
-            });
-          default:
-            return meals;
-        }
-      }),
-      catchError(error => {
-        console.error("Failed to sort meals", error);
         return throwError(error);
       })
     );

@@ -1,3 +1,5 @@
+import {Category} from "./category";
+
 export interface Meal {
   id: string;
   name: string;
@@ -5,8 +7,8 @@ export interface Meal {
   pictureUrl?: string;
   price: number;
   ingredients: string[];
-  categoryName: string;
   categoryId: string;
+  categoryName: string;
   chefId: string;
 }
 

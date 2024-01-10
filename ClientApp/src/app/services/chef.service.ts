@@ -84,6 +84,6 @@ return this.loadAllChefs().pipe(
     for (const mark of marks) {
       sum += mark;
     }
-    return sum / marks.length;
+    return marks.length ? sum / marks.length : 0;
   }
 }

@@ -1,20 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Category, Chef, Meal} from "../../../swagger";
 import {MealService, UserService, ChefService, CategoryService} from "../../services";
+import {SearchService, SearchType, SortOption, SortOptionItem, SortOptions} from "../../services/search.service";
 
-export enum SearchType {
-  CHEFS = 'chefs',
-  MEALS = 'meals'
-}
 
-export type SortOptionsDictionary = {
-  [type in SearchType]: string[];
-};
-
-export const SortOptions: SortOptionsDictionary = {
-  [SearchType.CHEFS]: ['', 'name', 'rating'],
-  [SearchType.MEALS]: ['', 'name', 'price']
-};
 
 @Component({
   selector: 'app-browse',
@@ -29,7 +18,9 @@ export class BrowseComponent implements OnInit {
 
 
   constructor(protected userService: UserService, protected mealService: MealService,
-              private chefService: ChefService, private categoryService: CategoryService) {}
+              private chefService: ChefService, private categoryService: CategoryService, private searchService: SearchService) {
+  }
+
   ngOnInit() {
     this.loadMeals();
     this.loadChefs();
@@ -39,7 +30,6 @@ export class BrowseComponent implements OnInit {
   loadMeals() {
     this.mealService.getAllMeals().subscribe(meals => {
       this.currentMeals = meals;
-      console.log(this.currentMeals);
     });
   }
 
@@ -55,56 +45,62 @@ export class BrowseComponent implements OnInit {
     });
   }
 
-  onSearchTypeChanged(event: SearchType): void {
-    this.searchType = event;
-    switch (event) {
-      case SearchType.CHEFS:
-        this.loadChefs();
-        break;
-      case SearchType.MEALS:
-        this.loadMeals();
-        break;
+  onSearchTypeChanged(searchType: string | undefined) {
+    if (searchType === undefined) {
+      this.searchType = SearchType.CHEFS;
     }
-  }
-
-  onSortItems(event: string): void {
+    this.searchType = searchType as SearchType;
+    this.searchService.updateSearchType(this.searchType);
     switch (this.searchType) {
       case SearchType.CHEFS:
-        this.chefService.sortChefs(event).subscribe(chefs => {
-          this.currentChefs = [...chefs];
-        });
+        this.currentChefs = [...this.searchService.toBeReturnedChefs];
+        this.currentMeals = [];
         break;
       case SearchType.MEALS:
-        this.mealService.sortMeals(event).subscribe(meals => {
-          this.currentMeals = [...meals];
-        });
+        this.currentMeals = [...this.searchService.toBeReturnedMeals];
+        this.currentChefs = [];
         break;
     }
   }
 
-  onFilterItems(event: string): void {
-    if (this.searchType === SearchType.MEALS) {
-      this.mealService.filterMeals(event).subscribe(meals => {
-        this.currentMeals =[...meals];
-      });
-    } else {
-      throw new Error('Filtering is only supported for meals');
+  onSortChanged(sortBy: SortOption) {
+    console.log('sort by', sortBy);
+    this.searchService.sortItems(sortBy);
+    switch (this.searchType) {
+      case SearchType.CHEFS:
+        this.currentChefs = [...this.searchService.toBeReturnedChefs];
+        break;
+      case SearchType.MEALS:
+        this.currentMeals = [...this.searchService.toBeReturnedMeals];
+        break;
+      }
     }
-  }
 
-
-  onSearchPerformed(event: { searchQuery: string, searchType: string }): void {
-    if (event.searchType === 'chefs') {
-      this.searchType = SearchType.CHEFS;
-      this.chefService.searchChefs(event.searchQuery).subscribe(chefs => {
-        this.currentChefs = [...chefs];
-      });
-    } else if (event.searchType === 'meals') {
-      this.searchType = SearchType.MEALS;
-      this.mealService.searchMeals(event.searchQuery).subscribe(meals => {
-        this.currentMeals = [...meals];
-      });
+    onFilterItems(filterBy: string) {
+      console.log('filter by', filterBy);
+      this.searchService.filterItems(filterBy);
+      switch (this.searchType) {
+        case SearchType.CHEFS:
+          this.currentChefs = [...this.searchService.toBeReturnedChefs];
+          break;
+        case SearchType.MEALS:
+          this.currentMeals = [...this.searchService.toBeReturnedMeals];
+          break;
+      }
     }
-  }
 
+    onSearchPerformed(searchQuery: string) {
+      this.searchService.searchItems(searchQuery);
+      switch (this.searchType) {
+        case SearchType.CHEFS:
+          this.currentChefs = [...this.searchService.toBeReturnedChefs];
+          break;
+        case SearchType.MEALS:
+          this.currentMeals = [...this.searchService.toBeReturnedMeals];
+          break;
+      }
+    }
+
+  protected readonly SearchType = SearchType;
+  protected readonly SortOptions = SortOptions;
 }

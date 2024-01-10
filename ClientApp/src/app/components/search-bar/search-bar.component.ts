@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Category, Chef, Meal} from "../../../swagger";
-import {SearchType} from "../browse/browse.component";
+import {SearchType, SortOption, SortOptionItem} from "../../services/search.service";
 
 @Component({
   selector: 'app-search-bar',
@@ -10,10 +10,11 @@ import {SearchType} from "../browse/browse.component";
 
 export class SearchBarComponent {
   @Input() categories: Category[] = [];
-  @Output() search: EventEmitter<{ searchQuery: string, searchType: SearchType}> = new EventEmitter<{ searchQuery: string, searchType: SearchType}>();
-  @Output() searchTypeChanged: EventEmitter<SearchType> = new EventEmitter<SearchType>();
+  @Input() sorts: SortOptionItem[] = [];
+  @Output() search: EventEmitter<string> = new EventEmitter<string>();
+  @Output() searchTypeChanged: EventEmitter<string | undefined> = new EventEmitter<string | undefined>();
   @Output() filterChanged: EventEmitter<string> = new EventEmitter<string>();
-  @Output() sortChanged: EventEmitter<string> = new EventEmitter<string>();
+  @Output() sortChanged: EventEmitter<SortOption> = new EventEmitter<SortOption>();
 
   searchQuery: string = '';
   searchType: SearchType = SearchType.CHEFS;
@@ -24,6 +25,8 @@ export class SearchBarComponent {
 
   performSearch() {
     console.log(`Searching for ${this.searchType}: ${this.searchQuery}`);
-    this.search.emit({ searchQuery: this.searchQuery, searchType: this.searchType });
+    this.search.emit(this.searchQuery);
   }
+
+  protected readonly SearchType = SearchType;
 }

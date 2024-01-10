@@ -61,6 +61,7 @@ export class ChefMealsComponent implements OnInit {
   }
 
   editMeal(meal: Meal): void {
+    console.log('Editing meal', meal);
     this.openMealModal(meal);
   }
 
