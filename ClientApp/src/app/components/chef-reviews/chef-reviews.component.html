@@ -1,16 +1,21 @@
-<div class="review-container" *ngIf="!reviews || reviews.length == 0">
-  <h2 *ngIf="!reviews || reviews.length === 0" else hasReviews>No reviews yet</h2>
+<div class="review-container">
+  <h2 class="review-title" *ngIf="!reviews.length else hasReviews">No reviews yet</h2>
   <ng-template #hasReviews>
-    <h2>Reviews</h2>
-    <div *ngFor="let review of reviews">
-      <div class="review-card">
-        <mat-card-header>
-          <mat-card-title>Rating: <b>{{review.rating}}/5</b></mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{review.comment}}</p>
-        </mat-card-content>
+    <h2 class="review-title" *ngIf="title">{{title}}</h2>
+    <div class="review-container">
+      <div *ngFor="let review of reviews">
+        <div class="review-card">
+          <mat-card-header>
+            <mat-card-title>Rating: <b>{{review.rating}}/5</b></mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{review.comment}}</p>
+          </mat-card-content>
+        </div>
       </div>
     </div>
   </ng-template>
+  <button *ngIf="this.sessionUserId != this.chefId" mat-raised-button color="primary" (click)="openAddReviewModal()">
+    Add Review
+  </button>
 </div>

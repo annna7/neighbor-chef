@@ -1,0 +1,17 @@
+<h1 mat-dialog-title> Submit Review </h1>
+<mat-dialog-content class="review-modal-container">
+    <div class="star-rating">
+      <mat-label>Rating</mat-label>
+      <span *ngFor="let start of [1, 2, 3, 4, 5]; let i = index"
+            (click)="setRating(i + 1)">
+        <mat-icon>{{ i < reviewForm.get('rating')?.value ? 'star' : 'star_border' }}</mat-icon>
+      </span>
+    </div>
+  <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+    <mat-form-field>
+      <mat-label> Comment (Optional) </mat-label>
+      <textarea matInput formControlName="comment" rows="5"></textarea>
+    </mat-form-field>
+  <button mat-raised-button color="primary" type="submit"> Submit </button>
+  </form>
+</mat-dialog-content>

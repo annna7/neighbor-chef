@@ -5,14 +5,22 @@
 
     <mat-divider></mat-divider>
 
-    <h2> Here's what's cooking today! </h2>
   </div>
 
-  <app-chef-orders [showPastOrders]="false"></app-chef-orders>
-
+  <div class="dashboard-row">
+    <h2> Fancy adding a new recipe? </h2>
+    <button mat-raised-button color="primary" routerLink="/meals">Go to Your Menu!</button>
+  </div>
   <mat-divider></mat-divider>
-
-  <app-chef-reviews [title]="'See Your Latest Reviews!'" [chefId]="(this.userService.currentUserId | async) ?? ''"></app-chef-reviews>
+  <div class="dashboard-row">
+    <h2> Don't forget about your upcoming clients! You have {{this.numberOfUpcomingOrders}} incoming orders! </h2>
+    <button mat-raised-button color="primary" routerLink="/orders">Go to Your Orders!</button>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="dashboard-row">
+    <h2> This is what your latest clients are saying about you! </h2>
+  </div>
+  <app-chef-reviews [limit]=2 [chefId]="(this.userService.currentUserId | async) ?? ''"></app-chef-reviews>
 
 
 </mat-card>

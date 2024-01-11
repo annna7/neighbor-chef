@@ -3,6 +3,7 @@ import {Category, Chef, Meal} from "../../swagger";
 import {ChefService} from "./chef.service";
 import {MealService} from "./meal.service";
 import {CategoryService} from "./category.service";
+import {forkJoin, Observable, tap} from "rxjs";
 
 export enum SearchType {
   CHEFS = 'chefs',
@@ -60,41 +61,57 @@ export const SortOptions: SortOptionsDictionary = {
   providedIn: 'root'
 })
 export class SearchService {
+  initialMeals: Meal[] = [];
+  initialChefs: Chef[] = [];
   allMeals: Meal[] = [];
   allChefs: Chef[] = [];
   allCategories: Category[] = [];
-  sortedMeals: Meal[] = [];
-  sortedChefs: Chef[] = [];
   toBeReturnedChefs: Chef[] = [];
   toBeReturnedMeals: Meal[] = [];
   currentSearchQuery: string = '';
   currentSearchType: SearchType = SearchType.CHEFS;
-
+  activeFilters: { [type in SearchType]: { [key: string]: (item: any) => boolean } } = {
+    [SearchType.CHEFS]: {},
+    [SearchType.MEALS]: {}
+  };
   constructor(private chefService: ChefService, private mealService: MealService, private categoryService: CategoryService) {
-    this.loadMeals();
-    this.loadChefs();
-    this.loadCategories();
+    this.loadAllItems();
   }
 
-  loadChefs() {
-    this.chefService.loadAllChefs().subscribe(chefs => {
-      this.allChefs = chefs;
-      this.toBeReturnedChefs = this.allChefs;
+  loadAllItems(): Observable<{chefs: Chef[], meals: Meal[], categories: Category[]}>  {
+    return forkJoin({
+      chefs: this.loadChefs(),
+      meals: this.loadMeals(),
+      categories: this.loadCategories()
     });
   }
 
-  loadMeals() {
-    this.mealService.getAllMeals().subscribe(meals => {
-      this.allMeals = meals;
-      this.toBeReturnedMeals = this.allMeals;
-    });
+  loadChefs(): Observable<Chef[]> {
+    return this.chefService.loadAllChefs().pipe(
+      tap(chefs => {
+        this.allChefs = chefs;
+        this.toBeReturnedChefs = this.initialChefs = this.allChefs;
+      })
+    );
   }
 
-  loadCategories() {
-    this.categoryService.getCategories().subscribe(categories => {
-      this.allCategories = categories;
-    });
+  loadMeals(): Observable<Meal[]> {
+    return this.mealService.getAllMeals().pipe(
+      tap(meals => {
+        this.allMeals = meals;
+        this.toBeReturnedMeals = this.initialMeals = this.allMeals;
+      })
+    );
   }
+
+  loadCategories(): Observable<Category[]> {
+    return this.categoryService.getCategories().pipe(
+      tap(categories => {
+        this.allCategories = categories;
+      })
+    );
+  }
+
 
   formatName(chef: Chef) {
     return `${chef.firstName} ${chef.lastName}`;
@@ -144,34 +161,89 @@ export class SearchService {
     }
   }
 
-  public filterItems(filterBy: string): void {
-    if (this.currentSearchType === SearchType.CHEFS) {
-      return;
+  onFilterByCategory(categoryName: string) {
+    if (categoryName === 'all') {
+      delete this.activeFilters[SearchType.MEALS]['category'];
+    } else {
+      this.activeFilters[SearchType.MEALS]['category'] = (meal: Meal) => meal.categoryName === categoryName;
     }
-
-    this.toBeReturnedMeals = filterBy === 'all' ?
-      this.allMeals : this.allMeals.filter(meal => meal.categoryName === filterBy);
-
-    console.log('filtered meals', this.toBeReturnedMeals);
+    this.applyFilters();
   }
 
-  public searchItems(searchQuery: string): void {
-    this.currentSearchQuery = searchQuery;
+  onFilterItemsByQuery(query: string) {
+    if (!query) {
+      delete this.activeFilters[this.currentSearchType]['query'];
+    } else {
+      switch (this.currentSearchType) {
+        case SearchType.CHEFS:
+          this.activeFilters[this.currentSearchType]['query'] = (chef: Chef) => this.formatName(chef).toLowerCase().includes(query.toLowerCase());
+          break;
+        case SearchType.MEALS:
+          this.activeFilters[this.currentSearchType]['query'] = (meal: Meal) => meal.name.toLowerCase().includes(query.toLowerCase());
+          break;
+      }
+    }
+    this.applyFilters();
+  }
+
+  private applyFilters() {
+    let filteredMeals = [...this.allMeals];
+    let filteredChefs = [...this.allChefs];
+
     switch (this.currentSearchType) {
       case SearchType.CHEFS:
-        this.toBeReturnedChefs = searchQuery ?
-          this.toBeReturnedChefs.filter(chef => this.formatName(chef).toLowerCase().includes(searchQuery.toLowerCase())) : this.sortedChefs;
+        Object.values(this.activeFilters[this.currentSearchType]).forEach(filter => {
+          filteredChefs = filteredChefs.filter(filter);
+        });
         break;
       case SearchType.MEALS:
-        this.toBeReturnedMeals = searchQuery ?
-          this.toBeReturnedMeals.filter(meal => meal.name.toLowerCase().includes(searchQuery.toLowerCase())) : this.sortedMeals;
+        Object.values(this.activeFilters[this.currentSearchType]).forEach(filter => {
+          console.log('filter', filter);
+          filteredMeals = filteredMeals.filter(filter);
+          console.log('filteredMeals', filteredMeals)
+        });
         break;
     }
+
+    this.toBeReturnedMeals = filteredMeals;
+    this.toBeReturnedChefs = filteredChefs;
   }
+
+  // public filterByCategory(categoryName: string) {
+  //   return this.filterByLambda((entity: Meal) => entity.categoryName === categoryName);
+  // }
+  //
+  // private filterByLambda(lambda: (entity: any) => boolean) {
+  //   switch (this.currentSearchType) {
+  //     case SearchType.CHEFS:
+  //       this.toBeReturnedChefs = this.allChefs.filter(lambda);
+  //       break;
+  //     case SearchType.MEALS:
+  //       this.toBeReturnedMeals = this.allMeals.filter(lambda);
+  //       break;
+  //   }
+  // }
+  //
+  // public onFilterItemsByQuery(query: string): void {
+  //   let filterLambda: (entity: any) => boolean;
+  //   switch (this.currentSearchType) {
+  //     case SearchType.CHEFS:
+  //       filterLambda = query ? (entity: Chef) => this.formatName(entity).toLowerCase().includes(query.toLowerCase()) || this.formatName(entity).toLowerCase().includes(query.toLowerCase()) : () => true;
+  //       break;
+  //     case SearchType.MEALS:
+  //       filterLambda = query ? (entity: Meal) => entity.name.toLowerCase().includes(query.toLowerCase()) : () => true;
+  //       break;
+  //   }
+  //   this.filterByLambda(filterLambda);
+  // }
 
   public updateSearchType(searchType: SearchType): void {
     this.currentSearchType = searchType;
   }
+
+  clearFilters() {
+    this.toBeReturnedChefs = this.allChefs = this.initialChefs;
+    this.toBeReturnedMeals = this.allMeals = this.initialMeals;
+  }
 }
 
-// TODO: FIX CATEGORY IN CREATE MEAL

@@ -1,0 +1,28 @@
+h1 {
+  font-family: 'Satisfy', cursive;
+  font-size: 3em;
+  color: #dbaeae;
+  padding: 50px;
+  padding-bottom: 10px;
+}
+
+.review-modal-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.star-rating {
+  display: flex;
+  margin-left: 30px;
+  color: white;
+}
+
+.star-rating mat-icon {
+  cursor: pointer;
+  color: gold;
+}
+
+.star-rating mat-icon:first-child {
+  margin-left: 5px;
+}
+

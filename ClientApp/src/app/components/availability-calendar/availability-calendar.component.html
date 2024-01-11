@@ -1,5 +1,11 @@
 <div class="calendar">
-  <mat-calendar class="cal-class" [selected]="selectedDate" (selectedChange)="onDateSelected($event)" disabled="isSelf"></mat-calendar>
+<!--  <mat-calendar></mat-calendar>-->
+  <mat-card class="demo-inline-calendar-card">
+    <mat-calendar
+      [selected]="selectedDate"
+      [dateClass]="dateClass">
+    </mat-calendar>
+  </mat-card>
   <mat-list>
     <h3 mat-subheader><b>Available Dates</b></h3>
     <div *ngIf="!availableDates.length" class="no-dates">No dates selected</div>
@@ -7,7 +13,7 @@
       <mat-list-item>
         <h4 mat-line>{{ date | date:'mediumDate' }}</h4>
       </mat-list-item>
-      <button mat-raised-button color="primary" (click)="deleteDate(date)">
+      <button *ngIf="isSelf" mat-raised-button color="primary" (click)="deleteDate(date)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

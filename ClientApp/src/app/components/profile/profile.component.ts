@@ -21,7 +21,7 @@ export class ProfileComponent {
   showProfile: boolean = true;
   showReviews: boolean = true;
   showAvailability: boolean = true;
-  availableDates: Date[] = [];
+  availableDates: string[] = [];
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -59,14 +59,13 @@ export class ProfileComponent {
       }
 
       const dateNum = date.getTime();
-      const convertedAvailableDates = this.availableDates.map(d => d instanceof Date ? d : new Date(d));
-      const index = convertedAvailableDates.findIndex(d => d.getTime() === dateNum);
+      const index = this.availableDates.findIndex(d => (new Date(d)).getTime() === dateNum);
       const dateString = moment.tz(date, 'Europe/Bucharest').format();
       if (index > -1) {
         this.availableDates.splice(index, 1);
         this.chefService.deleteDate(dateString).subscribe();
       } else {
-        this.availableDates.push(date);
+        this.availableDates.push(date.toString());
         this.chefService.addDate(dateString).subscribe();
       }
     }

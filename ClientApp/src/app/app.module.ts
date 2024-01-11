@@ -50,6 +50,7 @@ import {BrowseComponent} from "./components/browse/browse.component";
 import {ChefCardComponent} from "./components/chef-card/chef-card.component";
 import {OrderModalComponent} from "./components/order-modal/order-modal.component";
 import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
+import {AddReviewModalComponent} from "./components/add-review-modal/add-review-modal.component";
 
 @NgModule({
     declarations: [
@@ -79,7 +80,8 @@ import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
       SearchBarComponent,
       BrowseComponent,
       ChefCardComponent,
-      OrderModalComponent
+      OrderModalComponent,
+      AddReviewModalComponent
     ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

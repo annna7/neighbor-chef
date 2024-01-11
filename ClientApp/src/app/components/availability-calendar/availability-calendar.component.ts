@@ -10,40 +10,32 @@ import moment from "moment-timezone";
   encapsulation: ViewEncapsulation.None
 })
 export class AvailabilityCalendarComponent  {
-  @Input() availableDates !: Date[];
+  @Input() availableDates !: string[];
   @Input() isSelf !: boolean;
   @Output() toggleDateAvailability = new EventEmitter<Date>();
 
   selectedDate: any;
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.availableDates) {
-      this.dateClass = this.createDateClassFunction();
-    }
+  dateClass = (date: any):  MatCalendarCellCssClasses => {
+    console.log(date, typeof date);
+    console.log(this.availableDates, typeof this.availableDates[0]);
+    return this.availableDates.some(d => d.startsWith(date.toISOString().split('T')[0])) ? 'available-date' : '';
   }
 
-  createDateClassFunction(): MatCalendarCellClassFunction<Date> {
-    return (date: Date): MatCalendarCellCssClasses => {
-      const alternative = moment.tz(date, 'Europe/Bucharest').format().split('+')[0];
-      if (this.availableDates.find(d => (d as any) == alternative)) {
-        return 'available-date';
-      } else {
-        return '';
-      }
-    };
+  dateFilter = (date: Date | null): boolean => {
+    return this.availableDates.some(d => d.startsWith(date?.toISOString().split('T')[0] || ''));
   }
 
-  dateClass = this.createDateClassFunction();
-
-  onDateSelected(date: Date | null) {
-    if (!date) {
-      return;
-    }
-    this.toggleDateAvailability.emit(date);
+  onDateSelected(date: any) {
+    // if (!date) {
+    //   return;
+    // }
+    // this.toggleDateAvailability.emit(date);
+    return;
   }
 
-  deleteDate(date: Date) {
-    this.toggleDateAvailability.emit(date);
+  deleteDate(date: any) {
+    // this.toggleDateAvailability.emit(date);
+    return;
   }
 
 }

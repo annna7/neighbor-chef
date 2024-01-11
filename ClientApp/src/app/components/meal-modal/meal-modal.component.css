@@ -2,6 +2,8 @@ h1 {
   font-family: 'Satisfy', cursive;
   font-size: 3em;
   color: #dbaeae;
+  padding: 50px;
+  padding-bottom: 10px;
 }
 
 mat-dialog-content {
@@ -9,7 +11,7 @@ mat-dialog-content {
   margin: 20px auto;
 }
 
-.mat-dialog-containre {
+.mat-dialog-container {
   max-height: 100%;
   max-width: 100%;
   width: fit-content;
@@ -21,11 +23,6 @@ mat-dialog-content {
   width: 50vh !important;
   height: 50vh !important;
   padding: 30px !important;
-}
-
-h1 {
-  padding: 50px;
-  padding-bottom: 10px;
 }
 
 .modal-actions {

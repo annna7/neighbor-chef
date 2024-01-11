@@ -7,7 +7,8 @@
           <input matInput placeholder="What are you craving?" [(ngModel)]="this.searchQuery">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-        <button mat-raised-button cwolor="accent" (click)="performSearch()">Go!</button>
+        <button mat-raised-button color="accent" (click)="performSearch()">Go!</button>
+        <button mat-raised-button color="accent" (click)="clearFilters()">Clear</button>
       </div>
 
     <div class="search-param">
@@ -17,12 +18,12 @@
       </mat-radio-group>
 
     <div class="select-container">
-      <mat-select [placeholder]="'Category'" [(ngModel)]="currentFilter" [value]="'Filter by Category'" (selectionChange)="filterChanged.emit($event.value)" *ngIf="this.searchType === 'meals'">
+      <mat-select [placeholder]="'Category'" [(ngModel)]="this.currentFilter" [value]="'Filter by Category'" (selectionChange)="filterChanged.emit($event.value)" *ngIf="this.searchType === 'meals'">
         <mat-option *ngFor="let category of this.categories" [value]="category.name">{{category.name}}</mat-option>
         <mat-option value="all">All</mat-option>
       </mat-select>
 
-      <mat-select [(ngModel)]="currentSort" placeholder="Sort By" (selectionChange)="sortChanged.emit($event.value)">
+      <mat-select [(ngModel)]="this.currentSort" placeholder="Sort By" (selectionChange)="sortChanged.emit($event.value)">
         <mat-option *ngFor="let sort of this.sorts" [value]="sort.value">{{sort.name}}</mat-option>
       </mat-select>
     </div>

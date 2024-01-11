@@ -22,26 +22,10 @@ export class BrowseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadMeals();
-    this.loadChefs();
-    this.loadCategories();
-  }
-
-  loadMeals() {
-    this.mealService.getAllMeals().subscribe(meals => {
-      this.currentMeals = meals;
-    });
-  }
-
-  loadChefs() {
-    this.chefService.loadAllChefs().subscribe(chefs => {
-      this.currentChefs = chefs;
-    });
-  }
-
-  loadCategories() {
-    this.categoryService.getCategories().subscribe(categories => {
-      this.categories = categories;
+    this.searchService.loadAllItems().subscribe((data) => {
+      this.currentChefs = data.chefs;
+      this.currentMeals = data.meals;
+      this.categories = data.categories;
     });
   }
 
@@ -76,9 +60,8 @@ export class BrowseComponent implements OnInit {
       }
     }
 
-    onFilterItems(filterBy: string) {
-      console.log('filter by', filterBy);
-      this.searchService.filterItems(filterBy);
+    onFilterMealsByCategory(categoryName: string) {
+      this.searchService.onFilterByCategory(categoryName);
       switch (this.searchType) {
         case SearchType.CHEFS:
           this.currentChefs = [...this.searchService.toBeReturnedChefs];
@@ -89,8 +72,21 @@ export class BrowseComponent implements OnInit {
       }
     }
 
+
     onSearchPerformed(searchQuery: string) {
-      this.searchService.searchItems(searchQuery);
+      this.searchService.onFilterItemsByQuery(searchQuery);
+      switch (this.searchType) {
+        case SearchType.CHEFS:
+          this.currentChefs = [...this.searchService.toBeReturnedChefs];
+          break;
+        case SearchType.MEALS:
+          this.currentMeals = [...this.searchService.toBeReturnedMeals];
+          break;
+      }
+    }
+
+    onClearFilters() {
+      this.searchService.clearFilters();
       switch (this.searchType) {
         case SearchType.CHEFS:
           this.currentChefs = [...this.searchService.toBeReturnedChefs];

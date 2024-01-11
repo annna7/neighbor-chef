@@ -86,4 +86,8 @@ return this.loadAllChefs().pipe(
     }
     return marks.length ? sum / marks.length : 0;
   }
+
+  getNumberOfUpcomingOrders(chef: Chef) {
+    return chef.ordersReceived.filter(order => new Date(order.deliveryDate) > new Date()).length;
+  }
 }

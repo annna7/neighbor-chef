@@ -1,0 +1,42 @@
+.dashboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-row h2 {
+  font-family: 'Satisfy';
+  color: white;
+  font-size: 2em;
+  margin-bottom: 0;
+}
+
+.dashboard-row button {
+  margin: 0 10px;
+  width: fit-content;
+  align-self: center;
+  color: #dbaeae;
+  background-color: #3a2618;
+}
+
+mat-divider {
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+app-chef-reviews {
+  margin-top: 2.5em;
+}
+
+h1 {
+  font-family: 'Satisfy';
+  color: #dbaeae;
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.header {
+  padding: 20px;
+  text-align: center;
+  margin: 0 auto;
+}

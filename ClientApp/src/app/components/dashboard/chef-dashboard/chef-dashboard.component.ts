@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../../../services";
+import {ChefService, UserService} from "../../../services";
 import {Chef} from "../../../../swagger";
 
 @Component({
@@ -10,7 +10,8 @@ import {Chef} from "../../../../swagger";
 export class ChefDashboardComponent implements OnInit {
   displayName !: string;
   rating !: number;
-  constructor(protected userService: UserService) {}
+  numberOfUpcomingOrders !: number;
+  constructor(protected userService: UserService, private chefService: ChefService) {}
 
   ngOnInit() {
     this.loadUser();
@@ -20,7 +21,9 @@ export class ChefDashboardComponent implements OnInit {
     this.userService.getCurrentUser().subscribe(
       user => {
         this.displayName = user.firstName + " " + user.lastName;
-        this.rating = (user as Chef).reviewsReceived.reduce((acc, review) => acc + review.rating, 0) / (user as Chef).reviewsReceived.length;
+        this.rating = this.chefService.getRating(user as Chef);
+        this.numberOfUpcomingOrders = this.chefService.getNumberOfUpcomingOrders(user as Chef);
+
       },
       error => {
         throw new Error("failed to fetch user!");

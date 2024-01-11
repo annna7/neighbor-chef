@@ -7,7 +7,7 @@ export interface Chef extends Person {
   advanceNoticeDays: number;
   description: string;
   maxOrdersPerDay: number;
-  availableDates: Date[];
+  availableDates: string[];
   reviewsReceived: Review[];
   ordersReceived: Order[];
   meals: Meal[];
