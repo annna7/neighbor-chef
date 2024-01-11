@@ -53,6 +53,9 @@ import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
 import {AddReviewModalComponent} from "./components/add-review-modal/add-review-modal.component";
 import {TitleDirective} from "./directives/title.directive";
 import {SubtitleDirective} from "./directives/subtitle.directive";
+import {ImageLoaderDirective} from "./directives/image-loader.directive";
+import {environment} from "../environments/environment";
+import {AngularFireModule} from "@angular/fire/compat";
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -86,7 +89,8 @@ import {SubtitleDirective} from "./directives/subtitle.directive";
     OrderModalComponent,
     AddReviewModalComponent,
     TitleDirective,
-    SubtitleDirective
+    SubtitleDirective,
+    ImageLoaderDirective
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -113,6 +117,7 @@ import {SubtitleDirective} from "./directives/subtitle.directive";
     MatRadioModule,
     MatDialogActions,
     MatDialogContent,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

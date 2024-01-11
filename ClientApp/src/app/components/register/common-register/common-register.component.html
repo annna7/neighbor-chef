@@ -49,14 +49,15 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="example-full-width">
-      <mat-label>Picture URL</mat-label>
-      <input matInput type="text" id="pictureUrl" formControlName="pictureUrl">
-    </mat-form-field>
-          </div>
+    <div class="example-full-width">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #imageInput>
+      <button mat-raised-button color="primary" (click)="imageInput.click()">Upload Image</button>
+      <p *ngIf="uploadedImage">Image uploaded: {{ uploadedImage.name }}</p>
+    </div>
 
+      </div>
 
-    <div formGroupName="address" class="address-form form-row">
+    <div formGroupName="address" class="nested-form form-row">
       <div *ngFor="let field of addressFields">
         <mat-form-field>
           <mat-label>{{field | camelCaseToFormattedText}}</mat-label>

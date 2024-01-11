@@ -48,7 +48,6 @@ export class BrowseComponent implements OnInit {
   }
 
   onSortChanged(sortBy: SortOption) {
-    console.log('sort by', sortBy);
     this.searchService.sortItems(sortBy);
     switch (this.searchType) {
       case SearchType.CHEFS:

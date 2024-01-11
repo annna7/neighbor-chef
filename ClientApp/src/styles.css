@@ -64,11 +64,11 @@ button {
   width: 300px;
 }
 
-.address-form {
+.nested-form {
   display: flex;
   justify-content: space-between;
 }
 
-.address-form mat-form-field {
+.nested-form mat-form-field {
   flex: 1 1 45%;
 }

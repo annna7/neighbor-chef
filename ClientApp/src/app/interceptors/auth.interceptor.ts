@@ -28,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
       let newBody = JSON.parse(JSON.stringify(request.body).trim());
       request = request.clone({ body: newBody });
     }
-    
+
     if (token) {
       request = request.clone({
         setHeaders: {

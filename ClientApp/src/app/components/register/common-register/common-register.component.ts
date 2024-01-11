@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
+import {ImageService, ImageType} from "../../../services/image.service";
 
 @Component({
   selector: 'app-common-register',
@@ -9,9 +10,10 @@ import { Router } from '@angular/router';
 })
 export class CommonRegisterComponent implements OnInit {
   commonForm!: FormGroup;
+  uploadedImage: File | null = null;
   addressFields = ['street', 'city', 'county', 'country', 'zipCode', 'streetNumber', 'apartmentNumber'];
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private router: Router, private imageService: ImageService) {}
 
   ngOnInit(): void {
     this.commonForm = this.formBuilder.group({
@@ -21,6 +23,7 @@ export class CommonRegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       phoneNumber: ['', Validators.required],
       pictureUrl: [''],
+
       address: this.formBuilder.group({
         street: ['', Validators.required],
         city: ['', Validators.required],
@@ -32,6 +35,16 @@ export class CommonRegisterComponent implements OnInit {
       }),
       type: ['', Validators.required] // 'chef' or 'customer'
     });
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.imageService.uploadImage(file, ImageType.User).subscribe((url: string) => {
+        this.commonForm.patchValue({pictureUrl: url});
+        this.uploadedImage = file;
+      });
+    }
   }
 
   confirmSelection(): void {

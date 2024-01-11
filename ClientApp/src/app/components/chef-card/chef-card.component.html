@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="chef-photo">
-    <img mat-card-image *ngIf="this.chef.profilePictureUrl" [src]="this.chef.profilePictureUrl" alt="{{ this.chef.lastName + ' picture'}}">
-    <img mat-card-image *ngIf="!this.chef.profilePictureUrl" src="assets/logos/favicon2.png" alt="Default chef profile image">
+    <img appImageLoader mat-card-image *ngIf="this.chef.profilePictureUrl" [src]="this.chef.profilePictureUrl" alt="{{ this.chef.lastName + ' picture'}}">
+    <img appImageLoader mat-card-image *ngIf="!this.chef.profilePictureUrl" src="assets/logos/favicon2.png" alt="Default chef profile image">
   </div>
 </mat-card>

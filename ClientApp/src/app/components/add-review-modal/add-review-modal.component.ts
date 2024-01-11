@@ -31,8 +31,6 @@ export class AddReviewModalComponent {
     if (this.reviewForm.valid) {
       const rating = this.reviewForm.get('rating')?.value;
       const comment = this.reviewForm.get('comment')?.value;
-      console.log('rating', rating);
-      console.log('comment', comment);
       this.reviewService.postReview(this.chefId, rating, comment).subscribe(() => {
         this.dialogRef.close();
       });

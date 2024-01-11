@@ -1,5 +1,4 @@
 .app-card {
-  width: 80%;
   margin: 30px auto;
   align-self: center;
   border-radius: 10px;
@@ -8,7 +7,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   background: #3f3f3f;
-  width: 75%;
+  width: fit-content;
 }
 
 h2 {
@@ -46,10 +45,22 @@ button {
   width: auto;
 }
 
+.meal-photo {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  overflow: hidden;
+  width: 300px;
+  height: 300px;
+}
+
 .meal-photo img {
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 10px 10px 0 0;
+  margin-left: 30px;
+  align-self: center;
 }
 
 mat-list-item {
@@ -58,5 +69,9 @@ mat-list-item {
 
 .toggle, .delete {
   margin-top: 0;
+}
+
+.toggle {
+  padding: 25px;
 }
 

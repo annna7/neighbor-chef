@@ -198,9 +198,7 @@ export class SearchService {
         break;
       case SearchType.MEALS:
         Object.values(this.activeFilters[this.currentSearchType]).forEach(filter => {
-          console.log('filter', filter);
           filteredMeals = filteredMeals.filter(filter);
-          console.log('filteredMeals', filteredMeals)
         });
         break;
     }
@@ -208,35 +206,6 @@ export class SearchService {
     this.toBeReturnedMeals = filteredMeals;
     this.toBeReturnedChefs = filteredChefs;
   }
-
-  // public filterByCategory(categoryName: string) {
-  //   return this.filterByLambda((entity: Meal) => entity.categoryName === categoryName);
-  // }
-  //
-  // private filterByLambda(lambda: (entity: any) => boolean) {
-  //   switch (this.currentSearchType) {
-  //     case SearchType.CHEFS:
-  //       this.toBeReturnedChefs = this.allChefs.filter(lambda);
-  //       break;
-  //     case SearchType.MEALS:
-  //       this.toBeReturnedMeals = this.allMeals.filter(lambda);
-  //       break;
-  //   }
-  // }
-  //
-  // public onFilterItemsByQuery(query: string): void {
-  //   let filterLambda: (entity: any) => boolean;
-  //   switch (this.currentSearchType) {
-  //     case SearchType.CHEFS:
-  //       filterLambda = query ? (entity: Chef) => this.formatName(entity).toLowerCase().includes(query.toLowerCase()) || this.formatName(entity).toLowerCase().includes(query.toLowerCase()) : () => true;
-  //       break;
-  //     case SearchType.MEALS:
-  //       filterLambda = query ? (entity: Meal) => entity.name.toLowerCase().includes(query.toLowerCase()) : () => true;
-  //       break;
-  //   }
-  //   this.filterByLambda(filterLambda);
-  // }
-
   public updateSearchType(searchType: SearchType): void {
     this.currentSearchType = searchType;
   }

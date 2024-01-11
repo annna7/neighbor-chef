@@ -52,7 +52,6 @@ export class OrderModalComponent implements OnInit {
     const observations = this.orderForm.get('observations')?.value;
     const deliveryDate = this.orderForm.get('deliveryDate')?.value;
     const deliveryTime = this.orderForm.get('deliveryTime')?.value;
-    console.log(observations, deliveryDate, deliveryTime);
     this.cartService.orderMeals(this.chefId, observations, deliveryDate, deliveryTime);
     this.dialogRef.close();
   }

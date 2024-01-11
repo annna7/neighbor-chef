@@ -18,7 +18,7 @@ form {
   align-self: center;
 }
 
-.address-form {
+.nested-form {
   display: flex;
   justify-content: center;
   max-width: 100%;
@@ -27,7 +27,7 @@ form {
   flex-wrap: wrap;
 }
 
-.address-form mat-form-field {
+.nested-form mat-form-field {
   width: 100%;
 }
 

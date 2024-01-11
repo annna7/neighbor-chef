@@ -7,6 +7,7 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {auto} from "@popperjs/core";
 import {EventEmitter} from "@angular/core";
+import {ImageService, ImageType} from "../../services/image.service";
 
 @Component({
   selector: 'app-meal-modal',
@@ -22,6 +23,7 @@ export class MealModalComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   ingredients: string[] = [];
   currentUserId !: string;
+  uploadedImage !: File;
 
   constructor(
     public dialogRef: MatDialogRef<MealModalComponent>,
@@ -29,7 +31,8 @@ export class MealModalComponent implements OnInit {
     private fb: FormBuilder,
     private categoryService: CategoryService,
     private mealService: MealService,
-    private userService: UserService
+    private userService: UserService,
+    private imageService: ImageService,
   ) {
     this.mealForm = this.fb.group({
       name: [meal?.name || ''],
@@ -79,36 +82,42 @@ export class MealModalComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: any): void {
+    this.uploadedImage = event.target.files[0];
+  }
+
   onSave(): void {
-    if (this.meal && this.meal.id) {
-      this.mealService.updateMeal({
-        ...this.mealForm.value,
-        ingredients: this.ingredients,
-        id: this.meal.id,
-        chefId: this.currentUserId
-      }).subscribe(
-        () => {
-          this.mealCreated.emit();
-          this.dialogRef.close();
-        },
-        error => {
-          console.error('Failed to update meal', error);
+    this.imageService.uploadImage(this.uploadedImage, ImageType.Meals).subscribe(
+      imageUrl => {
+        this.mealForm.patchValue({pictureUrl: imageUrl});
+        if (this.meal && this.meal.id) {
+          this.mealService.updateMeal({
+            ...this.mealForm.value,
+            ingredients: this.ingredients,
+            id: this.meal.id,
+            chefId: this.currentUserId
+          }).subscribe(
+            () => {
+              this.mealCreated.emit();
+              this.dialogRef.close();
+            },
+            error => {
+              console.error('Failed to update meal', error);
+            });
+        } else {
+          this.mealService.createMeal({
+            ...this.mealForm.value,
+            ingredients: this.ingredients,
+            chefId: this.currentUserId
+          }).subscribe(
+            (createdMeal) => {
+              this.mealCreated.emit();
+              this.dialogRef.close();
+            },
+            error => {
+              console.error('Failed to create meal', error);
+            });
         }
-      );
-    } else {
-      this.mealService.createMeal({
-        ...this.mealForm.value,
-        ingredients: this.ingredients,
-        chefId: this.currentUserId
-      }).subscribe(
-        (createdMeal) => {
-          this.mealCreated.emit();
-          this.dialogRef.close();
-        },
-        error => {
-          console.error('Failed to create meal', error);
-        }
-      );
-    }
+      });
   }
 }

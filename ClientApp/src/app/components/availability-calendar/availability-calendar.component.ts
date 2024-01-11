@@ -16,8 +16,6 @@ export class AvailabilityCalendarComponent  {
 
   selectedDate: any;
   dateClass = (date: any):  MatCalendarCellCssClasses => {
-    console.log(date, typeof date);
-    console.log(this.availableDates, typeof this.availableDates[0]);
     return this.availableDates.some(d => d.startsWith(date.toISOString().split('T')[0])) ? 'available-date' : '';
   }
 

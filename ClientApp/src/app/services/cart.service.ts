@@ -72,7 +72,6 @@ export class CartService {
   }
 
   orderMeals(chefId: string, observations: string, deliveryDate: Date, deliveryTime: string): void {
-    console.log('deliveryTime orderMeals', deliveryTime);
     const orderItems = this.itemsSubject.getValue()[chefId]?.map(item => {
         return {
           mealId: item.meal.id,
@@ -96,8 +95,6 @@ export class CartService {
       deliveryTime: deliveryTimeDto,
       observations: observations,
     };
-
-    console.log('orderMeals', order);
 
     this.orderService.createOrder(order, chefId)
       .subscribe({

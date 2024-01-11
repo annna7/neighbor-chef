@@ -42,7 +42,7 @@
     </div>
     </div>
   <div class="meal-photo">
-    <img mat-card-image *ngIf="meal.pictureUrl" [src]="meal.pictureUrl" alt="{{ meal.name }}">
-    <img mat-card-image *ngIf="!meal.pictureUrl" src="assets/logos/favicon2.png" alt="Default meal image">
+    <img appImageLoader mat-card-image *ngIf="meal.pictureUrl" [src]="meal.pictureUrl" alt="{{ meal.name }}">
+    <img appImageLoader mat-card-image *ngIf="!meal.pictureUrl" src="assets/logos/favicon2.png" alt="Default meal image">
   </div>
 </mat-card>

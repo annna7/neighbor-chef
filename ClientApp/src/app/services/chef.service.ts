@@ -16,12 +16,10 @@ export class ChefService {
   }
 
   addDate(date: string): Observable<Chef> {
-    console.log(this.currentUserId);
     return this.http.post<Chef>(`${this.apiBaseUrl}/Chef/${this.currentUserId}/dates`, JSON.stringify(date));
   }
 
   deleteDate(date: string): Observable<Chef> {
-    console.log(this.currentUserId);
     return this.http.delete<Chef>(`${this.apiBaseUrl}/Chef/${this.currentUserId}/dates/${date}`);
   }
 

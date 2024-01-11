@@ -25,8 +25,6 @@ export class ChefReviewsComponent {
     this.loadReviews();
     this.userService.currentUserId.subscribe(userId => {
       this.sessionUserId = userId as string;
-      console.log(this.sessionUserId);
-      console.log(this.chefId === this.sessionUserId);
     });
   }
 

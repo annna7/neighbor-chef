@@ -22,7 +22,6 @@ export class StorageService {
   setUser(user: Chef | Customer): void {
     localStorage.setItem(this.userKey, JSON.stringify(user));
     this.userService.updateUserId(user.id);
-    console.log('AFTER SETTING', this.userService.currentUserId);
   }
 
   getUser(): Person {

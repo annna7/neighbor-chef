@@ -66,6 +66,7 @@ public class MealService : IMealService
         meal.Name = updateMealDto.Name ?? meal.Name;
         meal.Description = updateMealDto.Description ?? meal.Description;
         meal.PictureUrl = updateMealDto.PictureUrl ?? meal.PictureUrl;
+        Console.WriteLine(updateMealDto.PictureUrl);
         meal.Price = updateMealDto.Price ?? meal.Price;
         meal.CategoryId = updateMealDto.CategoryName != null ? (await _categoryService.GetCategoryAsync(updateMealDto.CategoryName)).Id : meal.CategoryId;
         // meal.IngredientsJson = updateMealDto.Ingredients != null ? JsonConvert.SerializeObject(updateMealDto.Ingredients) : meal.IngredientsJson;

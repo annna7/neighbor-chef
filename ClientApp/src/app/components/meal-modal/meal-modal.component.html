@@ -9,10 +9,9 @@
       <mat-label>Description</mat-label>
       <input matInput placeholder="Description" formControlName="description">
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>Picture Url</mat-label>
-      <input matInput placeholder="Picture" formControlName="pictureUrl">
-    </mat-form-field>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #imageInput>
+      <button mat-raised-button (click)="imageInput.click()">Upload Image</button>
+      <p *ngIf="uploadedImage">Image uploaded: {{ uploadedImage.name }}</p>
     <mat-form-field>
       <mat-label>Price</mat-label>
       <input matInput placeholder="Price" formControlName="price">
@@ -23,23 +22,37 @@
         <mat-option *ngFor="let category of this.categories" [value]="category.name">{{category.name}}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="example-full-width">
       <mat-label>Ingredients</mat-label>
-      <mat-chip-grid #myChipGrid formControlName="ingredients"
-                     aria-label="enter meal ingredients">
-        @for (ingredient of this.ingredients; track ingredient) {
-        <mat-chip-row (removed)="removeIngredient(ingredient)">
-        {{ingredient}}
-        <button matChipRemove>
-          <mat-icon>cancel</mat-icon>
-        </button>
-      </mat-chip-row>
-        }
+      <mat-chip-grid #myChipGrid aria-label="enter meal ingredients">
+        <mat-chip-row *ngFor="let ingredient of ingredients; let i = index" [removable]="true" (removed)="removeIngredient(i)">
+          {{ingredient}}
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
         <input [matChipInputFor]="myChipGrid"
                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                (matChipInputTokenEnd)="addIngredient($event)" />
       </mat-chip-grid>
     </mat-form-field>
+<!--    <mat-form-field>-->
+<!--      <mat-label>Ingredients</mat-label>-->
+<!--      <mat-chip-grid #myChipGrid formControlName="ingredients"-->
+<!--                     aria-label="enter meal ingredients">-->
+<!--        @for (ingredient of this.ingredients; track ingredient) {-->
+<!--        <mat-chip-row (removed)="removeIngredient(ingredient)">-->
+<!--        {{ingredient}}-->
+<!--        <button matChipRemove>-->
+<!--          <mat-icon>cancel</mat-icon>-->
+<!--        </button>-->
+<!--      </mat-chip-row>-->
+<!--        }-->
+<!--        <input [matChipInputFor]="myChipGrid"-->
+<!--               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"-->
+<!--               (matChipInputTokenEnd)="addIngredient($event)" />-->
+<!--      </mat-chip-grid>-->
+<!--    </mat-form-field>-->
 </form>
 <div mat-dialog-actions class="modal-actions">
   <button mat-button (click)="onSave()">Save</button>

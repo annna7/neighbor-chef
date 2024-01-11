@@ -26,7 +26,6 @@ export class MealCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getChefById(this.meal.chefId).subscribe(chef => {
-      console.log(chef);
       this.chefDisplayName = chef.firstName + ' ' + chef.lastName;
     });
   }

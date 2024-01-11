@@ -54,6 +54,7 @@ public class PersonService : IPersonService
             Address = address,
             ApplicationUser = user,
             ApplicationUserId = user.Id,
+            ProfilePictureUrl = personDto.PictureUrl
         };
         
         return person;
