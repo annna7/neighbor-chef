@@ -1,5 +1,5 @@
 <mat-card>
-  <h2> Register! </h2>
+  <h2 appSubtitle> Register! </h2>
   <form [formGroup]="commonForm" (ngSubmit)="confirmSelection()" class="example-form">
 
     <div class="form-row">
@@ -56,7 +56,7 @@
           </div>
 
 
-    <div formGroupName="address" class="address-form">
+    <div formGroupName="address" class="address-form form-row">
       <div *ngFor="let field of addressFields">
         <mat-form-field>
           <mat-label>{{field | camelCaseToFormattedText}}</mat-label>

@@ -1,5 +1,5 @@
 <mat-card>
-  <h2>Login</h2>
+  <h2 appSubtitle>Login</h2>
   <form [formGroup]="loginForm" (ngSubmit)="login()" class="example-form">
 
     <mat-form-field class="example-full-width">
@@ -32,6 +32,5 @@
 
     <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
   </form>
-  <p>Don't have an account? <a routerLink="/register">Register here</a></p>
 </mat-card>
 

@@ -2,8 +2,8 @@
   <section id="profile">
     <div class="toggle-section">
       <div class="toggle-header">
-        <h2 *ngIf="isSelf"> Edit your Personal Details! </h2>
-        <h2 *ngIf="!isSelf"> Personal Details </h2>
+        <h2 appSubtitle *ngIf="isSelf"> Edit your Personal Details! </h2>
+        <h2 appSubtitle *ngIf="!isSelf"> Personal Details </h2>
         <mat-slide-toggle color="secondary" (change)="showProfile = !showProfile" [checked]="showProfile"></mat-slide-toggle>
       </div>
       <app-details *ngIf="showProfile" [profileId]="profileId" [profileRole]="profileRole" [isSelf]="isSelf"></app-details>
@@ -12,7 +12,7 @@
    <section id="reviews" *ngIf="profileRole === 'Chef'">
      <div class="toggle-section">
        <div class="toggle-header">
-         <h2> Reviews </h2>
+         <h2 appSubtitle> Reviews </h2>
          <mat-slide-toggle color="secondary" (change)="showReviews = !showReviews" [checked]="showReviews"></mat-slide-toggle>
        </div>
        <app-chef-reviews *ngIf="showReviews" [chefId]="this.profileId"></app-chef-reviews>
@@ -21,7 +21,7 @@
    <section id="availability" *ngIf="profileRole === 'Chef'">
      <div class="toggle-section">
        <div class="toggle-header">
-         <h2>{{isSelf ? "Edit your availability!" : "Availability"}}</h2>
+         <h2 appSubtitle>{{isSelf ? "Edit your availability!" : "Availability"}}</h2>
          <mat-slide-toggle color="secondary" (change)="showAvailability = !showAvailability" [checked]="showAvailability"></mat-slide-toggle>
        </div>
        <div class="availability" *ngIf="profileRole === 'Chef' && showAvailability">

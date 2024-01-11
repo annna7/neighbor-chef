@@ -28,5 +28,4 @@ mat-dialog-content {
 .modal-actions {
   display: flex;
   justify-content: space-between;
-  padding: 0 50px 50px 50px;
 }

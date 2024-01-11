@@ -5,13 +5,6 @@ mat-form-field {
 h2 {
   margin: 20px;
   padding: 0;
-  font-size: 1.5em;
-  font-weight: 400;
-}
-
-mat-card {
-  margin: 20px;
-  padding: 50px;
 }
 
 form {
@@ -20,17 +13,22 @@ form {
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
+  align-self: center;
 }
 
 .address-form {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  max-width: 100%;
+  width: 100%;
+  margin: auto;
+  flex-wrap: wrap;
 }
 
 .address-form mat-form-field {
-  flex: 1 1 45%;
+  width: 100%;
 }
 
 button {

@@ -51,38 +51,43 @@ import {ChefCardComponent} from "./components/chef-card/chef-card.component";
 import {OrderModalComponent} from "./components/order-modal/order-modal.component";
 import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
 import {AddReviewModalComponent} from "./components/add-review-modal/add-review-modal.component";
+import {TitleDirective} from "./directives/title.directive";
+import {SubtitleDirective} from "./directives/subtitle.directive";
 
 @NgModule({
-    declarations: [
-      AppComponent,
-      HomeComponent,
-      NavMenuComponent,
-      FetchDataComponent,
-      FooterComponent,
-      LoginComponent,
-      ChefRegisterComponent,
-      CommonRegisterComponent,
-      CustomerRegisterComponent,
-      CamelCaseToFormattedTextPipe,
-      ParentDashboardComponent,
-      CustomerDashboardComponent,
-      ChefDashboardComponent,
-      ProfileComponent,
-      ChefReviewsComponent,
-      ChefMealsComponent,
-      MealCardComponent,
-      MealModalComponent,
-      ChefOrdersComponent,
-      OrderCardComponent,
-      DetailsComponent,
-      AvailabilityCalendarComponent,
-      CustomerOrdersComponent,
-      SearchBarComponent,
-      BrowseComponent,
-      ChefCardComponent,
-      OrderModalComponent,
-      AddReviewModalComponent
-    ],
+  bootstrap: [AppComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavMenuComponent,
+    FetchDataComponent,
+    FooterComponent,
+    LoginComponent,
+    ChefRegisterComponent,
+    CommonRegisterComponent,
+    CustomerRegisterComponent,
+    CamelCaseToFormattedTextPipe,
+    ParentDashboardComponent,
+    CustomerDashboardComponent,
+    ChefDashboardComponent,
+    ProfileComponent,
+    ChefReviewsComponent,
+    ChefMealsComponent,
+    MealCardComponent,
+    MealModalComponent,
+    ChefOrdersComponent,
+    OrderCardComponent,
+    DetailsComponent,
+    AvailabilityCalendarComponent,
+    CustomerOrdersComponent,
+    SearchBarComponent,
+    BrowseComponent,
+    ChefCardComponent,
+    OrderModalComponent,
+    AddReviewModalComponent,
+    TitleDirective,
+    SubtitleDirective
+  ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
@@ -110,9 +115,8 @@ import {AddReviewModalComponent} from "./components/add-review-modal/add-review-
     MatDialogContent,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: JsonFormatInterceptor, multi: true}
-  ],
-  bootstrap: [AppComponent]
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JsonFormatInterceptor, multi: true}
+  ]
 })
 export class AppModule { }

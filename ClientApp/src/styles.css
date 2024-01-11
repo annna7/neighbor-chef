@@ -42,8 +42,11 @@ h2 {
 }
 
 mat-card {
+  overflow-x: hidden;
+  overflow-y: auto;
   margin: 20px;
   padding: 50px;
+
 }
 
 form {

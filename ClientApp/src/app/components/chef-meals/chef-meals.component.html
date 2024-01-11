@@ -1,6 +1,6 @@
 <div class="meal-container">
   <div class="meal-cards-container">
-    <h1> {{ this.isSelf ? 'Your Meals' : 'Menu'}} </h1>
+    <h1 appTitle> {{ this.isSelf ? 'Your Meals' : 'Menu'}} </h1>
     <app-meal-card *ngFor="let meal of meals" [meal]="meal"
                    (deleteMeal)="deleteMeal($event)"
                    (editMeal)="editMeal($event)"
