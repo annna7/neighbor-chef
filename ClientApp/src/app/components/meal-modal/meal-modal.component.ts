@@ -88,7 +88,10 @@ export class MealModalComponent implements OnInit {
   onSave(): void {
     this.imageService.uploadImage(this.uploadedImage, ImageType.Meals).subscribe(
       imageUrl => {
-        this.mealForm.patchValue({pictureUrl: imageUrl});
+        console.log('ALOO');
+        if (imageUrl) {
+          this.mealForm.patchValue({pictureUrl: imageUrl});
+        }
         if (this.meal && this.meal.id) {
           this.mealService.updateMeal({
             ...this.mealForm.value,

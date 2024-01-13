@@ -4,7 +4,16 @@
 
 export const environment = {
   apiBaseUrl: 'http://localhost:5005',
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyBcjDhj2yHAMRsz7C06imNswOCsATmFfBU",
+    authDomain: "neighbor-chef-93af6.firebaseapp.com",
+    projectId: "neighbor-chef-93af6",
+    storageBucket: "neighbor-chef-93af6.appspot.com",
+    messagingSenderId: "868386996702",
+    appId: "1:868386996702:web:14a27494ae4d1895655d4f",
+    vapidKey: 'BG2eNJValHjlUeTtmnLbQ5Tfh5QffQZiQxDbzHia6NCNGiLclawFDLvFBck8cXvwL2nkR9baYpPUDOT9BmjH-gA'
+  },
 };
 
 /*

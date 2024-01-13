@@ -25,6 +25,7 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     public DbSet<Review> Reviews { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderMeal> OrderMeals { get; set; } = null!;
+    public DbSet<FirebaseToken> FirebaseTokens { get; set; } = null!;
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -92,6 +93,10 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
             .WithMany(c => c.OrdersPlaced)
             .HasForeignKey(o => o.CustomerId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<Person>()
+            .HasMany(p => p.FirebaseTokens)
+            .WithMany(ft => ft.People);
     }
     
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

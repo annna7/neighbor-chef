@@ -35,6 +35,7 @@ export class AuthService {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
     localStorage.removeItem('role');
+    localStorage.removeItem('notificationsPermission');
     this.roleSubject.next(null);
     this.userService.userIdSubject.next(null);
     await this.router.navigate(['/']);

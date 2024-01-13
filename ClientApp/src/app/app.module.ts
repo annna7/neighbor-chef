@@ -49,7 +49,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {BrowseComponent} from "./components/browse/browse.component";
 import {ChefCardComponent} from "./components/chef-card/chef-card.component";
 import {OrderModalComponent} from "./components/order-modal/order-modal.component";
-import {MatDialogActions, MatDialogContent} from "@angular/material/dialog";
+import {MatDialogActions, MatDialogContainer, MatDialogContent} from "@angular/material/dialog";
 import {AddReviewModalComponent} from "./components/add-review-modal/add-review-modal.component";
 import {TitleDirective} from "./directives/title.directive";
 import {SubtitleDirective} from "./directives/subtitle.directive";
@@ -57,12 +57,17 @@ import {ImageLoaderDirective} from "./directives/image-loader.directive";
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire/compat";
 import {RatingPipe} from "./pipes/rating.pipe";
-import {NotificationsModalComponent} from "./components/notifications-modal/notifications-modal.component";
 import {getMessaging} from "@angular/fire/messaging";
 import firebase from "firebase/compat";
 import messaging = firebase.messaging;
 import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
 import { ServiceWorkerModule } from '@angular/service-worker';
+import {
+  NotificationsPermissionsModalComponent
+} from "./components/notification-permissions-modal/notifications-permissions-modal.component";
+import {
+  NotificationReceivedModalComponent
+} from "./components/notification-received-modal/notification-received-modal.component";
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -99,7 +104,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SubtitleDirective,
     ImageLoaderDirective,
     RatingPipe,
-    NotificationsModalComponent
+    NotificationsPermissionsModalComponent,
+    NotificationReceivedModalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -133,7 +139,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    MatDialogContainer
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

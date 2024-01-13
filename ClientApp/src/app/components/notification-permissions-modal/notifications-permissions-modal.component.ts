@@ -3,12 +3,12 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {PushNotificationsService} from "../../services";
 
 @Component({
-  selector: 'app-notifications-modal',
-  templateUrl: './notifications-modal.component.html',
-  styleUrl: './notifications-modal.component.css'
+  selector: 'app-notifications-permissions-modal',
+  templateUrl: './notifications-permissions-modal.component.html',
+  styleUrl: './notifications-permissions-modal.component.css'
 })
-export class NotificationsModalComponent {
-  constructor(public dialogRef: MatDialogRef<NotificationsModalComponent>,
+export class NotificationsPermissionsModalComponent {
+  constructor(public dialogRef: MatDialogRef<NotificationsPermissionsModalComponent>,
               private pushService: PushNotificationsService) {}
 
   onAllow(): void {

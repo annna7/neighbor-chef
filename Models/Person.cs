@@ -11,6 +11,7 @@ public class Person : BaseEntity
     
     public Guid AddressId { get; set; }
     public virtual Address Address { get; set; } = null!;
-    
     public string? ProfilePictureUrl { get; set; }
+    
+    public virtual ICollection<FirebaseToken> FirebaseTokens { get; set; } = null!;
 }

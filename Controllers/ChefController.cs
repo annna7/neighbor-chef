@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
+using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Exceptions.Dates;
@@ -46,6 +47,7 @@ public class ChefController : ControllerBase
       {
          return NotFound("Chef with email " + chefEmail + " not found");
       }
+      
       return Ok(chef);
    }
    

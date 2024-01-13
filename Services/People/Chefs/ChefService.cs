@@ -35,9 +35,6 @@ public class ChefService : PersonService, IChefService
         
         var chef  = await base.CreatePersonAsync(chefDto);
         
-        // var jsonString = JsonConvert.SerializeObject(chef.ApplicationUser, Formatting.Indented);
-        // Console.WriteLine(jsonString);
-        
         await _accountService.RegisterUserAsync(chef.ApplicationUser);
         await _accountService.AssignRoleAsync(chef.ApplicationUser, "Chef");
 
@@ -201,7 +198,6 @@ public class ChefService : PersonService, IChefService
     
     private static DateDto ConvertToDateDtoFirstFormat(string isoDate)
     {
-        Console.WriteLine("Converting date" + isoDate);
         DateTime parsedDate;
         if(DateTime.TryParseExact(isoDate, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out parsedDate))
         {
@@ -220,7 +216,6 @@ public class ChefService : PersonService, IChefService
     
     public static DateDto ConvertToDateDtoSecondFormat(string isoDate)
     {
-        Console.WriteLine("Converting date" + isoDate);
         if (DateTime.TryParse(isoDate, out var parsedDate))
         {
             return new DateDto

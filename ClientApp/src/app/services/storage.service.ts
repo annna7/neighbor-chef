@@ -11,7 +11,7 @@ export class StorageService {
 
   constructor(private userService: UserService) {}
 
-  setToken(token: string): void {
+  setLogin(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
 

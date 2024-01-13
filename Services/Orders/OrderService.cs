@@ -1,9 +1,11 @@
 using Castle.Components.DictionaryAdapter.Xml;
+using CorePush.Firebase;
 using neighbor_chef.Exceptions.Meals;
 using neighbor_chef.Exceptions.Orders;
 using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Orders;
+using neighbor_chef.Services.Notifications;
 using neighbor_chef.Specifications;
 using neighbor_chef.Specifications.Orders;
 using neighbor_chef.Specifications.People.Customers;
@@ -15,16 +17,17 @@ public class OrderService : IOrderService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IChefService _chefService;
-
-    public OrderService(IUnitOfWork unitOfWork, IChefService chefService)
+    private readonly IFirebaseNotificationService _notificationService;
+    
+    public OrderService(IUnitOfWork unitOfWork, IChefService chefService, IFirebaseNotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _chefService = chefService;
+        _notificationService = notificationService;
     }
 
     public async Task<Order> CreateOrderAsync(Guid customerId, Guid chefId, CreateOrderDto orderDto)
     {
-        Console.WriteLine("Creating order 1...");
         var customer = await _unitOfWork.GetRepository<Customer>().
             FindFirstOrDefaultWithSpecificationPatternAsync(new FullCustomerWithIdSpecification(customerId));
         if (customer == null)
@@ -32,7 +35,6 @@ public class OrderService : IOrderService
             throw new CustomerNotFoundException();
         }
         
-        Console.WriteLine("Creating order 2...");
         var chef = await _unitOfWork.GetRepository<Chef>()
             .FindFirstOrDefaultWithSpecificationPatternAsync(new FullChefWithIdSpecification(chefId));
         
@@ -40,8 +42,6 @@ public class OrderService : IOrderService
         {
             throw new ChefNotFoundException();
         }
-        
-        Console.WriteLine("Creating order 3...");
         
         var orderMeals = new List<OrderMeal>();
         
@@ -118,8 +118,6 @@ public class OrderService : IOrderService
             throw new OrderNotFoundException();
         }
         
-        Console.WriteLine("Old status: " + order.Status);
-
         switch (isChef)
         {
             case true when !(order.Status == OrderStatus.Placed && newStatus == OrderStatus.Preparing)
@@ -129,8 +127,19 @@ public class OrderService : IOrderService
                 throw new InvalidOrderStatusTransitionException(order.Status, newStatus);
         }
         
-        Console.WriteLine("New status: " + newStatus);
-
+        switch (newStatus)
+        {
+            case OrderStatus.Preparing:
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", "Your order is being prepared!");
+                break;
+            case OrderStatus.Ready:
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update","Your order is ready!");
+                break;
+            case OrderStatus.Delivered:
+                await _notificationService.SendNotificationToPerson(order.ChefId, "Status Update", "Your client has received the order!");
+                break;
+        }
+        
         order.Status = newStatus;
         await _unitOfWork.GetRepository<Order>().UpdateAsync(order);
         await _unitOfWork.CompleteAsync();

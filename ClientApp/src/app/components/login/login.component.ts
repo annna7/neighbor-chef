@@ -45,7 +45,7 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        this.storageService.setToken(response.token);
+        this.storageService.setLogin(response.token);
         this.getUserDetails();
       },
       error: (err) => console.error('Login Error:', err)

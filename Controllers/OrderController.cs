@@ -1,5 +1,8 @@
 using System;
 using System.Security.Claims;
+using CorePush.Firebase;
+using CorePush.Serialization;
+using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using neighbor_chef.Models.DTOs.Orders;
@@ -17,13 +20,14 @@ public class OrderController : ControllerBase
     private readonly IChefService _chefService;
     private readonly ICustomerService _customerService;
     private readonly IAccountService _accountService;
-
-    public OrderController(IOrderService orderService, IChefService chefService, ICustomerService customerService, IAccountService accountService)
+    private readonly HttpClient _http;
+    public OrderController(IOrderService orderService, IChefService chefService, ICustomerService customerService, IAccountService accountService, HttpClient http)
     {
         _orderService = orderService;
         _chefService = chefService;
         _accountService = accountService;
         _customerService = customerService;
+        _http = http;
     }
 
     [HttpPost("{chefId:guid}")]

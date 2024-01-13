@@ -13,11 +13,14 @@ using neighbor_chef.UnitOfWork;
 using AutoMapper;
 using Duende.IdentityServer.EntityFramework.Services;
 using Duende.IdentityServer.Services;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.OpenApi.Models;
 using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
 using neighbor_chef.Services.Cors;
+using neighbor_chef.Services.Notifications;
 using neighbor_chef.Services.Orders;
 using neighbor_chef.Services.People.Chefs;
 using neighbor_chef.Services.Reviews;
@@ -93,14 +96,21 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
 
 builder.Services.AddScoped<CustomerAuthorizeAttribute>();
 builder.Services.AddScoped<ChefAuthorizeAttribute>();
 
 
 var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-
+if (FirebaseApp.DefaultInstance == null)
+{
+    FirebaseApp.Create(new AppOptions()
+    {
+        Credential = GoogleCredential.FromFile("C:\\Users\\Acer\\Desktop\\NEIGHBOR CHEF SECRET\\neighbor-chef-93af6-firebase-adminsdk-yqe31-7092342535.json"),
+        ProjectId = "neighbor-chef-93af6"
+    });
+}
 
 var app = builder.Build();
 
@@ -112,18 +122,15 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 }
 else
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-// app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
