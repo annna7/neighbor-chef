@@ -2,7 +2,7 @@
   <div class="app-card-info-container">
     <h2>Chef {{ this.chef.firstName + ' ' + this.chef.lastName }} </h2>
     <div class="app-card-info">
-      <h4> <b>Rating:</b> {{ this.chefService.getRating(chef) }} / 5 </h4>
+      <h4> <b>Rating:</b> {{ this.chefService.getRating(chef) | rating }} </h4>
       <div class="buttons-container">
         <button mat-button [routerLink]="['/profile', chef.id]">Go to Profile</button>
         <button mat-button [routerLink]="['/meals', chef.id]">Go to Meals</button>

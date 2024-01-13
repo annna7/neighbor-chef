@@ -56,6 +56,7 @@ import {SubtitleDirective} from "./directives/subtitle.directive";
 import {ImageLoaderDirective} from "./directives/image-loader.directive";
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire/compat";
+import {RatingPipe} from "./pipes/rating.pipe";
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -90,7 +91,8 @@ import {AngularFireModule} from "@angular/fire/compat";
     AddReviewModalComponent,
     TitleDirective,
     SubtitleDirective,
-    ImageLoaderDirective
+    ImageLoaderDirective,
+    RatingPipe,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

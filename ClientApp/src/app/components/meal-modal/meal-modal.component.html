@@ -36,23 +36,6 @@
                (matChipInputTokenEnd)="addIngredient($event)" />
       </mat-chip-grid>
     </mat-form-field>
-<!--    <mat-form-field>-->
-<!--      <mat-label>Ingredients</mat-label>-->
-<!--      <mat-chip-grid #myChipGrid formControlName="ingredients"-->
-<!--                     aria-label="enter meal ingredients">-->
-<!--        @for (ingredient of this.ingredients; track ingredient) {-->
-<!--        <mat-chip-row (removed)="removeIngredient(ingredient)">-->
-<!--        {{ingredient}}-->
-<!--        <button matChipRemove>-->
-<!--          <mat-icon>cancel</mat-icon>-->
-<!--        </button>-->
-<!--      </mat-chip-row>-->
-<!--        }-->
-<!--        <input [matChipInputFor]="myChipGrid"-->
-<!--               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"-->
-<!--               (matChipInputTokenEnd)="addIngredient($event)" />-->
-<!--      </mat-chip-grid>-->
-<!--    </mat-form-field>-->
 </form>
 <div mat-dialog-actions class="modal-actions">
   <button mat-button (click)="onSave()">Save</button>
