@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {Chef, Meal} from '../../../swagger';
 import { MealModalComponent } from '../meal-modal/meal-modal.component';
-import {UserService} from "../../services/user.service";
 import {User} from "oidc-client";
-import {ChefService, MealService} from "../../services";
+import {ChefService, MealService, UserService, CartService} from "../../services";
 import {ActivatedRoute} from "@angular/router";
 import {of, Subscription, switchMap} from "rxjs";
-import {CartService} from "../../services/cart.service";
 import {OrderModalComponent} from "../order-modal/order-modal.component";
 import {ChefMealItem} from "../../models/chef-meal.dto";
 

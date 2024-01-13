@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../../../services";
+import {UserService, PushNotificationsService} from "../../../services";
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -8,7 +8,7 @@ import {UserService} from "../../../services";
 })
 export class CustomerDashboardComponent implements OnInit {
   displayName !: string;
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private pushService: PushNotificationsService) {}
 
   ngOnInit() {
     this.loadUser();
@@ -23,5 +23,4 @@ export class CustomerDashboardComponent implements OnInit {
         throw new Error("failed to fetch user!");
       }
     )};
-
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
-import {ImageService, ImageType} from "../../../services/image.service";
+import {ImageService, ImageType} from "../../../services";
 
 @Component({
   selector: 'app-common-register',

@@ -2,12 +2,11 @@ import {Component, Inject, OnInit} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {FormArray, FormBuilder, FormGroup} from '@angular/forms';
 import {Category, Meal} from '../../../swagger';
-import {CategoryService, MealService, UserService} from '../../services';
+import {CategoryService, MealService, UserService, ImageService, ImageType} from '../../services';
 import {MatChipInputEvent} from "@angular/material/chips";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {auto} from "@popperjs/core";
 import {EventEmitter} from "@angular/core";
-import {ImageService, ImageType} from "../../services/image.service";
 
 @Component({
   selector: 'app-meal-modal',

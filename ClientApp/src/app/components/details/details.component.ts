@@ -4,9 +4,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {UserService} from "../../services";
+import {UserService, ImageService, ImageType} from "../../services";
 import {ActivatedRoute} from "@angular/router";
-import {ImageService, ImageType} from "../../services/image.service";
 
 @Component({
   selector: 'app-details',

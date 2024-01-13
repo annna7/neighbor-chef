@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Order} from "../../../swagger";
-import {OrdersService} from "../../services/orders.service";
-import {UserService} from "../../services";
+import {UserService, OrdersService} from "../../services";
 
 @Component({
   selector: 'app-customer-orders',

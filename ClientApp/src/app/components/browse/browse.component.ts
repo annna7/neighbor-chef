@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Category, Chef, Meal} from "../../../swagger";
-import {MealService, UserService, ChefService, CategoryService} from "../../services";
-import {SearchService, SearchType, SortOption, SortOptionItem, SortOptions} from "../../services/search.service";
-
+import {SearchService, SearchType, SortOption, SortOptionItem, SortOptions, MealService, UserService, ChefService, CategoryService} from "../../services";
 
 
 @Component({

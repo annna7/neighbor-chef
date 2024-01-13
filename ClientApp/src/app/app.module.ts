@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,6 +57,12 @@ import {ImageLoaderDirective} from "./directives/image-loader.directive";
 import {environment} from "../environments/environment";
 import {AngularFireModule} from "@angular/fire/compat";
 import {RatingPipe} from "./pipes/rating.pipe";
+import {NotificationsModalComponent} from "./components/notifications-modal/notifications-modal.component";
+import {getMessaging} from "@angular/fire/messaging";
+import firebase from "firebase/compat";
+import messaging = firebase.messaging;
+import {AngularFireMessagingModule} from "@angular/fire/compat/messaging";
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -93,6 +99,7 @@ import {RatingPipe} from "./pipes/rating.pipe";
     SubtitleDirective,
     ImageLoaderDirective,
     RatingPipe,
+    NotificationsModalComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -120,10 +127,18 @@ import {RatingPipe} from "./pipes/rating.pipe";
     MatDialogActions,
     MatDialogContent,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireMessagingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: JsonFormatInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JsonFormatInterceptor, multi: true},
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

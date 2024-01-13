@@ -5,8 +5,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatListModule} from "@angular/material/list";
-import {UserService} from "../../services";
-import {OrdersService} from "../../services/orders.service";
+import {UserService, OrdersService, PushNotificationsService} from "../../services";
 
 @Component({
   selector: 'app-order-card',
@@ -25,7 +24,7 @@ export class OrderCardComponent {
   chefDisplayName !: string;
   customerDisplayName !: string;
 
-  constructor(private userService: UserService, protected orderService: OrdersService) {}
+  constructor(private userService: UserService, protected orderService: OrdersService, private pushService: PushNotificationsService) {}
   ngOnInit() {
     this.deliveryDate = new Date(this.order.deliveryDate);
     if (this.isChef) {

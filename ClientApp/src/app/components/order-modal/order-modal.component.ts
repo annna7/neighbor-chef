@@ -1,5 +1,5 @@
 import {Component, Inject, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {CartService} from "../../services/cart.service";
+import {CartService} from "../../services";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ChefMealItem} from "../../models/chef-meal.dto";

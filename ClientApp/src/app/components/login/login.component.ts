@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import {LoginDto} from "../../models/people/login.dto";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
-import {StorageService} from "../../services/storage.service";
-import {UserService} from "../../services/user.service";
+import {UserService, StorageService, AuthService} from "../../services";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {PersonDto} from "../../models/people/person.dto";
 import {error} from "@angular/compiler-cli/src/transformers/util";

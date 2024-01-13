@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Review} from "../../../swagger";
-import {UserService} from "../../services/user.service";
+import {UserService} from "../../services";
 import {AddReviewModalComponent} from "../add-review-modal/add-review-modal.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogRef} from "@angular/cdk/dialog";

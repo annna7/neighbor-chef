@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { Meal } from '../../../swagger';
-import {CartService} from "../../services/cart.service";
-import {UserService} from "../../services";
+import {UserService, CartService} from "../../services";
 
 @Component({
   selector: 'app-meal-card',

@@ -1,0 +1,15 @@
+<h1 mat-dialog-title appTitle> Enable Notifications? </h1>
+
+<mat-dialog-content>
+  <p>Want to keep track of your orders and get notified when they are ready for pick up?</p>
+  <p>Enable notifications and never miss out!</p>
+
+  <div class="row">
+    <div class="col-6">
+      <button mat-raised-button color="primary" (click)="onAllow()">Enable</button>
+    </div>
+    <div class="col-6">
+      <button mat-raised-button color="warn" (click)="onDeny()">Disable</button>
+    </div>
+  </div>
+</mat-dialog-content>

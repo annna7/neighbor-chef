@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import {UserService, ChefService} from '../../services';
 import {ActivatedRoute} from "@angular/router";
 import {Chef, Customer} from "../../../swagger";
 import moment from 'moment-timezone';
-import {ChefService} from "../../services";
 
 @Component({
   selector: 'app-profile',

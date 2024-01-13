@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {Category, Chef, Meal} from "../../../swagger";
-import {SearchType, SortOption, SortOptionItem} from "../../services/search.service";
+import {SearchType, SortOption, SortOptionItem} from "../../services";
 
 @Component({
   selector: 'app-search-bar',
