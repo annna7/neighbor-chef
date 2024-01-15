@@ -86,8 +86,8 @@ public class OrderService : IOrderService
         
         await _unitOfWork.GetRepository<Order>().AddAsync(order);
         await _unitOfWork.CompleteAsync();
-
-        Console.WriteLine(chef.OrdersReceived.Count);
+        
+        await _notificationService.SendNotificationToPerson(chefId, "New Order", "You have a new order from " + customer.FirstName + " " + customer.LastName + "!");
         
         customer.OrdersPlaced.Add(order);
         chef.OrdersReceived.Add(order);
@@ -127,16 +127,28 @@ public class OrderService : IOrderService
                 throw new InvalidOrderStatusTransitionException(order.Status, newStatus);
         }
         
+        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(order.ChefId);
+        if (chef == null)
+        {
+            throw new ChefNotFoundException();
+        }
+        
+        var customer = await _unitOfWork.GetRepository<Customer>().GetByIdNoTrackingAsync(order.CustomerId);
+        if (customer == null)
+        {
+            throw new CustomerNotFoundException();
+        }
+        
         switch (newStatus)
         {
             case OrderStatus.Preparing:
-                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", "Your order is being prepared!");
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", "Chef " +  chef.FirstName + " " + chef.LastName + " started preparing your order!");
                 break;
             case OrderStatus.Ready:
-                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update","Your order is ready!");
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update","Chef " +  chef.FirstName + " " + chef.LastName + " has finished preparing your order! Time to pick it up!");
                 break;
             case OrderStatus.Delivered:
-                await _notificationService.SendNotificationToPerson(order.ChefId, "Status Update", "Your client has received the order!");
+                await _notificationService.SendNotificationToPerson(order.ChefId, "Status Update", "Your client " + customer.FirstName + " " + customer.LastName + " has received the order! Well Done!");
                 break;
         }
         

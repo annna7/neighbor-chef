@@ -18,6 +18,11 @@ import {HttpClient} from "@angular/common/http";
 export class PushNotificationsService {
   currentUserId !: string;
   constructor(private angularFireMessaging: AngularFireMessaging, public dialog: MatDialog, public userService: UserService, private http: HttpClient) {
+    this.userService.currentUserId.subscribe(
+        (userId) => {
+            this.currentUserId = userId as string;
+    });
+
     this.angularFireMessaging.messages.subscribe(
       async (msg) => {
         console.log('Push notification received', msg);
