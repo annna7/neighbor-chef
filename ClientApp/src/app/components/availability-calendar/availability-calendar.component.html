@@ -3,6 +3,7 @@
   <mat-card class="demo-inline-calendar-card">
     <mat-calendar
       [selected]="selectedDate"
+      (selectedChange)="onDateSelected($event)"
       [dateClass]="dateClass">
     </mat-calendar>
   </mat-card>

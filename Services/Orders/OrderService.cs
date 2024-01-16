@@ -5,6 +5,7 @@ using neighbor_chef.Exceptions.Orders;
 using neighbor_chef.Exceptions.People;
 using neighbor_chef.Models;
 using neighbor_chef.Models.DTOs.Orders;
+using neighbor_chef.Services.Emails;
 using neighbor_chef.Services.Notifications;
 using neighbor_chef.Specifications;
 using neighbor_chef.Specifications.Orders;
@@ -17,12 +18,14 @@ public class OrderService : IOrderService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IChefService _chefService;
+    private readonly IEmailService _emailService;
     private readonly IFirebaseNotificationService _notificationService;
     
-    public OrderService(IUnitOfWork unitOfWork, IChefService chefService, IFirebaseNotificationService notificationService)
+    public OrderService(IUnitOfWork unitOfWork, IChefService chefService, IFirebaseNotificationService notificationService, IEmailService emailService)
     {
         _unitOfWork = unitOfWork;
         _chefService = chefService;
+        _emailService = emailService;
         _notificationService = notificationService;
     }
 
@@ -87,7 +90,10 @@ public class OrderService : IOrderService
         await _unitOfWork.GetRepository<Order>().AddAsync(order);
         await _unitOfWork.CompleteAsync();
         
-        await _notificationService.SendNotificationToPerson(chefId, "New Order", "You have a new order from " + customer.FirstName + " " + customer.LastName + "!");
+        var title = "New Order";
+        var body = "You have a new order from " + customer.FirstName + " " + customer.LastName + "!";
+        await _notificationService.SendNotificationToPerson(chefId, title, body);
+        await _emailService.SendEmailAsync(chef.ApplicationUser.Email, customer.ProfilePictureUrl, body);
         
         customer.OrdersPlaced.Add(order);
         chef.OrdersReceived.Add(order);
@@ -127,28 +133,40 @@ public class OrderService : IOrderService
                 throw new InvalidOrderStatusTransitionException(order.Status, newStatus);
         }
         
-        var chef = await _unitOfWork.GetRepository<Chef>().GetByIdNoTrackingAsync(order.ChefId);
+        var chef = await _unitOfWork.GetRepository<Chef>().FindFirstOrDefaultWithSpecificationPatternAsync(
+            new FullChefWithIdSpecification(order.ChefId), true);
+        
         if (chef == null)
         {
             throw new ChefNotFoundException();
         }
         
-        var customer = await _unitOfWork.GetRepository<Customer>().GetByIdNoTrackingAsync(order.CustomerId);
+        var customer = await _unitOfWork.GetRepository<Customer>().FindFirstOrDefaultWithSpecificationPatternAsync(
+            new FullCustomerWithIdSpecification(order.CustomerId), true);
+        
         if (customer == null)
         {
             throw new CustomerNotFoundException();
         }
+
+        string statusText;
         
         switch (newStatus)
         {
             case OrderStatus.Preparing:
-                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", "Chef " +  chef.FirstName + " " + chef.LastName + " started preparing your order!");
+                statusText = "Chef" + " " + chef.FirstName + " " + chef.LastName + " started preparing your order!";
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", statusText);
+                await _emailService.SendEmailAsync(customer.ApplicationUser.Email, chef.ProfilePictureUrl, statusText);
                 break;
             case OrderStatus.Ready:
-                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update","Chef " +  chef.FirstName + " " + chef.LastName + " has finished preparing your order! Time to pick it up!");
+                statusText = "Chef" + " " + chef.FirstName + " " + chef.LastName + " finished preparing your order! Time to pick it up!";
+                await _notificationService.SendNotificationToPerson(order.CustomerId, "Status Update", statusText);
+                await _emailService.SendEmailAsync(customer.ApplicationUser.Email, chef.ProfilePictureUrl, statusText);
                 break;
             case OrderStatus.Delivered:
-                await _notificationService.SendNotificationToPerson(order.ChefId, "Status Update", "Your client " + customer.FirstName + " " + customer.LastName + " has received the order! Well Done!");
+                statusText = "Chef" + " " + chef.FirstName + " " + chef.LastName + " delivered your order! Enjoy!";
+                await _notificationService.SendNotificationToPerson(order.ChefId, "Status Update", statusText);
+                await _emailService.SendEmailAsync(chef.ApplicationUser.Email, customer.ProfilePictureUrl, statusText);
                 break;
         }
         

@@ -20,6 +20,7 @@ using neighbor_chef.Filters;
 using neighbor_chef.Models.MappingProfile;
 using neighbor_chef.Services;
 using neighbor_chef.Services.Cors;
+using neighbor_chef.Services.Emails;
 using neighbor_chef.Services.Notifications;
 using neighbor_chef.Services.Orders;
 using neighbor_chef.Services.People.Chefs;
@@ -97,6 +98,7 @@ builder.Services.AddScoped<IMealService, MealService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddScoped<CustomerAuthorizeAttribute>();
 builder.Services.AddScoped<ChefAuthorizeAttribute>();
@@ -125,6 +127,7 @@ app.UseSwaggerUI(c =>
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    builder.Configuration.AddUserSecrets<Program>();
 }
 else
 {

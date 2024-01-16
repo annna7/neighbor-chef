@@ -11,3 +11,7 @@ obj
 swagger-codegen-cli-3.0.9.jar
 **.sh
 IO.Swagger.sln
+firebase-messaging-sw.js
+secrets.json
+manifest.json
+

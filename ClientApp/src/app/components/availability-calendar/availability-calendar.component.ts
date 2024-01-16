@@ -24,15 +24,15 @@ export class AvailabilityCalendarComponent  {
   }
 
   onDateSelected(date: any) {
-    // if (!date) {
-    //   return;
-    // }
-    // this.toggleDateAvailability.emit(date);
+    if (!date) {
+      return;
+    }
+    this.toggleDateAvailability.emit(date);
     return;
   }
 
   deleteDate(date: any) {
-    // this.toggleDateAvailability.emit(date);
+    this.toggleDateAvailability.emit(date);
     return;
   }
 

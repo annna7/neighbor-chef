@@ -10,6 +10,7 @@ using neighbor_chef.Models;
 using neighbor_chef.Services;
 using neighbor_chef.Models.DTOs;
 using neighbor_chef.Models.DTOs.Orders;
+using neighbor_chef.Services.Emails;
 using neighbor_chef.Services.Orders;
 
 namespace neighbor_chef.Controllers;
@@ -21,11 +22,13 @@ public class ChefController : ControllerBase
    private readonly IChefService _chefService;
    private readonly IOrderService _orderService;
    private readonly IAccountService _accountService;
+   private readonly IEmailService _emailService;
    
-   public ChefController(IChefService chefService, IOrderService orderService, IAccountService accountService)
+   public ChefController(IChefService chefService, IOrderService orderService, IAccountService accountService, IEmailService emailService)
    {
       _chefService = chefService;
       _orderService = orderService;
+      _emailService = emailService;
       _accountService = accountService;
    }
    
@@ -144,6 +147,15 @@ public class ChefController : ControllerBase
          return NotFound(e.Message);
       }
 
+      return Ok();
+   }
+   
+   [HttpGet("test-email")]
+   public async Task<IActionResult> TestEmail()
+   {
+      await _emailService.SendEmailAsync("annapecheanu1@gmail.com",
+         "https://firebasestorage.googleapis.com/v0/b/neighbor-chef-93af6.appspot.com/o/images%2Fusers%2Fgarlic-butter-salmon-7.webp_1705338689551?alt=media&token=9dc9a6e3-b3ce-4d0e-bb13-3cf82a9f567b",
+         "Chef Gordon Ramsay finished preparing your order!");
       return Ok();
    }
 }
