@@ -24,19 +24,24 @@ The app serves as a platform for local chefs to share their passion for cooking 
 - Both parties get notified via in-app notifications and email when the status of their order changes
 
 ## Tech Stack
+### Backend
 - .NET 7.0 (C#)
 - Entity Framework Core
-- Identity
-- Microsoft SQL Server
-- Angular (v. 17) with Material UI
-
+- ASP.NET Core Identity
+- Microsoft SQL Server (Database)
+### Frontend
+- Angular (v. 17) with Typescript
+- Material UI
+### Misc
+- Firebase (image storage + notifications)
+- Brevo (email services)
 
 ## Project Requirements
 ### Back End
-- [x] At least 3 Controllers, CRUD methods, REST
+- [x] 10 Controllers, CRUD methods, REST
 - [x] One to one relationship (User and Address)
 - [x] One to many relationship (Chef and Meals, Customer and Reviews, Customer and Orders, Chef and Orders etc.)
-- [x] Many to many relationship (Meals and Orders)]
+- [x] Many to many relationship (Meals and Orders)
 - [x] Linq queries
 - [x] Authentication and Authorization (two roles: Customer and Chef)
 - [x] Repository pattern
